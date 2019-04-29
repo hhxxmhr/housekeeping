@@ -41,7 +41,38 @@
              class="dialog-footer">
           <el-button @click="close_dialog()">取消</el-button>
           <at-button type="primary"
-                     @click="addOrEditUser">确定
+                     @click="addOrEditService">确定
+          </at-button>
+        </div>
+      </el-dialog>
+      <el-dialog width="400px"
+                 :title="dialog_title"
+                 :visible.sync="dialog_visibleChild"
+                 :before-close="close_dialog"
+                 :close-on-click-modal="false">
+        <el-form :model="service"
+                 :rules="rules"
+                 ref="service">
+          <el-form-item label="子服务名称"
+                        prop="name"
+                        label-width="100px">
+            <el-input v-model="service.name" style="width: 180px"
+                      auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="子服务工资"
+                        prop="price"
+                        label-width="100px">
+            <el-input v-model="service.price" style="width: 180px" auto-complete="off">
+              <template slot="append">元/次</template>
+            </el-input>
+          </el-form-item>
+
+        </el-form>
+        <div slot="footer"
+             class="dialog-footer">
+          <el-button @click="close_dialog()">取消</el-button>
+          <at-button type="primary"
+                     @click="addOrEditService">确定
           </at-button>
         </div>
       </el-dialog>
@@ -50,10 +81,10 @@
         <el-table-column prop="name" label="类别" align="center"></el-table-column>
         <el-table-column prop="childrenType" label="包含服务" align="center" width="400px">
           <template slot-scope="scope">
-            <el-tag :key="tag" v-for="tag in scope.row.childrenType" closable
-                    @close="handleClose(tag,scope.row.childrenType)"
+            <el-tag :key="tag.id" v-for="tag in scope.row.childrenType" closable
+                    @close="handleClose(tag,scope.row)" @click="editChild(tag)"
                     :disable-transitions="false" size="medium" slot="reference">
-              {{tag}}
+              {{tag.name}}
             </el-tag>
           </template>
         </el-table-column>
@@ -61,7 +92,9 @@
         <el-table-column prop="enable" label="操作" header-align="center" align="center">
           <template slot-scope="scope">
             <el-button size="mini" type="warning" @click="dialog_show(scope.row.id)">编辑</el-button>
-            <at-button size="mini" type="danger" confirmText="确定要删除此服务类别" @click="delService(scope.row.id)">删除</at-button>
+            <at-button size="mini" type="danger" confirmText="确定要删除此服务类别" @click="delService(scope.row.id)">删除
+            </at-button>
+            <el-button size="mini" type="success" @click="dialog_showChild(scope.row.id)">添加子服务</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -87,6 +120,7 @@
         formLabelWidth: "80px",
         dialog_title: '',
         dialog_visible: false,
+        dialog_visibleChild: false,
         rules: {
           name: [
             {required: true, message: "请输入服务名称", trigger: "blur"},
@@ -118,9 +152,14 @@
         });
         this.serviceList.forEach(it => {
           let childrenType = [];
+
           res.serviceList.forEach(item => {
+            let row = {};
             if (item.parent === it.id) {
-              childrenType.push(item.name)
+              row.id = item.id;
+              row.name = item.name;
+              row.price = item.price;
+              childrenType.push(row)
             }
           });
           it["childrenType"] = childrenType;
@@ -134,8 +173,28 @@
         });
         this.init();
       },
-      handleClose(tag, dynamicTags) {
-        dynamicTags.splice(dynamicTags.indexOf(tag), 1);
+      async handleClose(tag, row) {
+        row.childrenType.splice(row.childrenType.indexOf(tag), 1);
+        let res = await this.$api("Service/deleteChild", {id: tag.id});
+        this.$message({
+          type: res.code === 200 ? 'success' : 'error',
+          message: res.msg
+        });
+        this.init();
+      },
+      async editChild(tag) {
+        this.dialog_title = "编辑子服务";
+        this.service.name = tag.name;
+        this.service.id = tag.id;
+        this.service.price = tag.price;
+        this.dialog_visibleChild = true;
+      },
+      dialog_showChild(id) {
+        this.dialog_title = "新增子服务";
+        this.service.name = '';
+        this.service.price = null;
+        this.service.parent = id;
+        this.dialog_visibleChild = true;
       },
       dialog_show(id) {
         if (id == null) {
@@ -151,25 +210,28 @@
           this.service.price = parseInt(tmp.price);
         }
         this.dialog_visible = true;
+        this.dialog_visible = true;
       },
       close_dialog() {
         this.dialog_visible = false;
+        this.dialog_visibleChild = false;
         setTimeout(() => {
           this.$refs["service"].resetFields();
         }, 200);
       },
-      async addOrEditUser() {
+      async addOrEditService() {
         this.service.id = this.service.id === null ? null : parseInt(this.service.id);
         this.$refs["service"].validate(async valid => {
           if (valid) {
             let res;
             if (this.service.id == null) {
-              res = await this.$api("Service/addParent", {
+              res = await this.$api("Service/addService", {
+                parent:parseInt(this.service.parent),
                 name: this.service.name,
                 price: parseInt(this.service.price),
               });
             } else {
-              res = await this.$api("Service/editParent", {
+              res = await this.$api("Service/editService", {
                 id: this.service.id,
                 name: this.service.name,
                 price: parseInt(this.service.price),
@@ -185,7 +247,6 @@
         });
       },
       search() {
-        console.log(123)
         this.$router.push({
           path: this.$route.path,
           query: this.searchForm

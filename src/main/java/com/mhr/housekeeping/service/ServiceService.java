@@ -25,6 +25,9 @@ public interface ServiceService {
 	
 	Result countService(ServiceVO serviceVO) throws Exception;
 	
-	Result deleteService(ServiceVO serviceVO) throws Exception;
+	Result deleteParService(ServiceVO serviceVO) throws Exception;
+
+	Result deleteService(ServiceVO serviceVO);
+
 
 }

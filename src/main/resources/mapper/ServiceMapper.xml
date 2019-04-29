@@ -17,18 +17,13 @@
     <sql id="_fields">
 		id,`name`,price,parent
 	</sql>
-
-
-
-
     <sql id="_condition">
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="id!=null">
                 AND id = #{id}
             </if>
             <if test="name!=null and ''!=name">
-                AND `name` LIKE '%${name}%'
---                 AND `name` = #{name}
+                name like concat(concat('%',#{name}),'%')
             </if>
             <if test="price!=null">
                 AND price = #{price}
@@ -150,9 +145,11 @@
         <include refid="_table"/>
         <include refid="_primaryKey_condition"/>
     </delete>
+
     <delete id="deleteParService" parameterType="ServiceVO">
         DELETE FROM service where id = #{id} or parent = #{id}
     </delete>
+
 
 
 </mapper>

@@ -41,16 +41,11 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public Result updateService(ServiceVO serviceVO) throws Exception {
-        ServiceVO vo = serviceMapper.findServiceByName(serviceVO);
-        if (vo != null) {
-            return Result.getFailure("该服务名称已存在");
-        } else {
-            Integer count = serviceMapper.updateService(serviceVO);
-            if (count > 0) {
-                return Result.getSuccess("操作成功");
-            }
-            return Result.getFailure("操作失败");
+        Integer count = serviceMapper.updateService(serviceVO);
+        if (count > 0) {
+            return Result.getSuccess("操作成功");
         }
+        return Result.getFailure("操作失败");
     }
 
     @Override
@@ -76,17 +71,28 @@ public class ServiceServiceImpl implements ServiceService {
 
     /**
      * 删除服务的父类   删除的同时还需要删除数据库中parent是此父类的记录
+     *
      * @param serviceVO
      * @return
      * @throws Exception
      */
     @Override
-    public Result deleteService(ServiceVO serviceVO) throws Exception {
+    public Result deleteParService(ServiceVO serviceVO) throws Exception {
         Integer count = serviceMapper.deleteParService(serviceVO);
-        if (count>0){
+        if (count > 0) {
             return Result.getSuccess("删除成功");
         }
         return Result.getFailure("删除失败");
     }
+
+    @Override
+    public Result deleteService(ServiceVO serviceVO) {
+        Integer count = serviceMapper.deleteService(serviceVO);
+        if (count > 0) {
+            return Result.getSuccess("删除成功");
+        }
+        return Result.getFailure("删除失败");
+    }
+
 
 }

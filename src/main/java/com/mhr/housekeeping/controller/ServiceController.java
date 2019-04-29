@@ -24,18 +24,24 @@ public class ServiceController {
         object.put("serviceList", res.getData());
         return object;
     }
-    @RequestMapping("/Service/addParent")
-    public Result addParent(@RequestBody ServiceVO serviceVO) throws Exception {
+
+    @RequestMapping("/Service/addService")
+    public Result addService(@RequestBody ServiceVO serviceVO) throws Exception {
         return serviceService.addService(serviceVO);
     }
 
-    @RequestMapping("/Service/editParent")
-    public Result editParent(@RequestBody ServiceVO serviceVO) throws Exception {
+    @RequestMapping("/Service/editService")
+    public Result editService(@RequestBody ServiceVO serviceVO) throws Exception {
         return serviceService.updateService(serviceVO);
     }
 
     @RequestMapping("/Service/delParService")
     public Result delParService(@RequestBody ServiceVO serviceVO) throws Exception {
+        return serviceService.deleteParService(serviceVO);
+    }
+
+    @RequestMapping("/Service/deleteChild")
+    public Result deleteChild(@RequestBody ServiceVO serviceVO) throws Exception {
         return serviceService.deleteService(serviceVO);
     }
 
