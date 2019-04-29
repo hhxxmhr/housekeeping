@@ -1,7 +1,10 @@
 package com.mhr.housekeeping.service.impl;
 
 import com.mhr.housekeeping.dao.UserMapper;
+import com.mhr.housekeeping.dao.UserServiceMapper;
 import com.mhr.housekeeping.entity.UserDO;
+import com.mhr.housekeeping.entity.UserServiceDO;
+import com.mhr.housekeeping.entity.vo.UserServiceVO;
 import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.service.UserService;
 import com.mhr.housekeeping.utils.Result;
@@ -27,6 +30,8 @@ public class UserServiceImpl implements UserService {
     HttpServletRequest request;
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private UserServiceMapper userServiceMapper;
 
     @Override
     public Result addUser(UserVO userVO) throws Exception {
@@ -69,6 +74,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result deleteUser(UserVO userVO) throws Exception {
+        UserServiceVO userServiceVO = new UserServiceVO();
+        userServiceVO.setUserId(userVO.getId());
+        List<UserServiceDO> list = userServiceMapper.listUserService(userServiceVO);
+        if (list.size() > 0) {
+            Integer r = userServiceMapper.deleteUserServiceByUserId(userVO.getId());
+            if (r > 0) {
+                Integer count = userMapper.deleteUser(userVO);
+                if (count > 0) {
+                    return new Result(Result.CODE_SUCCESS, "删除成功");
+                }
+                return new Result(Result.CODE_FAILURE, "删除失败");
+            }
+        }
         Integer count = userMapper.deleteUser(userVO);
         if (count > 0) {
             return new Result(Result.CODE_SUCCESS, "删除成功");

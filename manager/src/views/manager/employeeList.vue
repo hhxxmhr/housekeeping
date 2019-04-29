@@ -36,8 +36,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="rank" align="center" label="等级"></el-table-column>
-        <el-table-column prop="money" align="center" label="参考工资"></el-table-column>
+        <el-table-column prop="rank" align="center" label="拥有等级"></el-table-column>
         <el-table-column prop="orders" align="center" label="有效订单"></el-table-column>
         <el-table-column prop="praise" align="center" label="好评率"></el-table-column>
         <el-table-column prop="createTime" align="center" label="创建时间" width="180px">
@@ -64,9 +63,6 @@
             <at-button confirmText="确定删除此账号?" size="mini" type="warning"
                        @click="deleteEmployee(scope.row)">删除
             </at-button>
-            <!--<at-button size="mini" type="info"
-                       @click="showMoreInfo(scope.row.id)">更多资料
-            </at-button>-->
             <el-dropdown size="mini" split-button type="info" @command="handleCommand($event, scope.row.id)" style="margin-left: 5px">
               更多操作
               <el-dropdown-menu slot="dropdown">

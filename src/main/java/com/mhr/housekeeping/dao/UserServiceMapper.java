@@ -27,4 +27,9 @@ public interface UserServiceMapper {
 
     Integer deleteUserService(UserServiceVO userServiceVO);
 
+    Integer deleteUserServiceByRanId(Integer id);
+
+    Integer deleteUserServiceByServiceId(Integer id);
+
+    Integer deleteUserServiceByUserId(Integer id);
 }

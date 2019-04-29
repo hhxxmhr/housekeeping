@@ -2,7 +2,6 @@ package com.mhr.housekeeping.dao;
 
 import com.mhr.housekeeping.entity.ServiceDO;
 import com.mhr.housekeeping.entity.vo.ServiceVO;
-import com.mhr.housekeeping.entity.vo.ServiceVO2;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,4 +31,5 @@ public interface ServiceMapper {
 
     Integer deleteParService(ServiceVO serviceVO);
 
+    List<Integer> getIds(Integer id);
 }

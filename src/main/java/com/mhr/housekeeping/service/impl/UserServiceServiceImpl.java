@@ -1,6 +1,7 @@
 package com.mhr.housekeeping.service.impl;
 
 import com.mhr.housekeeping.dao.UserServiceMapper;
+import com.mhr.housekeeping.entity.UserServiceDO;
 import com.mhr.housekeeping.entity.vo.UserServiceVO;
 import com.mhr.housekeeping.service.UserServiceService;
 import com.mhr.housekeeping.utils.Result;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /** 
  * <br/>
@@ -38,8 +40,9 @@ public class UserServiceServiceImpl implements UserServiceService {
 	}
 
 	@Override
-	public Result listUserService(UserServiceVO userServiceVO) throws Exception{
-		return null;
+	public List<UserServiceDO> listUserService(UserServiceVO userServiceVO) throws Exception{
+		List<UserServiceDO> list = userServiceMapper.listUserService(userServiceVO);
+		return list;
 	}
 	
 	@Override
@@ -56,5 +59,16 @@ public class UserServiceServiceImpl implements UserServiceService {
 	public Result deleteUserService(UserServiceVO userServiceVO) throws Exception{
 		return null;
 	}
+
+	@Override
+	public Integer deleteUserServiceByRanId(Integer id) {
+		return userServiceMapper.deleteUserServiceByRanId(id);
+	}
+
+	@Override
+	public Integer deleteUserServiceByServiceId(Integer id) {
+		return userServiceMapper.deleteUserServiceByServiceId(id);
+	}
+
 
 }

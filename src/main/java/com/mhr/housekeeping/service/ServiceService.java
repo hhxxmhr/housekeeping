@@ -2,10 +2,7 @@ package com.mhr.housekeeping.service;
 
 
 import com.mhr.housekeeping.entity.vo.ServiceVO;
-import com.mhr.housekeeping.entity.vo.ServiceVO2;
 import com.mhr.housekeeping.utils.Result;
-
-import java.util.List;
 
 /**
  * <br/>
@@ -27,7 +24,7 @@ public interface ServiceService {
 	
 	Result deleteParService(ServiceVO serviceVO) throws Exception;
 
-	Result deleteService(ServiceVO serviceVO);
+	Result deleteService(ServiceVO serviceVO) throws Exception;
 
 
 }

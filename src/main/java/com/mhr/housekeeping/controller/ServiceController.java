@@ -2,15 +2,12 @@ package com.mhr.housekeeping.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mhr.housekeeping.entity.vo.ServiceVO;
-import com.mhr.housekeeping.entity.vo.ServiceVO2;
 import com.mhr.housekeeping.service.ServiceService;
 import com.mhr.housekeeping.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 public class ServiceController {

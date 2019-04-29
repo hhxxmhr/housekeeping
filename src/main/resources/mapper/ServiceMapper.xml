@@ -140,6 +140,10 @@
         <include refid="_condition"/>
     </select>
 
+    <select id="getIds" parameterType="Integer">
+        select id from service where id = #{id} or parent = #{id}
+    </select>
+
     <delete id="deleteService" parameterType="ServiceVO">
         DELETE FROM
         <include refid="_table"/>

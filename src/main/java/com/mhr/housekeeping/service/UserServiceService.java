@@ -1,8 +1,11 @@
 package com.mhr.housekeeping.service;
 
 
+import com.mhr.housekeeping.entity.UserServiceDO;
 import com.mhr.housekeeping.entity.vo.UserServiceVO;
 import com.mhr.housekeeping.utils.Result;
+
+import java.util.List;
 
 /**
  * <br/>
@@ -16,11 +19,16 @@ public interface UserServiceService {
 	
 	Result findDetailUserService(UserServiceVO userServiceVO) throws Exception;
 	
-	Result listUserService(UserServiceVO userServiceVO) throws Exception;
+	List<UserServiceDO> listUserService(UserServiceVO userServiceVO) throws Exception;
 
     Result listUserServicePage(UserServiceVO userServiceVO) throws Exception;
 	
 	Result countUserService(UserServiceVO userServiceVO) throws Exception;
 	
 	Result deleteUserService(UserServiceVO userServiceVO) throws Exception;
+
+    Integer deleteUserServiceByRanId(Integer id);
+
+	Integer deleteUserServiceByServiceId(Integer id);
+
 }

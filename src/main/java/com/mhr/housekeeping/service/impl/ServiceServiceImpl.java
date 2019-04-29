@@ -2,9 +2,11 @@ package com.mhr.housekeeping.service.impl;
 
 import com.mhr.housekeeping.dao.ServiceMapper;
 import com.mhr.housekeeping.entity.ServiceDO;
+import com.mhr.housekeeping.entity.UserServiceDO;
 import com.mhr.housekeeping.entity.vo.ServiceVO;
-import com.mhr.housekeeping.entity.vo.ServiceVO2;
+import com.mhr.housekeeping.entity.vo.UserServiceVO;
 import com.mhr.housekeeping.service.ServiceService;
+import com.mhr.housekeeping.service.UserServiceService;
 import com.mhr.housekeeping.utils.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,8 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Resource
     private ServiceMapper serviceMapper;
+    @Resource
+    private UserServiceService userServiceService;
 
     @Override
     public Result addService(ServiceVO serviceVO) throws Exception {
@@ -71,6 +75,7 @@ public class ServiceServiceImpl implements ServiceService {
 
     /**
      * 删除服务的父类   删除的同时还需要删除数据库中parent是此父类的记录
+     * 还需要删除关联表里面有关的数据
      *
      * @param serviceVO
      * @return
@@ -78,6 +83,17 @@ public class ServiceServiceImpl implements ServiceService {
      */
     @Override
     public Result deleteParService(ServiceVO serviceVO) throws Exception {
+//        select id from service where id=30 or parent=30
+        //得到父类id以及父类下面子类的id
+        List<Integer> ids = serviceMapper.getIds(serviceVO.getId());
+        for (int i = 0; i < ids.size(); i++) {
+            UserServiceVO userServiceVO = new UserServiceVO();
+            userServiceVO.setServiceId(ids.get(i));
+            List<UserServiceDO> list = userServiceService.listUserService(userServiceVO);
+            if (list.size() > 0) {
+                userServiceService.deleteUserServiceByServiceId(ids.get(i));
+            }
+        }
         Integer count = serviceMapper.deleteParService(serviceVO);
         if (count > 0) {
             return Result.getSuccess("删除成功");
@@ -86,7 +102,22 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public Result deleteService(ServiceVO serviceVO) {
+    public Result deleteService(ServiceVO serviceVO) throws Exception {
+        //根据id查询关联表中是否有数据，有的话就删除
+        UserServiceVO userServiceVO = new UserServiceVO();
+        userServiceVO.setServiceId(serviceVO.getId());
+        List<UserServiceDO> list = userServiceService.listUserService(userServiceVO);
+        if (list.size() > 0) {
+            Integer r = userServiceService.deleteUserServiceByServiceId(serviceVO.getId());
+            if (r > 0) {
+                Integer count = serviceMapper.deleteService(serviceVO);
+                if (count > 0) {
+                    return Result.getSuccess("删除成功");
+                }
+                return Result.getFailure("删除失败");
+            }
+            return Result.getFailure("删除失败");
+        }
         Integer count = serviceMapper.deleteService(serviceVO);
         if (count > 0) {
             return Result.getSuccess("删除成功");
