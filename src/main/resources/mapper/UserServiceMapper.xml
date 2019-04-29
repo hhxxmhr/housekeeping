@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mhr.housekeeping.dao.UserServiceMapper">
+
+	<resultMap id="userServiceMapper" type="UserServiceDO">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="serviceId" column="service_id"/>
+        <result property="rankId" column="rank_id"/>
+	</resultMap>
+
+    <sql id="_table">
+        user_service
+	</sql>
+
+	<sql id="_fields">
+		id,user_id,service_id,rank_id
+	</sql>
+
+	<sql id="_condition">
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id!=null">
+				AND id = #{id}
+			</if>
+            <if test="userId!=null">
+				AND user_id = #{userId}
+			</if>
+            <if test="serviceId!=null">
+				AND service_id = #{serviceId}
+			</if>
+            <if test="rankId!=null">
+				AND rank_id = #{rankId}
+			</if>
+		</trim>
+	</sql>
+
+	<sql id="_primaryKey_condition">
+		WHERE id = #{id}
+	</sql>
+
+	<sql id="_order">
+        <if test="sortByParams!= null and sortByParams.size()>0" >
+            ORDER BY
+            <foreach collection="sortByParams.keys" index="index" item="sortByParamKey" separator=",">
+                <![CDATA[${sortByParamKey} ${sortByParams[sortByParamKey]}]]>
+            </foreach>
+        </if>
+	</sql>
+
+    <insert id="addUserService" parameterType="UserServiceVO" keyProperty="id">
+        INSERT INTO <include refid="_table"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+				id,
+			</if>
+            <if test="userId!=null">
+				user_id,
+			</if>
+            <if test="serviceId!=null">
+				service_id,
+			</if>
+            <if test="rankId!=null">
+				rank_id,
+			</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+				#{id},
+			</if>
+            <if test="userId!=null">
+				#{userId},
+			</if>
+            <if test="serviceId!=null">
+				#{serviceId},
+			</if>
+            <if test="rankId!=null">
+				#{rankId},
+			</if>
+        </trim>
+    </insert>
+
+    <update id="updateUserService" parameterType="UserServiceVO">
+        UPDATE <include refid="_table"/>
+        <set>
+            <if test="userId!=null">
+				user_id = #{userId},
+			</if>
+            <if test="serviceId!=null">
+				service_id = #{serviceId},
+			</if>
+            <if test="rankId!=null">
+				rank_id = #{rankId},
+			</if>
+        </set>
+        <include refid="_primaryKey_condition"/>
+    </update>
+
+    <select id="findDetailUserService" resultMap="userServiceMapper" parameterType="UserServiceVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM <include refid="_table"/>
+        <include refid="_primaryKey_condition"/>
+    </select>
+
+    <select id="listUserService" resultMap="userServiceMapper" parameterType="UserServiceVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM <include refid="_table"/>
+        <include refid="_condition"/>
+	    <include refid="_order"/>
+    </select>
+
+    <select id="listUserServicePage" resultMap="userServiceMapper" parameterType="UserServiceVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM <include refid="_table"/>
+        <include refid="_condition"/>
+        <include refid="_order"/>
+        <if test="startRecord != null and pageSize != null and pageSize >0">
+            limit #{startRecord},#{pageSize}
+        </if>
+	    <if test="!(startRecord != null and pageSize != null and pageSize >0)">
+		    limit 0,15
+	    </if>
+    </select>
+
+    <select id="countUserService" resultType="java.lang.Integer" parameterType="UserServiceVO">
+        SELECT
+        COUNT(*)
+        FROM <include refid="_table"/>
+        <include refid="_condition"/>
+    </select>
+
+    <delete id="deleteUserService" parameterType="UserServiceVO">
+        DELETE FROM <include refid="_table"/>
+        <include refid="_primaryKey_condition"/>
+    </delete>
+
+</mapper>

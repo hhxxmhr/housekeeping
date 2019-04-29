@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mhr.housekeeping.dao.RankMapper">
+
+	<resultMap id="rankMapper" type="RankDO">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="money" column="money"/>
+	</resultMap>
+
+    <sql id="_table">
+        rank
+	</sql>
+
+	<sql id="_fields">
+		id,`name`,money
+	</sql>
+
+	<sql id="_condition">
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id!=null">
+				AND id = #{id}
+			</if>
+            <if test="name!=null and ''!=name">
+				AND `name` = #{name}
+			</if>
+            <if test="money!=null">
+				AND money = #{money}
+			</if>
+		</trim>
+	</sql>
+
+	<sql id="_primaryKey_condition">
+		WHERE id = #{id}
+	</sql>
+
+	<sql id="_order">
+        <if test="sortByParams!= null and sortByParams.size()>0" >
+            ORDER BY
+            <foreach collection="sortByParams.keys" index="index" item="sortByParamKey" separator=",">
+                <![CDATA[${sortByParamKey} ${sortByParams[sortByParamKey]}]]>
+            </foreach>
+        </if>
+	</sql>
+
+    <insert id="addRank" parameterType="RankVO" keyProperty="id">
+        INSERT INTO <include refid="_table"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+				id,
+			</if>
+            <if test="name!=null and ''!=name">
+				`name`,
+			</if>
+            <if test="money!=null">
+				money,
+			</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+				#{id},
+			</if>
+            <if test="name!=null and ''!=name">
+				#{name},
+			</if>
+            <if test="money!=null">
+				#{money},
+			</if>
+        </trim>
+    </insert>
+
+    <update id="updateRank" parameterType="RankVO">
+        UPDATE <include refid="_table"/>
+        <set>
+            <if test="name!=null and ''!=name">
+				`name` = #{name},
+			</if>
+            <if test="money!=null">
+				money = #{money},
+			</if>
+        </set>
+        <include refid="_primaryKey_condition"/>
+    </update>
+
+    <select id="findDetailRank" resultMap="rankMapper" parameterType="RankVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM <include refid="_table"/>
+        <include refid="_primaryKey_condition"/>
+    </select>
+
+    <select id="listRank" resultMap="rankMapper" parameterType="RankVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM <include refid="_table"/>
+        <include refid="_condition"/>
+	    <include refid="_order"/>
+    </select>
+
+    <select id="listRankPage" resultMap="rankMapper" parameterType="RankVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM <include refid="_table"/>
+        <include refid="_condition"/>
+        <include refid="_order"/>
+        <if test="startRecord != null and pageSize != null and pageSize >0">
+            limit #{startRecord},#{pageSize}
+        </if>
+	    <if test="!(startRecord != null and pageSize != null and pageSize >0)">
+		    limit 0,15
+	    </if>
+    </select>
+
+    <select id="countRank" resultType="java.lang.Integer" parameterType="RankVO">
+        SELECT
+        COUNT(*)
+        FROM <include refid="_table"/>
+        <include refid="_condition"/>
+    </select>
+
+    <delete id="deleteRank" parameterType="RankVO">
+        DELETE FROM <include refid="_table"/>
+        <include refid="_primaryKey_condition"/>
+    </delete>
+
+</mapper>

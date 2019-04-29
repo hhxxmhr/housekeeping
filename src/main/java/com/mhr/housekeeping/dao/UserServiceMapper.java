@@ -1,0 +1,30 @@
+package com.mhr.housekeeping.dao;
+
+import com.mhr.housekeeping.entity.UserServiceDO;
+import com.mhr.housekeeping.entity.vo.UserServiceVO;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/** 
+ * <br/>
+ * Created by min on 2019/04/28
+ */
+@Repository
+public interface UserServiceMapper {
+
+    Integer addUserService(UserServiceVO userServiceVO);
+
+    Integer updateUserService(UserServiceVO userServiceVO);
+
+    UserServiceDO findDetailUserService(UserServiceVO userServiceVO);
+
+    List<UserServiceDO> listUserService(UserServiceVO userServiceVO);
+
+    List<UserServiceDO> listUserServicePage(UserServiceVO userServiceVO);
+
+    Integer countUserService(UserServiceVO userServiceVO);
+
+    Integer deleteUserService(UserServiceVO userServiceVO);
+
+}

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mhr.housekeeping.dao.ServiceMapper">
+
+    <resultMap id="serviceMapper" type="ServiceDO">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="price" column="price"/>
+        <result property="parent" column="parent"/>
+    </resultMap>
+
+    <sql id="_table">
+        service
+	</sql>
+
+    <sql id="_fields">
+		id,`name`,price,parent
+	</sql>
+
+    <sql id="_condition">
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id!=null">
+                AND id = #{id}
+            </if>
+            <if test="name!=null and ''!=name">
+                AND `name` LIKE '%${name}%'
+--                 AND `name` = #{name}
+            </if>
+            <if test="price!=null">
+                AND price = #{price}
+            </if>
+            <if test="parent!=null">
+                AND parent = #{parent}
+            </if>
+        </trim>
+    </sql>
+
+    <sql id="_primaryKey_condition">
+		WHERE id = #{id}
+	</sql>
+
+    <sql id="_order">
+        <if test="sortByParams!= null and sortByParams.size()>0">
+            ORDER BY
+            <foreach collection="sortByParams.keys" index="index" item="sortByParamKey" separator=",">
+                <![CDATA[${sortByParamKey} ${sortByParams[sortByParamKey]}]]>
+            </foreach>
+        </if>
+    </sql>
+
+    <insert id="addService" parameterType="ServiceVO" keyProperty="id">
+        INSERT INTO
+        <include refid="_table"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                id,
+            </if>
+            <if test="name!=null and ''!=name">
+                `name`,
+            </if>
+            <if test="price!=null">
+                price,
+            </if>
+            <if test="parent!=null">
+                parent,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                #{id},
+            </if>
+            <if test="name!=null and ''!=name">
+                #{name},
+            </if>
+            <if test="price!=null">
+                #{price},
+            </if>
+            <if test="parent!=null">
+                #{parent},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateService" parameterType="ServiceVO">
+        UPDATE
+        <include refid="_table"/>
+        <set>
+            <if test="name!=null and ''!=name">
+                `name` = #{name},
+            </if>
+            <if test="price!=null">
+                price = #{price},
+            </if>
+            <if test="parent!=null">
+                parent = #{parent},
+            </if>
+        </set>
+        <include refid="_primaryKey_condition"/>
+    </update>
+
+    <select id="findDetailService" resultMap="serviceMapper" parameterType="ServiceVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM
+        <include refid="_table"/>
+        <include refid="_primaryKey_condition"/>
+    </select>
+    <select id="findServiceByName" resultType="ServiceVO">
+        select * from service WHERE name = #{name}
+    </select>
+
+    <select id="listService" resultMap="serviceMapper" parameterType="ServiceVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM
+        <include refid="_table"/>
+        <include refid="_condition"/>
+        <include refid="_order"/>
+    </select>
+
+    <select id="listServicePage" resultMap="serviceMapper" parameterType="ServiceVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM
+        <include refid="_table"/>
+        <include refid="_condition"/>
+        <include refid="_order"/>
+        <if test="startRecord != null and pageSize != null and pageSize >0">
+            limit #{startRecord},#{pageSize}
+        </if>
+        <if test="!(startRecord != null and pageSize != null and pageSize >0)">
+            limit 0,15
+        </if>
+    </select>
+
+    <select id="countService" resultType="java.lang.Integer" parameterType="ServiceVO">
+        SELECT
+        COUNT(*)
+        FROM
+        <include refid="_table"/>
+        <include refid="_condition"/>
+    </select>
+
+    <delete id="deleteService" parameterType="ServiceVO">
+        DELETE FROM
+        <include refid="_table"/>
+        <include refid="_primaryKey_condition"/>
+    </delete>
+    <delete id="deleteParService" parameterType="ServiceVO">
+        DELETE FROM service where id = #{id} or parent = #{id}
+    </delete>
+
+
+</mapper>

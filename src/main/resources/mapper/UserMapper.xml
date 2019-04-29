@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mhr.housekeeping.dao.UserMapper">
+
+    <resultMap id="userMapper" type="UserDO">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="role" column="role"/>
+        <result property="state" column="state"/>
+        <result property="sex" column="sex"/>
+        <result property="age" column="age"/>
+        <result property="phone" column="phone"/>
+        <result property="idCard" column="id_card"/>
+        <result property="bankCard" column="bank_card"/>
+        <result property="createTime" column="create_time"/>
+        <result property="photo" column="photo"/>
+        <result property="address" column="address"/>
+        <result property="married" column="married"/>
+        <result property="education" column="education"/>
+        <result property="experience" column="experience"/>
+        <result property="introduction" column="introduction"/>
+        <result property="city" column="city"/>
+        <result property="prov" column="prov"/>
+    </resultMap>
+
+    <sql id="_table">
+        user
+	</sql>
+
+    <sql id="_fields">
+		id,`name`,username,`password`,role,state,sex,age,phone,id_card,bank_card,create_time,photo,address,married,education,experience,introduction,city,prov
+	</sql>
+
+    <sql id="_condition">
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id!=null">
+                AND id = #{id}
+            </if>
+            <if test="name!=null and ''!=name">
+                AND `name` = #{name}
+            </if>
+            <if test="username!=null and ''!=username">
+                AND username = #{username}
+            </if>
+            <if test="password!=null and ''!=password">
+                AND `password` = #{password}
+            </if>
+            <if test="role!=null">
+                AND role = #{role}
+            </if>
+            <if test="state!=null">
+                AND state = #{state}
+            </if>
+            <if test="sex!=null and ''!=sex">
+                AND sex = #{sex}
+            </if>
+            <if test="age!=null">
+                AND age = #{age}
+            </if>
+            <if test="phone!=null and ''!=phone">
+                AND phone = #{phone}
+            </if>
+            <if test="idCard!=null and ''!=idCard">
+                AND id_card = #{idCard}
+            </if>
+            <if test="bankCard!=null and ''!=bankCard">
+                AND bank_card = #{bankCard}
+            </if>
+            <if test="createTime!=null">
+                AND create_time = #{createTime}
+            </if>
+            <if test="photo!=null and ''!=photo">
+                AND photo = #{photo}
+            </if>
+            <if test="address!=null and ''!=address">
+                AND address = #{address}
+            </if>
+            <if test="married!=null and ''!=married">
+                AND married = #{married}
+            </if>
+            <if test="education!=null">
+                AND education = #{education}
+            </if>
+            <if test="experience!=null">
+                AND experience = #{experience}
+            </if>
+            <if test="introduction!=null and ''!=introduction">
+                AND introduction = #{introduction}
+            </if>
+            <if test="city!=null and ''!=city">
+                AND city = #{city}
+            </if>
+            <if test="prov!=null and ''!=prov">
+                AND prov = #{prov}
+            </if>
+        </trim>
+    </sql>
+
+    <sql id="_primaryKey_condition">
+		WHERE id = #{id}
+	</sql>
+
+    <sql id="_order">
+        <if test="sortByParams!= null and sortByParams.size()>0">
+            ORDER BY
+            <foreach collection="sortByParams.keys" index="index" item="sortByParamKey" separator=",">
+                <![CDATA[${sortByParamKey} ${sortByParams[sortByParamKey]}]]>
+            </foreach>
+        </if>
+    </sql>
+
+    <insert id="addUser" parameterType="UserVO" keyProperty="id">
+        INSERT INTO
+        <include refid="_table"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                id,
+            </if>
+            <if test="name!=null and ''!=name">
+                `name`,
+            </if>
+            <if test="username!=null and ''!=username">
+                username,
+            </if>
+            <if test="password!=null and ''!=password">
+                `password`,
+            </if>
+            <if test="role!=null">
+                role,
+            </if>
+            <if test="state!=null">
+                state,
+            </if>
+            <if test="sex!=null and ''!=sex">
+                sex,
+            </if>
+            <if test="age!=null">
+                age,
+            </if>
+            <if test="phone!=null and ''!=phone">
+                phone,
+            </if>
+            <if test="idCard!=null and ''!=idCard">
+                id_card,
+            </if>
+            <if test="bankCard!=null and ''!=bankCard">
+                bank_card,
+            </if>
+            <if test="createTime!=null">
+                create_time,
+            </if>
+            <if test="photo!=null and ''!=photo">
+                photo,
+            </if>
+            <if test="address!=null and ''!=address">
+                address,
+            </if>
+            <if test="married!=null and ''!=married">
+                married,
+            </if>
+            <if test="education!=null">
+                education,
+            </if>
+            <if test="experience!=null">
+                experience,
+            </if>
+            <if test="introduction!=null and ''!=introduction">
+                introduction,
+            </if>
+            <if test="city!=null and ''!=city">
+                city,
+            </if>
+            <if test="prov!=null and ''!=prov">
+                prov,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                #{id},
+            </if>
+            <if test="name!=null and ''!=name">
+                #{name},
+            </if>
+            <if test="username!=null and ''!=username">
+                #{username},
+            </if>
+            <if test="password!=null and ''!=password">
+                #{password},
+            </if>
+            <if test="role!=null">
+                #{role},
+            </if>
+            <if test="state!=null">
+                #{state},
+            </if>
+            <if test="sex!=null and ''!=sex">
+                #{sex},
+            </if>
+            <if test="age!=null">
+                #{age},
+            </if>
+            <if test="phone!=null and ''!=phone">
+                #{phone},
+            </if>
+            <if test="idCard!=null and ''!=idCard">
+                #{idCard},
+            </if>
+            <if test="bankCard!=null and ''!=bankCard">
+                #{bankCard},
+            </if>
+            <if test="createTime!=null">
+                #{createTime},
+            </if>
+            <if test="photo!=null and ''!=photo">
+                #{photo},
+            </if>
+            <if test="address!=null and ''!=address">
+                #{address},
+            </if>
+            <if test="married!=null and ''!=married">
+                #{married},
+            </if>
+            <if test="education!=null">
+                #{education},
+            </if>
+            <if test="experience!=null">
+                #{experience},
+            </if>
+            <if test="introduction!=null and ''!=introduction">
+                #{introduction},
+            </if>
+            <if test="city!=null and ''!=city">
+                #{city},
+            </if>
+            <if test="prov!=null and ''!=prov">
+                #{prov},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateUser" parameterType="UserVO">
+        UPDATE
+        <include refid="_table"/>
+        <set>
+            <if test="name!=null and ''!=name">
+                `name` = #{name},
+            </if>
+            <if test="username!=null and ''!=username">
+                username = #{username},
+            </if>
+            <if test="password!=null and ''!=password">
+                `password` = #{password},
+            </if>
+            <if test="role!=null">
+                role = #{role},
+            </if>
+            <if test="state!=null">
+                state = #{state},
+            </if>
+            <if test="sex!=null and ''!=sex">
+                sex = #{sex},
+            </if>
+            <if test="age!=null">
+                age = #{age},
+            </if>
+            <if test="phone!=null and ''!=phone">
+                phone = #{phone},
+            </if>
+            <if test="idCard!=null and ''!=idCard">
+                id_card = #{idCard},
+            </if>
+            <if test="bankCard!=null and ''!=bankCard">
+                bank_card = #{bankCard},
+            </if>
+            <if test="createTime!=null">
+                create_time = #{createTime},
+            </if>
+            <if test="photo!=null and ''!=photo">
+                photo = #{photo},
+            </if>
+            <if test="address!=null and ''!=address">
+                address = #{address},
+            </if>
+            <if test="married!=null and ''!=married">
+                married = #{married},
+            </if>
+            <if test="education!=null">
+                education = #{education},
+            </if>
+            <if test="experience!=null">
+                experience = #{experience},
+            </if>
+            <if test="introduction!=null and ''!=introduction">
+                introduction = #{introduction},
+            </if>
+            <if test="city!=null and ''!=city">
+                city = #{city},
+            </if>
+            <if test="prov!=null and ''!=prov">
+                prov = #{prov},
+            </if>
+        </set>
+        <include refid="_primaryKey_condition"/>
+    </update>
+
+    <select id="findDetailUser" resultMap="userMapper" parameterType="UserVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM
+        <include refid="_table"/>
+        <include refid="_primaryKey_condition"/>
+    </select>
+
+    <select id="listUser" resultMap="userMapper" parameterType="UserVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM
+        <include refid="_table"/>
+        <include refid="_condition"/>
+        <include refid="_order"/>
+    </select>
+
+    <select id="listUserPage" resultMap="userMapper" parameterType="UserVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM
+        <include refid="_table"/>
+        <include refid="_condition"/>
+        <include refid="_order"/>
+        <if test="startRecord != null and pageSize != null and pageSize >0">
+            limit #{startRecord},#{pageSize}
+        </if>
+        <if test="!(startRecord != null and pageSize != null and pageSize >0)">
+            limit 0,15
+        </if>
+    </select>
+
+    <select id="countUser" resultType="java.lang.Integer" parameterType="UserVO">
+        SELECT
+        COUNT(*)
+        FROM
+        <include refid="_table"/>
+        <include refid="_condition"/>
+    </select>
+
+    <delete id="deleteUser" parameterType="UserVO">
+        DELETE FROM
+        <include refid="_table"/>
+        <include refid="_primaryKey_condition"/>
+    </delete>
+
+    <select id="getUserByUsername" resultType="UserVO">
+        select *
+        from user
+        WHERE username = #{username}
+    </select>
+
+    <select id="getUserByPhone" resultType="UserVO">
+        select *
+        from user
+        WHERE phone = #{phone}
+    </select>
+
+    <select id="getUserByIdCard" resultType="UserVO">
+        select *
+        from user
+        WHERE id_card = #{idcard}
+    </select>
+    <select id="getUserByBankCard" resultType="UserVO">
+        select *
+        from user
+        WHERE bank_card = #{bankCard}
+    </select>
+    <update id="updateUserByUsername" parameterType="UserVO">
+        update user set password = #{password} where username = #{username}
+    </update>
+</mapper>
+

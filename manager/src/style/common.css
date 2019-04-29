@@ -1,0 +1,774 @@
+.layout {
+    *zoom: 1
+}
+
+.layout:after {
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+    clear: both
+}
+
+.mySelect .icon {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    overflow: hidden
+}
+
+a, article, aside, audio, b, body, canvas, caption, dd, div, dl, dt, em, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, html, i, iframe, img, label, legend, li, ol, p, section, span, strong, sub, sup, table, tbody, td, tfoot, th, thead, tr, u, ul, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    font-size: 100%;
+    vertical-align: baseline
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+    display: block
+}
+
+ol, ul {
+    list-style: none
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+caption, td, th {
+    text-align: left;
+    font-weight: 400;
+    vertical-align: middle
+}
+
+a:active, a:hover, a:link, a:visited {
+    text-decoration: none;
+    outline: none
+}
+
+a img {
+    border: none
+}
+
+img {
+    max-width: 100%;
+    vertical-align: middle
+}
+
+button, input, select, textarea {
+    outline: none
+}
+
+textarea {
+    resize: none;
+    overflow: auto
+}
+
+body {
+    line-height: 1.45;
+    min-width: 1200px;
+    margin: 0 auto
+}
+
+body, button, input, textarea {
+    font: 14px Microsoft Yahei, simsun, Arial;
+    color: #566066
+}
+
+button, input, textarea {
+    outline: 0;
+    border: 0;
+    background: transparent
+}
+
+a {
+    color: #21a9ff
+}
+
+a:hover {
+    text-decoration: underline
+}
+
+::-webkit-input-placeholder {
+    color: #999
+}
+
+::-moz-placeholder {
+    color: #999
+}
+
+:-ms-input-placeholder {
+    color: #999
+}
+
+:-moz-placeholder {
+    color: #999
+}
+
+.hide {
+    display: none
+}
+
+.page-content {
+    width: 1200px;
+    margin: 0 auto
+}
+
+.btn-active, .btn-cancel {
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 3px;
+    text-align: center;
+    cursor: pointer
+}
+
+.btn-active:hover, .btn-cancel:hover {
+    text-decoration: none
+}
+
+.btn-active {
+    background: #21a9ff;
+    color: #fff
+}
+
+.btn-active:hover {
+    background: #089fff
+}
+
+.btn-active.disabled {
+    opacity: .6
+}
+
+.btn-active.disabled:hover {
+    background: #21a9ff
+}
+
+.btn-cancel {
+    background: #fff;
+    border: 1px solid #21a9ff;
+    color: #21a9ff
+}
+
+.btn-cancel:hover {
+    background: rgba(236, 140, 71, .06)
+}
+
+.btn-cancel.disabled {
+    opacity: .6
+}
+
+.btn-cancel.disabled:hover {
+    background: transparent
+}
+
+.align-center {
+    text-align: center
+}
+
+.align-right {
+    text-align: right
+}
+
+.mySelect {
+    position: relative;
+    height: 32px;
+    line-height: 32px;
+    cursor: pointer;
+    padding-left: 10px;
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 3px;
+    font-size: 14px;
+    color: #333
+}
+
+.mySelect .value {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden
+}
+
+.mySelect .value.default {
+    color: #999
+}
+
+.mySelect .icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -2px;
+    border-top: 5px solid #666;
+    border-left: 4px dashed transparent;
+    border-right: 4px dashed transparent
+}
+
+.mySelect .options {
+    position: absolute;
+    display: none;
+    top: 42px;
+    left: 0;
+    width: 100%;
+    max-height: 400px;
+    overflow: auto;
+    background: #fff;
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, .1);
+    border-radius: 3px;
+    z-index: 10
+}
+
+.mySelect .options .list {
+    padding: 10px
+}
+
+.mySelect .options .list li {
+    font-size: 14px;
+    line-height: 34px;
+    padding: 0 10px;
+    cursor: pointer;
+    white-space: nowrap
+}
+
+.mySelect .options .list li:hover {
+    background: #fff5ef
+}
+
+.mySelect .options .list li.selected {
+    color: #21a9ff
+}
+
+.mySelect:hover {
+    border-color: #666;
+    z-index: 1
+}
+
+.mySelect.focus {
+    background: #fff;
+    border-color: #21a9ff;
+    color: #333;
+    z-index: 1
+}
+
+.mySelect.focus .options {
+    display: block
+}
+
+.layout {
+    position: relative;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAABAQMAAAA/7iMoAAAAA1BMVEX3+PqW/Cg4AAAAC0lEQVQI12MgAgAAACQAAShjW4MAAAAASUVORK5CYII=) repeat-y;
+    width: 1200px;
+    min-height: 400px;
+    margin: 20px auto;
+    overflow: hidden
+}
+
+.layout .main {
+    min-height: 100%;
+    margin-left: 310px
+}
+
+.layout .main.border {
+    border: 1px solid #ebebeb
+}
+
+.layout .main .main-title {
+    line-height: 38px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #333
+}
+
+.date-int-wrap {
+    position: relative;
+    background: #fff;
+    border: 1px solid #eaeaea
+}
+
+.date-int-wrap input {
+    width: 100%;
+    height: 32px;
+    line-height: 32px;
+    margin: 0;
+    padding: 0;
+    text-indent: 10px;
+    color: #333;
+    cursor: pointer
+}
+
+.date-int-wrap:after {
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+}
+
+.beauty-checkbox, .beauty-radio {
+    position: relative;
+    display: inline-block;
+    color: #666;
+    overflow: hidden;
+    font-size: 14px;
+    cursor: pointer;
+    vertical-align: middle
+}
+
+.beauty-checkbox i, .beauty-radio i {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-right: 6px
+}
+
+.beauty-checkbox span, .beauty-radio span {
+    display: inline-block;
+    line-height: 18px;
+    vertical-align: middle
+}
+
+.beauty-checkbox input, .beauty-radio input {
+    position: absolute;
+    left: -999px
+}
+
+.beauty-checkbox.checked i, .beauty-radio.checked i {
+    border-color: #21a9ff
+}
+
+.beauty-checkbox.checked i:before, .beauty-radio.checked i:before {
+    content: "";
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAALVBMVEUAAADtjEfvj1DsjUjsjEjtkknujkntjUfsjEjsjEntjEfsjUjwj0nwkkn/qlUWAQBwAAAAD3RSTlMA/hDL3BxNrr+XjGBCIwYFZiJ7AAAANUlEQVQI12MgGkRcgNCsjgVAkm8DQ4iwApDBLsXqaAQSZxOcAhQAgURBoABYCCgAAYeItQUA3PEGOiOJVWgAAAAASUVORK5CYII=) no-repeat
+}
+
+.beauty-checkbox.disabled i, .beauty-radio.disabled i {
+    background-color: #f2f6fc;
+    border-color: #dcdfe6
+}
+
+.beauty-checkbox.checked.disabled i:before, .beauty-radio.checked.disabled i:before {
+    background-image: url(data:image/png;base64,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)
+}
+
+.box-info {
+    background: #ebf5fb;
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #95a7b2
+}
+
+.table {
+    width: 100%;
+    table-layout: fixed;
+    border: 1px solid #ebebeb;
+    border-radius: 3px
+}
+
+.table td, .table th {
+    height: 40px;
+    padding: 5px 10px;
+    border: 1px solid #ebebeb;
+    vertical-align: middle;
+    color: #333
+}
+
+.table th {
+    background: #f7f8fa;
+    color: #666
+}
+
+.table a {
+    color: #4ba3f8
+}
+
+.table a:hover {
+    color: #21a9ff;
+    text-decoration: none
+}
+
+.table .tc {
+    text-align: center
+}
+
+.table .tr {
+    text-align: right
+}
+
+.nodata {
+    /*background: url("../../public/images/coop/nodata.png") no-repeat top;*/
+    padding: 140px 0 0;
+    text-align: center
+}
+
+.nodata p {
+    color: #999;
+    font-size: 14px;
+    line-height: 20px
+}
+
+.nodata .btn-active {
+    height: 42px;
+    line-height: 42px;
+    padding: 0 40px;
+    font-size: 14px;
+    margin-top: 30px
+}
+
+.loading {
+    display: block;
+    text-align: center;
+    color: #666;
+    padding: 20px 0
+}
+
+.table-order {
+    position: relative
+}
+
+.table-order .table-sequence {
+    display: none;
+    position: relative;
+    top: 4px;
+    content: "";
+    width: 0;
+    height: 0;
+    border: 5px solid transparent
+}
+
+.table-order[data-order=desc] .table-sequence {
+    display: inline-block;
+    border-top: 5px solid #000
+}
+
+.table-order[data-order=asc] .table-sequence {
+    display: inline-block;
+    top: -4px;
+    border-bottom: 5px solid #000
+}
+
+.header .left, .header .nav, .header .right {
+    *zoom: 1
+}
+
+.header .nav:after, .header .right:after {
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+    clear: both
+}
+
+.header .toggle-trigger:before {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    overflow: hidden
+}
+
+.header {
+    position: relative;
+    background: #fff;
+    padding: 15px 40px 15px 20px;
+    z-index: 3;
+    border-bottom: 1px solid #21a9ff;
+}
+
+.header .inner {
+    position: relative;
+    width: 1200px;
+    height: 40px;
+    margin: 0 auto;
+}
+
+.header .left {
+    float: left;
+    width: 174px;
+    height: 40px;
+    /*background: url("../../public/images/my.png") no-repeat;*/
+}
+
+.header .right {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin-top: -12px
+}
+
+.header .toggle-trigger {
+    position: relative;
+    cursor: pointer
+}
+
+.header .toggle-trigger:before {
+    content: "";
+    float: right;
+    border-top: 5px solid #6c6f76;
+    border-left: 4px dashed transparent;
+    border-right: 4px dashed transparent;
+    margin: 11px 0 0 8px
+}
+
+.header .toggle-trigger.active:before, .header .toggle-trigger:hover:before {
+    border-top-color: #21a9ff
+}
+
+.header .toggle-trigger:hover .toggle {
+    display: block
+}
+
+.header .toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding-top: 36px;
+    display: none
+}
+
+.header .toggle .in {
+    display: block;
+    width: 150px;
+    background: #fff;
+    box-shadow: 0 1px 4px 0 rgba(86, 96, 102, .3);
+    border-radius: 3px
+}
+
+.header .toggle a {
+    display: block;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 10px;
+    color: #6f777c;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden
+}
+
+.header .toggle a:first-child {
+    border-radius: 4px 4px 0 0
+}
+
+.header .toggle a:last-child {
+    border-radius: 0 0 4px 4px
+}
+
+.header .toggle a:hover {
+    color: #21a9ff;
+    background: #f3f3f3;
+    text-decoration: none
+}
+
+.header .toggle a.active {
+    color: #21a9ff
+}
+
+.header .nav {
+    position: relative;
+    float: left;
+    text-align: center;
+    margin-top: 10px
+}
+
+.header .nav .toggle-trigger, .header .nav > a {
+    position: relative;
+    float: left;
+    display: block;
+    line-height: 20px;
+    color: #707070;
+    font-size: 14px;
+    margin-left: 52px
+}
+
+.header .nav .toggle-trigger:first-child, .header .nav > a:first-child {
+    margin-left: 20px
+}
+
+.header .nav .toggle-trigger.active, .header .nav .toggle-trigger:hover, .header .nav > a.active, .header .nav > a:hover {
+    color: #21a9ff;
+    text-decoration: none
+}
+
+.header .nav .toggle-trigger.active:after, .header .nav > a.active:after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -8px;
+    display: block;
+    width: 12px;
+    height: 4px;
+    border-radius: 4px;
+    background: #21a9ff;
+    margin-left: -6px
+}
+
+.header .nav .toggle-trigger.active:after {
+    margin-left: -19px
+}
+
+.header .nav .toggle {
+    right: auto;
+    left: 50%;
+    margin-left: -62px
+}
+
+.header .nav .toggle .in {
+    width: 124px
+}
+
+.header .nav .toggle .in a {
+    padding-right: 20px;
+    text-align: center
+}
+
+.header .nav .num {
+    position: absolute;
+    right: -2px;
+    top: -4px;
+    display: block;
+    min-width: 10px;
+    line-height: 16px;
+    padding: 0 4px;
+    background: #df6a4e;
+    border-radius: 16px;
+    font-size: 12px;
+    font-family: Arial;
+    color: #fff;
+    text-align: center;
+    -webkit-transform: translateX(100%);
+    -moz-transform: translateX(100%);
+    -ms-transform: translate(100%);
+    -o-transform: translate(100%);
+    transform: translateX(100%)
+}
+
+.header .user {
+    float: left
+}
+
+.header .user .icon-user {
+    float: left;
+    display: block;
+    width: 24px;
+    height: 24px;
+    /*background-image: url("../../public/images/user.png");*/
+    vertical-align: middle;
+    margin: 0 10px 0 0
+}
+
+.header .user .link-login .icon-user {
+    /*background-image: url("../../public/images/user.png");*/
+}
+
+.header .user > .toggle-trigger, .header .user > a {
+    position: relative;
+    float: left;
+    display: block;
+    height: 24px;
+    line-height: 24px;
+    color: #999;
+    padding: 0 20px;
+    cursor: pointer;
+    vertical-align: middle
+}
+
+.header .user > .toggle-trigger:after, .header .user > a:after {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 0;
+    display: block;
+    height: 16px;
+    border-left: 1px solid #52555e
+}
+
+.header .user > .toggle-trigger.active, .header .user > .toggle-trigger:hover, .header .user > a.active, .header .user > a:hover {
+    color: #21a9ff;
+    text-decoration: none
+}
+
+.header .user > .toggle-trigger.active .icon-user, .header .user > .toggle-trigger:hover .icon-user, .header .user > a.active .icon-user, .header .user > a:hover .icon-user {
+    /*background-image: url("../../public/images/user_active.png")*/
+}
+
+.header .user > .toggle-trigger:first-child, .header .user > a:first-child {
+    padding-left: 0
+}
+
+.header .user > .toggle-trigger:first-child:after, .header .user > a:first-child:after {
+    display: none
+}
+
+.header .user > .toggle-trigger:last-child, .header .user > a:last-child {
+    padding-right: 0
+}
+
+.header .user .link-login {
+    padding-right: 10px
+}
+
+.header .user .link-register {
+    width: 50px;
+    height: 22px;
+    line-height: 22px;
+    border: 1px solid #999;
+    border-radius: 24px;
+    text-align: center;
+    padding: 0;
+    margin-right: 20px
+}
+
+.header .user .link-register:after {
+    display: none
+}
+
+.header .user .link-register:hover {
+    border-color: #21a9ff
+}
+
+.header.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0
+}
+
+.footer {
+    width: 100%;
+    line-height: 26px;
+    padding: 30px 0;
+    text-align: center;
+    font-size: 12px;
+    color: #707070;
+}
+
+.crumbs {
+    background: #383e4b
+}
+
+.crumbs .inner {
+    width: 1200px;
+    height: 40px;
+    line-height: 40px;
+    margin: 0 auto
+}
+
+.crumbs .crumbs-item, .crumbs .crumbs-sp {
+    color: #999;
+    white-space: nowrap
+}
+
+.crumbs a.crumbs-item:hover {
+    color: #21a9ff;
+    text-decoration: none
+}
