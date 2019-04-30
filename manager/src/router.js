@@ -45,31 +45,57 @@ const routes = [
         name: '修改密码',
         component: () => import('./views/manager/editPassword'),
         meta: {login: true},
-        hidden:true
+        hidden: true
       },
     ]
   },
   {
-    path: '/', name: '系统设置', roles: [100],component: layout, meta: {icon: 'el-icon-setting', login: true},
+    path: '/', name: '服务中心', roles: [100], component: layout, meta: {icon: 'el-icon-setting', login: true},
     children: [
       {path: '/manager/rank', name: '等级管理', component: () => import('./views/manager/rank'), meta: {login: true}},
       {path: '/manager/service', name: '服务管理', component: () => import('./views/manager/service'), meta: {login: true}},
     ]
   },
   {
-    path: '/', name: '人员管理', roles: [100],component: layout, meta: {icon: 'el-icon-setting', login: true},
+    path: '/', name: '人员管理', roles: [100], component: layout, meta: {icon: 'el-icon-setting', login: true},
     children: [
-      {path: '/manager/employeeList', name: '雇员列表', component: () => import('./views/manager/employeeList'), meta: {login: true}},
-      {path: '/manager/employerList', name: '雇主列表', component: () => import('./views/manager/employerList'), meta: {login: true}},
+      {
+        path: '/manager/employeeList',
+        name: '雇员列表',
+        component: () => import('./views/manager/employeeList'),
+        meta: {login: true}
+      },
+      {
+        path: '/manager/employerList',
+        name: '雇主列表',
+        component: () => import('./views/manager/employerList'),
+        meta: {login: true}
+      },
     ]
   },
 
   {
+    path: '/', name: '家政服务', roles:[300], component: layout, meta: {icon: 'el-icon-setting', login: true},
+    children: [
+      {path: '/employer/service', name: '服务中心', component: () => import('./views/employer/service'), meta: {login: true}},
+      {path: '/employer/chooseEmployee', name: '人员浏览', component: () => import('./views/employer/chooseEmployee'), meta: {login: true}},
+      {path: '/employer/reserve', name: '家政预定', component: () => import('./views/employer/reserve'), meta: {login: true}},
+    ]
+  },
+  {
     path: '/', name: '订单管理', component: layout, meta: {icon: 'el-icon-setting', login: true},
     children: [
-
       {path: '/manager/orders', name: '订单列表', component: () => import('./views/manager/orders'), meta: {login: true}},
       {path: '/manager/comment', name: '查看评论', component: () => import('./views/manager/comment'), meta: {login: true}},
+    ]
+  },
+
+  {
+    path: '/', name: '数据统计', component: layout, meta: {icon: 'el-icon-setting', login: true},
+    children: [
+
+      {path: '/manager/orders', name: '服务统计', component: () => import('./views/manager/orders'), meta: {login: true}},
+      {path: '/manager/comment', name: '资金统计', component: () => import('./views/manager/comment'), meta: {login: true}},
     ]
   },
 ];

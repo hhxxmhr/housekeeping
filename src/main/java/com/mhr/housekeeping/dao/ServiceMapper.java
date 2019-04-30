@@ -32,4 +32,6 @@ public interface ServiceMapper {
     Integer deleteParService(ServiceVO serviceVO);
 
     List<Integer> getIds(Integer id);
+
+    List<ServiceDO> listServiceByName(ServiceVO serviceVO);
 }

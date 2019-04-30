@@ -79,7 +79,7 @@
       <el-table :data="serviceList" border style="width: 100%">
         <el-table-column prop="id" label="ID" align="center" width="150px"></el-table-column>
         <el-table-column prop="name" label="类别" align="center"></el-table-column>
-        <el-table-column prop="childrenType" label="包含服务" align="center" width="400px">
+        <el-table-column prop="childrenType" label="可选服务" align="center" width="400px">
           <template slot-scope="scope">
             <el-tag :key="tag.id" v-for="tag in scope.row.childrenType" closable
                     @close="handleClose(tag,scope.row)" @click="editChild(tag)"
@@ -107,7 +107,6 @@
     data() {
       return {
         searchForm: {
-          id: null,
           name: ''
         },
         service: {
@@ -138,13 +137,13 @@
     },
     watch: {
       '$route'() {
-        this.searchForm.id = null;
         this.initQuery();
         this.init();
       }
     },
     methods: {
       async init() {
+        this.serviceList = [];
         let res = await this.$api('Service/getAll', this.searchForm);
         //得到所有的父类
         res.serviceList.forEach(item => {
@@ -254,7 +253,7 @@
       },
       initQuery() {
         Object.assign(this.searchForm, this.$route.query);
-        this.searchForm.id = this.searchForm.id ? parseInt(this.searchForm.id) : null;
+        // this.searchForm.id = this.searchForm.id ? parseInt(this.searchForm.id) : null;
       }
     }
   }

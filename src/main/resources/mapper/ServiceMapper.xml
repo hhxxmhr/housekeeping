@@ -117,6 +117,12 @@
         <include refid="_order"/>
     </select>
 
+    <select id="listServiceByName" resultMap="serviceMapper" parameterType="ServiceVO">
+        SELECT * from service where parent=
+(SELECT case when parent is not null then parent else id end as uid from service WHERE `name` = #{name} )
+ or id=(SELECT case when parent is not null then parent else id end as uid from service WHERE `name` = #{name} )
+    </select>
+
     <select id="listServicePage" resultMap="serviceMapper" parameterType="ServiceVO">
         SELECT
         <include refid="_fields"/>

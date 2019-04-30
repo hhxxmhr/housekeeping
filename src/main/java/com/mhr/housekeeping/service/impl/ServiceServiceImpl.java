@@ -59,8 +59,14 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public Result listService(ServiceVO serviceVO) throws Exception {
-        List<ServiceDO> listService = serviceMapper.listService(serviceVO);
-        return new Result<>(listService);
+        //搜索条件不为空的时候，查询的如果是大类别，需要将他的小类别也返回,反之一样
+        if (!serviceVO.getName().isEmpty()) {
+            List<ServiceDO> listService = serviceMapper.listServiceByName(serviceVO);
+            return new Result<>(listService);
+        } else {
+            List<ServiceDO> listService = serviceMapper.listService(serviceVO);
+            return new Result<>(listService);
+        }
     }
 
     @Override
