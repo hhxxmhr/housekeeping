@@ -1,6 +1,7 @@
 package com.mhr.housekeeping.service;
 
 
+import com.mhr.housekeeping.entity.UserDO;
 import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.utils.Result;
 
@@ -24,17 +25,18 @@ public interface UserService {
 	
 	Result deleteUser(UserVO userVO) throws Exception;
 
-	UserVO getUserByUsername(String username) throws Exception;
+	UserDO getUserByUsername(UserVO username) throws Exception;
 
 	Result updateUserState(UserVO userVO);
 
 	Result editPassword(String new_pwd, String old_pwd);
 
-	UserVO getUserByPhone(String phone);
+	UserDO getUserByPhone(UserVO userVO);
 
-	UserVO getUserByIdCard(String idCard);
+	UserDO getUserByIdCard(UserVO userVO);
 
-	UserVO getUserByBankCard(String bankCard);
+	UserDO getUserByBankCard(UserVO userVO);
 
     Result updateUserByUsername(UserVO userVO);
+
 }

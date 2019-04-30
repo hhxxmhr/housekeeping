@@ -124,4 +124,8 @@
         <include refid="_primaryKey_condition"/>
     </delete>
 
+    <select id="getRankByName" resultMap="rankMapper" parameterType="RankVO">
+        select * from rank where name = #{name}
+    </select>
+
 </mapper>

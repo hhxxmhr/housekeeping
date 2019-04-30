@@ -3,11 +3,13 @@ package com.mhr.housekeeping.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
+import com.mhr.housekeeping.entity.UserDO;
 import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.service.UserService;
 import com.mhr.housekeeping.utils.EnumType;
 import com.mhr.housekeeping.utils.Result;
 import com.mhr.housekeeping.utils.SmsUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,10 +30,10 @@ public class UserController {
     static Integer code;
 
     @RequestMapping("/User/login")
-    public Result login(@RequestBody UserVO userVO) throws Exception {
-        UserVO user = userService.getUserByUsername(userVO.getUsername());
+    public Result login(@RequestBody UserVO uservO) throws Exception {
+        UserDO user = userService.getUserByUsername(uservO);
         if (user != null) {
-            if (user.getPassword().equals(userVO.getPassword())) {
+            if (user.getPassword().equals(uservO.getPassword())) {
                 if (user.getState() == EnumType.Normal||user.getState() == EnumType.Free||user.getState() == EnumType.busy) {
                     request.getSession().setAttribute("user", user);
                     return new Result<>(200, "登录成功", user);
@@ -47,7 +49,7 @@ public class UserController {
 
     @RequestMapping("/User/getMineInfo")
     public Result getMineInfo() {
-        Object user = request.getSession().getAttribute("user");
+        UserDO user = (UserDO) request.getSession().getAttribute("user");
         if (user == null) {
             return new Result<>(true);
         }
@@ -62,8 +64,8 @@ public class UserController {
 
     @RequestMapping("/User/getCode")
     public Result getCode(@RequestBody UserVO userVO) throws Exception {
-        UserVO user = userService.getUserByPhone(userVO.getPhone());
-        if (user != null) {
+        UserDO userByPhone = userService.getUserByPhone(userVO);
+        if (userByPhone != null) {
             return Result.getFailure("手机号已注册");
         }
         return message(userVO);
@@ -71,7 +73,7 @@ public class UserController {
 
     @RequestMapping("/User/getForgetCode")
     public Result getForgetCode(@RequestBody UserVO userVO) throws Exception {
-        UserVO userByUsername = userService.getUserByUsername(userVO.getUsername());
+        UserDO userByUsername = userService.getUserByUsername(userVO);
         if (userByUsername == null) {
             return Result.getFailure("用户不存在");
         } else {
@@ -84,19 +86,19 @@ public class UserController {
 
     @RequestMapping("/User/register")
     public Result register(@RequestBody UserVO userVO) throws Exception {
-        UserVO user = userService.getUserByUsername(userVO.getUsername());
+        UserDO user = userService.getUserByUsername(userVO);
         if (user != null) {
             return Result.getFailure("此账号已存在");
         }
-        UserVO user2 = userService.getUserByPhone(userVO.getPhone());
+        UserDO user2 = userService.getUserByPhone(userVO);
         if (user2 != null) {
             return Result.getFailure("手机号已注册");
         }
-        UserVO user3 = userService.getUserByIdCard(userVO.getIdCard());
+        UserDO user3 = userService.getUserByIdCard(userVO);
         if (user3 != null) {
             return Result.getFailure("请检查身份证号");
         }
-        UserVO user4 = userService.getUserByBankCard(userVO.getBankCard());
+        UserDO user4 = userService.getUserByBankCard(userVO);
         if (user4 != null) {
             return Result.getFailure("请检查银行卡号");
         }
@@ -107,7 +109,7 @@ public class UserController {
 
     @RequestMapping("/User/forgetPwd")
     public Result forgetPwd(@RequestBody UserVO userVO) throws Exception {
-        UserVO userByUsername = userService.getUserByUsername(userVO.getUsername());
+        UserDO userByUsername = userService.getUserByUsername(userVO);
         if (userByUsername == null) {
             return Result.getFailure("用户不存在");
         } else {
@@ -120,12 +122,14 @@ public class UserController {
 
     @RequestMapping("/User/editPwd")
     public Result editPwd(@RequestBody HashMap hashMap) throws Exception {
-        UserVO user = (UserVO) request.getSession().getAttribute("user");
+        UserDO user = (UserDO) request.getSession().getAttribute("user");
         if (!user.getPassword().equals(hashMap.get("old_pwd"))) {
             return Result.getFailure("原密码错误");
         } else {
             user.setPassword((String) hashMap.get("new_pwd"));
-            return userService.updateUser(user);
+            UserVO userVO  = new UserVO();
+            BeanUtils.copyProperties(user, userVO);
+            return userService.updateUser(userVO);
         }
     }
 
@@ -146,8 +150,8 @@ public class UserController {
     @RequestMapping("/User/deleteEmployee")
     public Result deleteEmployee(@RequestBody UserVO userVO) throws Exception {
         return userService.deleteUser(userVO);
-
     }
+
     public Result message(UserVO userVO) throws ClientException, InterruptedException {
         code = 0;
         for (int j = 0; j < 100; j++) {

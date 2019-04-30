@@ -32,18 +32,30 @@ public class RankServiceImpl implements RankService {
 
     @Override
     public Result addRank(RankVO rankVO) throws Exception {
-        Integer count = rankMapper.addRank(rankVO);
-        if (count > 0) {
-            return Result.getSuccess("增添成功");
+        //查询数据库中是否存在此名字的等级
+        RankDO rankDO = rankMapper.getRankByName(rankVO);
+        if (rankDO != null ) {
+            return Result.getFailure("此等级已存在");
+        }else {
+            Integer count = rankMapper.addRank(rankVO);
+            if (count > 0) {
+                return Result.getSuccess("增添成功");
+            }
         }
         return Result.getFailure("增添失败");
     }
 
     @Override
     public Result updateRank(RankVO rankVO) throws Exception {
-        Integer count = rankMapper.updateRank(rankVO);
-        if (count > 0) {
-            return Result.getSuccess("修改成功");
+        //查询数据库中是否存在此名字的等级
+        RankDO rankDO = rankMapper.getRankByName(rankVO);
+        if (rankDO != null ) {
+            return Result.getFailure("此等级已存在,无需重复");
+        }else {
+            Integer count = rankMapper.updateRank(rankVO);
+            if (count > 0) {
+                return Result.getSuccess("修改成功");
+            }
         }
         return Result.getFailure("修改失败");
     }

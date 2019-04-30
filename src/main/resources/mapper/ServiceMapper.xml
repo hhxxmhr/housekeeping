@@ -146,7 +146,7 @@
         <include refid="_condition"/>
     </select>
 
-    <select id="getIds" parameterType="Integer">
+    <select id="getIds" parameterType="Integer" resultType="ServiceVO">
         select id from service where id = #{id} or parent = #{id}
     </select>
 

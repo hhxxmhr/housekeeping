@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ public class ServiceServiceImpl implements ServiceService {
     public Result addService(ServiceVO serviceVO) throws Exception {
         ServiceVO vo = serviceMapper.findServiceByName(serviceVO);
         if (vo != null) {
-            return Result.getFailure("该服务名称已存在");
+            return Result.getFailure("该服务名称已存在,操作失败");
         } else {
             Integer count = serviceMapper.addService(serviceVO);
             if (count > 0) {
@@ -45,11 +46,16 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public Result updateService(ServiceVO serviceVO) throws Exception {
-        Integer count = serviceMapper.updateService(serviceVO);
-        if (count > 0) {
-            return Result.getSuccess("操作成功");
+        ServiceVO vo = serviceMapper.findServiceByName(serviceVO);
+        if (vo != null) {
+            return Result.getFailure("该服务名称已存在,请勿重复编辑");
+        } else {
+            Integer count = serviceMapper.updateService(serviceVO);
+            if (count > 0) {
+                return Result.getSuccess("操作成功");
+            }
+            return Result.getFailure("操作失败");
         }
-        return Result.getFailure("操作失败");
     }
 
     @Override
@@ -91,7 +97,12 @@ public class ServiceServiceImpl implements ServiceService {
     public Result deleteParService(ServiceVO serviceVO) throws Exception {
 //        select id from service where id=30 or parent=30
         //得到父类id以及父类下面子类的id
-        List<Integer> ids = serviceMapper.getIds(serviceVO.getId());
+        List<ServiceVO> vos = serviceMapper.getIds(serviceVO.getId());
+        List<Integer> ids = new ArrayList<>();
+        for (int i = 0; i < vos.size(); i++) {
+            ids.add(vos.get(i).getId());
+        }
+        System.out.println(ids);
         for (int i = 0; i < ids.size(); i++) {
             UserServiceVO userServiceVO = new UserServiceVO();
             userServiceVO.setServiceId(ids.get(i));

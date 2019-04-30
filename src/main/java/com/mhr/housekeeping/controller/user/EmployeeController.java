@@ -1,5 +1,6 @@
 package com.mhr.housekeeping.controller.user;
 
+import com.mhr.housekeeping.entity.UserDO;
 import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.service.UserService;
 import com.mhr.housekeeping.utils.Result;
@@ -19,10 +20,11 @@ public class EmployeeController {
 
     @RequestMapping("/Employee/editInfo")
     public Result editInfo(@RequestBody UserVO userVO, HttpServletRequest request) throws Exception {
-        System.out.println(userVO);
-        UserVO user = (UserVO) request.getSession().getAttribute("user");
+        UserDO user = (UserDO) request.getSession().getAttribute("user");
         BeanUtils.copyProperties(userVO, user);
-        return userService.updateUser(user);
+        UserVO vo = new UserVO();
+        BeanUtils.copyProperties(user, vo);
+        return userService.updateUser(vo);
     }
 
 

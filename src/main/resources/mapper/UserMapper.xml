@@ -352,28 +352,34 @@
         <include refid="_primaryKey_condition"/>
     </delete>
 
-    <select id="getUserByUsername" resultType="UserVO">
+    <select id="getUserByUsername" resultMap="userMapper" parameterType="UserVO">
         select *
         from user
         WHERE username = #{username}
     </select>
 
-    <select id="getUserByPhone" resultType="UserVO">
+    <select id="getUserByPhone" resultMap="userMapper" parameterType="UserVO">
         select *
         from user
         WHERE phone = #{phone}
     </select>
 
-    <select id="getUserByIdCard" resultType="UserVO">
+    <select id="getUserByIdCard" resultMap="userMapper" parameterType="UserVO">
         select *
         from user
         WHERE id_card = #{idcard}
     </select>
-    <select id="getUserByBankCard" resultType="UserVO">
+
+    <select id="getUserByBankCard" resultMap="userMapper" parameterType="UserVO">
         select *
         from user
         WHERE bank_card = #{bankCard}
     </select>
+
+    <select id="getUserForUpdate" resultMap="userMapper" parameterType="UserVO">
+        SELECT * FROM user where username = #{username} or phone = #{phone}
+    </select>
+
     <update id="updateUserByUsername" parameterType="UserVO">
         update user set password = #{password} where username = #{username}
     </update>

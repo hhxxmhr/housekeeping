@@ -27,13 +27,15 @@ public interface UserMapper {
 
     Integer deleteUser(UserVO userVO);
 
-    UserVO getUserByUsername(String username);
+    UserDO getUserByUsername(UserVO username);
 
-    UserVO getUserByPhone(String phone);
+    UserDO getUserByPhone(UserVO userVO);
 
-    UserVO getUserByIdCard(String idCard);
+    UserDO getUserByIdCard(UserVO userVO);
 
-    UserVO getUserByBankCard(String bankCard);
+    UserDO getUserByBankCard(UserVO userVO);
 
     Integer updateUserByUsername(UserVO userVO);
+
+    List<UserDO> getUserForUpdate(UserVO userVO);
 }

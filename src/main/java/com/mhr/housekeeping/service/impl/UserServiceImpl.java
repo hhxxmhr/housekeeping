@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.print.attribute.standard.NumberUp;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -35,20 +36,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result addUser(UserVO userVO) throws Exception {
-        Integer count = userMapper.addUser(userVO);
-        if (count > 0) {
-            return new Result(Result.CODE_SUCCESS, "添加成功");
-        }
+        /*List<UserDO> getUserForUpdate = userMapper.getUserForUpdate(userVO);
+        if (getUserForUpdate != null) {
+            return new Result(Result.CODE_FAILURE, "账号、手机号已被注册");
+        } else {
+            Integer count = userMapper.addUser(userVO);
+            if (count > 0) {
+                return new Result(Result.CODE_SUCCESS, "添加成功");
+            }
+        }*/
+
         return null;
     }
 
     @Override
     public Result updateUser(UserVO userVO) throws Exception {
-        Integer count = userMapper.updateUser(userVO);
-        if (count > 0) {
-            return new Result(Result.CODE_SUCCESS, "修改成功");
+        List<UserDO> getUserForUpdate = userMapper.getUserForUpdate(userVO);
+
+        if (getUserForUpdate != null && getUserForUpdate.size() > 0) {
+            return Result.getFailure("账号、手机号已被注册");
+        } else {
+            Integer count = userMapper.updateUser(userVO);
+            if (count > 0) {
+                return Result.getSuccess("修改成功");
+            }
         }
-        return new Result(Result.CODE_FAILURE, "修改失败");
+        return Result.getFailure("修改失败");
     }
 
     @Override
@@ -95,7 +108,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserVO getUserByUsername(String username) throws Exception {
+    public UserDO getUserByUsername(UserVO username) throws Exception {
         return userMapper.getUserByUsername(username);
     }
 
@@ -116,18 +129,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserVO getUserByPhone(String phone) {
-        return userMapper.getUserByPhone(phone);
+    public UserDO getUserByPhone(UserVO userVO) {
+        return userMapper.getUserByPhone(userVO);
     }
 
     @Override
-    public UserVO getUserByIdCard(String idCard) {
-        return userMapper.getUserByIdCard(idCard);
+    public UserDO getUserByIdCard(UserVO userVO) {
+        return userMapper.getUserByIdCard(userVO);
     }
 
     @Override
-    public UserVO getUserByBankCard(String bankCard) {
-        return userMapper.getUserByBankCard(bankCard);
+    public UserDO getUserByBankCard(UserVO userVO) {
+        return userMapper.getUserByBankCard(userVO);
     }
 
     @Override

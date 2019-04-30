@@ -27,4 +27,5 @@ public interface RankMapper {
 
     Integer deleteRank(RankVO rankVO);
 
+    RankDO getRankByName(RankVO rankVO);
 }

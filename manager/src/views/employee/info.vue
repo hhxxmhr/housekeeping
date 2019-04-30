@@ -51,11 +51,11 @@
       <el-form-item label="等级" style="margin-left: 8%"
                     prop="grade">
         <el-input type="text" disabled
-                  v-model="user.grade"></el-input>
+                  v-model="user.rank"></el-input>
       </el-form-item>
       <el-form-item label="学历"
                     prop="experience">
-        <el-select v-model="user.degree" placeholder="请选择">
+        <el-select v-model="user.education" placeholder="请选择">
           <el-option v-for="item in Object.entries(UserDegree)"
                      :key="item[0]"
                      :label="item[1]"
@@ -76,9 +76,9 @@
         </el-select>
       </el-form-item>
       <el-form-item label="身份证号"
-                    prop="card">
+                    prop="idCard">
         <el-input type="text" disabled
-                  v-model="user.card"></el-input>
+                  v-model="user.idCard"></el-input>
       </el-form-item>
       <el-form-item label="婚否"
                     prop="married">
@@ -93,9 +93,9 @@
                   v-model="user.introduction"></el-input>
       </el-form-item>
       <el-form-item label="银行卡号"
-                    prop="bank">
+                    prop="bankCard">
         <el-input type="text" disabled
-                  v-model="user.bank"></el-input>
+                  v-model="user.bankCard"></el-input>
       </el-form-item>
       <br>
       <el-form-item>
