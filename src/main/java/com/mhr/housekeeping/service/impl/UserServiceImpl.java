@@ -7,9 +7,11 @@ import com.mhr.housekeeping.entity.UserServiceDO;
 import com.mhr.housekeeping.entity.vo.UserServiceVO;
 import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.service.UserService;
+import com.mhr.housekeeping.service.UserServiceService;
 import com.mhr.housekeeping.utils.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,34 +35,41 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Resource
     private UserServiceMapper userServiceMapper;
+    @Autowired
+    UserServiceService userServiceService;
 
     @Override
-    public Result addUser(UserVO userVO) throws Exception {
-        /*List<UserDO> getUserForUpdate = userMapper.getUserForUpdate(userVO);
-        if (getUserForUpdate != null) {
-            return new Result(Result.CODE_FAILURE, "账号、手机号已被注册");
-        } else {
-            Integer count = userMapper.addUser(userVO);
-            if (count > 0) {
-                return new Result(Result.CODE_SUCCESS, "添加成功");
+    public Result addUser(UserVO userVO, List<Integer> serviceList) throws Exception {
+        Integer count = userMapper.addUser(userVO);
+        if (count > 0) {
+            if (serviceList.size() > 0) {
+                //更新UserService关联表
+                Integer userId = userVO.getId();//获取数据库里面自增的id
+                UserServiceVO userServiceVO = new UserServiceVO();
+                userServiceVO.setUserId(userId);
+                userServiceVO.setRankId(1);
+                for (int i = 0; i < serviceList.size(); i++) {
+                    userServiceVO.setServiceId(serviceList.get(i));
+                    userServiceService.addUserService(userServiceVO);
+                }
             }
-        }*/
-
-        return null;
+            return Result.getSuccess("用户添加成功");
+        }
+        return Result.getFailure("用户添加失败");
     }
 
     @Override
     public Result updateUser(UserVO userVO) throws Exception {
         List<UserDO> getUserForUpdate = userMapper.getUserForUpdate(userVO);
 
-        if (getUserForUpdate != null && getUserForUpdate.size() > 0) {
+        /*if (getUserForUpdate != null && getUserForUpdate.size() > 0  ) {
             return Result.getFailure("账号、手机号已被注册");
-        } else {
-            Integer count = userMapper.updateUser(userVO);
-            if (count > 0) {
-                return Result.getSuccess("修改成功");
-            }
+        } else {*/
+        Integer count = userMapper.updateUser(userVO);
+        if (count > 0) {
+            return Result.getSuccess("修改成功");
         }
+//        }
         return Result.getFailure("修改失败");
     }
 

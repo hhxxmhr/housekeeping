@@ -112,7 +112,7 @@
         </if>
     </sql>
 
-    <insert id="addUser" parameterType="UserVO" keyProperty="id">
+    <insert id="addUser" parameterType="UserVO" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
         <include refid="_table"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -367,7 +367,7 @@
     <select id="getUserByIdCard" resultMap="userMapper" parameterType="UserVO">
         select *
         from user
-        WHERE id_card = #{idcard}
+        WHERE id_card = #{idCard}
     </select>
 
     <select id="getUserByBankCard" resultMap="userMapper" parameterType="UserVO">

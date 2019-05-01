@@ -47,7 +47,12 @@
         <el-radio v-model="user.sex" label="男">男</el-radio>
         <el-radio v-model="user.sex" label="女" style="margin-left: 5px">女</el-radio>
       </el-form-item>
-
+      <!--可做服务-->
+      <!--<el-form-item label="可做服务"
+                    prop="sex">
+        <el-radio v-model="user.sex" label="男">男</el-radio>
+        <el-radio v-model="user.sex" label="女" style="margin-left: 5px">女</el-radio>
+      </el-form-item>-->
       <el-form-item label="等级" style="margin-left: 8%"
                     prop="grade">
         <el-input type="text" disabled
@@ -137,6 +142,7 @@
         photo: '',
         user: {
           photo: '',
+          service:[],
         },
         rules: {
           name: {required: true, message: '姓名不能为空'},

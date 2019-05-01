@@ -1,6 +1,7 @@
 package com.mhr.housekeeping.entity.vo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * <br/>
@@ -8,6 +9,16 @@ import java.io.Serializable;
  */
 public class UserVO extends Query implements Serializable {
     private static final long serialVersionUID = -4944675620658964018L;
+
+    /*private ArrayList<Integer> service;
+
+    public ArrayList<Integer> getService() {
+        return service;
+    }
+
+    public void setService(ArrayList<Integer> service) {
+        this.service = service;
+    }*/
 
     private Integer id;
 

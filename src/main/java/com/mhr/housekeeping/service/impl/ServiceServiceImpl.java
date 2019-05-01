@@ -7,6 +7,7 @@ import com.mhr.housekeeping.entity.vo.ServiceVO;
 import com.mhr.housekeeping.entity.vo.UserServiceVO;
 import com.mhr.housekeeping.service.ServiceService;
 import com.mhr.housekeeping.service.UserServiceService;
+import com.mhr.housekeeping.utils.DataUtils;
 import com.mhr.housekeeping.utils.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,8 +66,9 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public Result listService(ServiceVO serviceVO) throws Exception {
+        System.out.println(serviceVO);
         //搜索条件不为空的时候，查询的如果是大类别，需要将他的小类别也返回,反之一样
-        if (!serviceVO.getName().isEmpty()) {
+        if (serviceVO != null && !DataUtils.isEmpty(serviceVO.getName())) {
             List<ServiceDO> listService = serviceMapper.listServiceByName(serviceVO);
             return new Result<>(listService);
         } else {

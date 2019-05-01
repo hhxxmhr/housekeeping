@@ -5,13 +5,15 @@ import com.mhr.housekeeping.entity.UserDO;
 import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.utils.Result;
 
+import java.util.List;
+
 /**
  * <br/>
  * Created by min on 2019/04/24
  */
 public interface UserService {
 
-	Result addUser(UserVO userVO) throws Exception;
+	Result addUser(UserVO userVO, List<Integer> serviceList) throws Exception;
 
 	Result updateUser(UserVO userVO) throws Exception;
 	

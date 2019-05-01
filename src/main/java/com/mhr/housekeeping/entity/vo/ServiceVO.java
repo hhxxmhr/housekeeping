@@ -48,4 +48,14 @@ public class ServiceVO extends Query implements Serializable {
     public void setParent(Integer parent) {
         this.parent = parent;
     }
+
+    @Override
+    public String toString() {
+        return "ServiceVO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", parent=" + parent +
+                '}';
+    }
 }

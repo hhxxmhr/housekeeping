@@ -1,20 +1,23 @@
 package com.mhr.housekeeping.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.mhr.housekeeping.entity.UserDO;
+import com.mhr.housekeeping.entity.vo.UserServiceVO;
 import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.service.UserService;
+import com.mhr.housekeeping.service.UserServiceService;
 import com.mhr.housekeeping.utils.EnumType;
 import com.mhr.housekeeping.utils.Result;
 import com.mhr.housekeeping.utils.SmsUtils;
+import net.sf.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * 管理登陆的操作
@@ -26,6 +29,8 @@ public class UserController {
     @Autowired
     UserService userService;
     @Autowired
+    UserServiceService userServiceService;
+    @Autowired
     HttpServletRequest request;
     static Integer code;
 
@@ -34,7 +39,7 @@ public class UserController {
         UserDO user = userService.getUserByUsername(uservO);
         if (user != null) {
             if (user.getPassword().equals(uservO.getPassword())) {
-                if (user.getState() == EnumType.Normal||user.getState() == EnumType.Free||user.getState() == EnumType.busy) {
+                if (user.getState() == EnumType.Normal || user.getState() == EnumType.Free || user.getState() == EnumType.busy) {
                     request.getSession().setAttribute("user", user);
                     return new Result<>(200, "登录成功", user);
                 } else if (user.getState() == EnumType.Disable) {
@@ -85,9 +90,15 @@ public class UserController {
     }
 
     @RequestMapping("/User/register")
-    public Result register(@RequestBody UserVO userVO) throws Exception {
-        UserDO user = userService.getUserByUsername(userVO);
-        if (user != null) {
+    public Result register(@RequestBody HashMap hashMap) throws Exception {
+        List<Integer> serviceList = (List<Integer>) hashMap.get("service");
+        System.out.println(serviceList);
+        hashMap.remove("service");
+        JSONObject object = JSONObject.fromObject(hashMap);
+        UserVO userVO = (UserVO) JSONObject.toBean(object, UserVO.class);
+        //更新user表
+//        UserDO user = userService.getUserByUsername(userVO);
+        /*if (user != null) {
             return Result.getFailure("此账号已存在");
         }
         UserDO user2 = userService.getUserByPhone(userVO);
@@ -101,10 +112,10 @@ public class UserController {
         UserDO user4 = userService.getUserByBankCard(userVO);
         if (user4 != null) {
             return Result.getFailure("请检查银行卡号");
-        }
-        userVO.setCreateTime(System.currentTimeMillis()/1000);
+        }*/
+        userVO.setCreateTime(System.currentTimeMillis() / 1000);
         userVO.setState(EnumType.check);
-        return userService.addUser(userVO);
+        return userService.addUser(userVO,serviceList);
     }
 
     @RequestMapping("/User/forgetPwd")
@@ -127,7 +138,7 @@ public class UserController {
             return Result.getFailure("原密码错误");
         } else {
             user.setPassword((String) hashMap.get("new_pwd"));
-            UserVO userVO  = new UserVO();
+            UserVO userVO = new UserVO();
             BeanUtils.copyProperties(user, userVO);
             return userService.updateUser(userVO);
         }

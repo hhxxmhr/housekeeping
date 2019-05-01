@@ -200,15 +200,16 @@
           this.dialog_title = "新增服务类别";
           this.service.name = '';
           this.service.price = null;
+          this.service.parent = null;
 
         } else {
           this.dialog_title = "编辑服务类别";
           let tmp = this.serviceList.find(item => item.id === id);
-          this.service.id = parseInt(tmp.id);
+          this.service.id = id;
           this.service.name = tmp.name;
+          this.service.parent = null;
           this.service.price = parseInt(tmp.price);
         }
-        this.dialog_visible = true;
         this.dialog_visible = true;
       },
       close_dialog() {

@@ -98,7 +98,7 @@
           </el-form-item>
           <el-form-item label="身份证"
                         :label-width="formLabelWidth">
-            <el-input v-model="moreInfo.idcard" readonly></el-input>
+            <el-input v-model="moreInfo.idCard" readonly></el-input>
           </el-form-item>
           <el-form-item label="电话"
                         :label-width="formLabelWidth">
@@ -222,7 +222,7 @@
         this.moreInfo.name = tmp.name;
         this.moreInfo.age = tmp.age;
         this.moreInfo.sex = tmp.sex;
-        this.moreInfo.idcard = tmp.idCard;
+        this.moreInfo.idCard = tmp.idCard;
         this.moreInfo.phone = tmp.phone;
         this.moreInfo.education = this.UserDegree[tmp.education];
         this.moreInfo.address = tmp.prov + '|' + tmp.city;

@@ -88,7 +88,7 @@
           </el-form-item>
           <el-form-item label="身份证"
                         :label-width="formLabelWidth">
-            <el-input v-model="moreInfo.idcard" readonly></el-input>
+            <el-input v-model="moreInfo.idCard" readonly></el-input>
           </el-form-item>
           <el-form-item label="电话"
                         :label-width="formLabelWidth">

@@ -56,7 +56,7 @@
               <el-form-item label="年龄" prop="age">
                 <el-input v-model="registerForm.age" placeholder="请输入实际年龄"></el-input>
               </el-form-item>
-              <el-form-item label="学历" prop="education" v-if="registerRole==='employee'">
+              <el-form-item label="学历" prop="education" v-if="registerForm.role==='employee'||registerForm.role===200">
                 <el-select v-model="registerForm.education" placeholder="请选择" style="width: 189px">
                   <el-option v-for="item in Object.entries(UserDegree)"
                              :key="item[0]"
@@ -68,10 +68,10 @@
                 <el-radio v-model="registerForm.sex" label="男">男</el-radio>
                 <el-radio v-model="registerForm.sex" label="女">女</el-radio>
               </el-form-item>
-              <el-form-item label="手机号码" prop="phone" :class="{ style1:registerRole==='employer' }">
+              <el-form-item label="手机号码" prop="phone" :class="{ style1:registerForm.role==='employer'||registerForm.role!==200 }">
                 <el-input v-model="registerForm.phone" placeholder="手机号码用于找回密码、接收通知短信"></el-input>
               </el-form-item>
-              <el-form-item label="工作经验" prop="experience" v-if="registerRole==='employee'">
+              <el-form-item label="工作经验" prop="experience" v-if="registerForm.role==='employee'||registerForm.role===200">
                 <el-select v-model="registerForm.experience" placeholder="请选择" style="width: 189px">
                   <el-option v-for="item in Object.entries(UserExperience)"
                              :key="item[0]"
@@ -79,43 +79,57 @@
                              :value="parseInt(item[0])"></el-option>
                 </el-select>
               </el-form-item>
+
               <el-form-item label="验证码" prop="code">
                 <el-input v-model="registerForm.code" class="code" placeholder="短信验证码"></el-input>
                 <el-button class="code-button" v-if="coding <= 0" @click="get_code" style="margin-left: 5px">获取验证码
                 </el-button>
                 <el-button class="code-button" type="warning" v-else disabled>{{coding}} 秒</el-button>
               </el-form-item>
-              <el-form-item label="身份证号" prop="card">
-                <el-input v-model="registerForm.card" placeholder="一旦确认不可更改"></el-input>
+              <el-form-item label="身份证号" prop="idCard">
+                <el-input v-model="registerForm.idCard" placeholder="一旦确认不可更改"></el-input>
               </el-form-item>
-              <el-form-item label="银行卡号" prop="bank" v-if="registerRole==='employee'">
-                <el-input v-model="registerForm.bank" placeholder="一旦确认不可更改"></el-input>
+              <el-form-item label="银行卡号" prop="bankCard" v-if="registerForm.role==='employee'||registerForm.role===200">
+                <el-input v-model="registerForm.bankCard" placeholder="一旦确认不可更改"></el-input>
               </el-form-item>
-
 
               <el-form-item label="所在区域">
                 <v-distpicker :province="registerForm.prov" :city="registerForm.city" @province="selectProv"
                               @city="selectCity"
                               hide-area></v-distpicker>
               </el-form-item>
-              <el-form-item label="详细地址" prop="address" v-if="registerRole!=='employee'">
-                <el-input type="textarea" autosize :rows="2" v-model="registerForm.address" placeholder="请输入详细地址"></el-input>
+              <el-form-item label="详细地址" prop="address" v-if="registerForm.role!=='employee'||registerForm.role===200">
+                <el-input type="textarea" autosize :rows="2" v-model="registerForm.address"
+                          placeholder="请输入详细地址"></el-input>
               </el-form-item>
-              <el-form-item label="是否婚配" prop="married" v-if="registerRole==='employee'">
+              <el-form-item label="是否婚配" prop="married" v-if="registerForm.role==='employee'||registerForm.role===200">
                 <el-select v-model="registerForm.married" placeholder="请选择" style="width: 189px">
                   <el-option label="是" value="是"></el-option>
                   <el-option label="否" value="否"></el-option>
                 </el-select>
               </el-form-item>
 
-              <el-form-item label="自我介绍" prop="introduction" v-if="registerRole==='employee'">
+              <el-form-item label="自我介绍" prop="introduction" v-if="registerForm.role==='employee'||registerForm.role===200">
                 <el-input type="textarea" v-model="registerForm.introduction" autosize :rows="2"
                           style="width: 400px"></el-input>
+              </el-form-item>
+              <el-form-item label="可做服务" prop="service" v-if="registerForm.role==='employee'||registerForm.role===200">
+                <el-checkbox-group v-model="registerForm.service" size="mini" v-for="(serviceItem,index) in serviceList"
+                                   :key="serviceItem.id" :label="serviceItem.id" :class="{'do':index%3===1,'does':index%3===2}">
+                  <div v-if="serviceItem.childrenType.length===0">
+                    <el-checkbox v-if style="color: #EC8C47" :label="serviceItem.id">{{serviceItem.name}}</el-checkbox>
+                  </div>
+                  <span class="type" v-else style="color: #EC8C47">{{serviceItem.name}}</span>
+                  <el-checkbox v-for="(serviceChild,index) in serviceItem.childrenType" :label="serviceChild.id"
+                               :key="index">
+                    {{serviceChild.name}}
+                  </el-checkbox>
+                </el-checkbox-group>
               </el-form-item>
             </el-form>
           </div>
           <div class="register__ft">
-            <at-button type="primary" @click="submit">创建帐号</at-button>
+            <at-button type="primary" @click="submit">创建账号</at-button>
           </div>
         </div>
       </form>
@@ -158,11 +172,11 @@
         phoneCode: '',
         activeName: 'employer',
         dialog: false,
-        registerRole: '',//控制注册的是哪个角色，雇员   雇主
         step_1: true,
         step_2: false,
         coding: 0,
         registerForm: {
+          service: [],
           role: null,
           username: '',
           password: '',
@@ -173,8 +187,8 @@
           city: '',
           introduction: '',
           married: '',
-          bank: '',
-          card: '',
+          bankCard: '',
+          idCard: '',
           experience: '',
           education: '',
           sex: '',
@@ -199,7 +213,7 @@
           name: [
             {required: true, message: '请输入真实姓名', trigger: 'blur'},
           ],
-          age: [{validator: checkAge, trigger: 'blur'}, {pattern: /^[1-9]\d*$/, message: '请输入数字'}],
+         /* age: [{validator: checkAge, trigger: 'blur'}, {pattern: /^[1-9]\d*$/, message: '请输入数字'}],
           sex: [
             {required: true, message: '请选择性别', trigger: 'change'},
           ],
@@ -209,14 +223,17 @@
           education: [
             {required: true, message: '请选择学历', trigger: 'change'},
           ],
+          service: [
+            {required: true, message: '请至少选择一项', trigger: 'change'},
+          ],
           experience: [
             {required: true, message: '请选择工作年限', trigger: 'change'},
           ],
-          card: [
+          idCard: [
             {required: true, message: '请输入正确卡号，提交后不可修改', trigger: 'blur'},
             {pattern: /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4}$/, message: '请输入正确格式的身份证号'}
           ],
-          bank: [
+          bankCard: [
             {required: true, message: '请输入正确卡号，提交后不可修改', trigger: 'blur'},
             {pattern: /^([1-9])(\d{14}|\d{18})$/, message: '请输入正确格式的银行卡号'}
           ],
@@ -227,15 +244,40 @@
           code: [
             {required: true, message: '请输入短信验证码', trigger: 'blur'},
             {pattern: /^[0-9]{6}$/, message: '请输入正确的短信验证码'}
-          ],
+          ],*/
 
 
         }
       }
     },
+    async created() {
+      this.init();
+    },
     methods: {
+      async init() {
+        this.serviceList = [];
+        let res = await this.$api('Service/getAll', {});
+        //得到所有的父类
+        res.serviceList.forEach(item => {
+          if (item.parent === null) this.serviceList.push(item)
+        });
+        this.serviceList.forEach(it => {
+          let childrenType = [];
+
+          res.serviceList.forEach(item => {
+            let row = {};
+            if (item.parent === it.id) {
+              row.id = item.id;
+              row.name = item.name;
+              row.price = item.price;
+              childrenType.push(row)
+            }
+          });
+          it["childrenType"] = childrenType;
+        });
+      },
       handleClick(tab) {
-        this.registerRole = tab.name
+        this.registerForm.role = tab.name
       },
       step1Fn() {
         this.$refs['registerForm_1'].validate((valid) => {
@@ -269,26 +311,11 @@
       },
       async submit() {
         this.$refs['registerForm_2'].validate(async valid => {
+          this.registerForm.role = this.registerForm.role === 'employee' ? 200 : 300;
           if (valid) {
-            if (parseInt(this.registerForm.code) === this.phoneCode) {
-              let res = await this.$api('User/register', {
-                role: this.registerRole === 'employee' ? 200 : 300,
-                // rankId:this.registerRole === 'employee' ? 1 : null,
-                username: this.registerForm.username,
-                password: this.registerForm.password,
-                name: this.registerForm.name,
-                phone: this.registerForm.phone,
-                prov: this.registerForm.prov,
-                city: this.registerForm.city,
-                introduction: this.registerForm.introduction,
-                married: this.registerForm.married,
-                bankCard: this.registerForm.bank,
-                idCard: this.registerForm.card,
-                experience: this.registerForm.experience,
-                education: this.registerForm.education,
-                sex: this.registerForm.sex,
-                age: this.registerForm.age,
-              });
+            // if (parseInt(this.registerForm.code) === this.phoneCode) {
+              let res = await this.$api('User/register', this.registerForm);
+              console.log(res)
               if (res.code === 200) {
                 this.$message.success('注册成功，请重新登录');
                 // localStorage.setItem('username', res.username);
@@ -303,15 +330,17 @@
                   message: res.msg
                 });
               }
-            } else {
-              this.$message({
-                type: 'error',
-                message: "验证码错误"
-              });
-            }
+            // }
+            // else {
+            //   this.$message({
+            //     type: 'error',
+            //     message: "验证码错误"
+            //   });
+            // }
 
           }
         });
+        this.activeName= this.registerForm.role === 200 ? 'employee' : 'employer';
       },
       selectProv(data) {
         this.registerForm.prov = data.value;
@@ -324,8 +353,23 @@
 </script>
 
 <style>
-  .style1 {
-    margin-left: 20px;
+  .type {
+    color: #606266;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    display: block;
+    position: relative;
+    white-space: nowrap;
+  }
+
+  .do {
+    margin-left: 340px;
+    margin-top: -85px;
+  }
+  .does {
+    margin-left: 650px;
+    margin-top: -85px;
   }
 
   .register__register-form {
