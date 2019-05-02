@@ -31,12 +31,6 @@ Vue.use(comp);
 Vue.use(ElementUI);
 Vue.use(Vuex);
 
-/*axios.interceptors.response.use(response => {
-  return response.data;
-}, error => {
-  return {error: 1, message: error.message.data};
-});*/
-
 Vue.prototype.$api = async (method, data) => {
   // let keys2 = Object.keys(data);
   /* 这里就是把json变成url形式，并进行encode */

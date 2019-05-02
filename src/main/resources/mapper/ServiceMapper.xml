@@ -150,6 +150,19 @@
         select id from service where id = #{id} or parent = #{id}
     </select>
 
+    <select id="findServiceByUserId" parameterType="Integer" resultMap="serviceMapper">
+            SELECT
+    service.id,
+    service.`name`,
+    service.price,
+    service.parent
+    FROM
+    user_service
+    INNER JOIN service ON user_service.service_id = service.id
+    WHERE
+    user_service.user_id = #{id}
+    </select>
+
     <delete id="deleteService" parameterType="ServiceVO">
         DELETE FROM
         <include refid="_table"/>
@@ -159,7 +172,6 @@
     <delete id="deleteParService" parameterType="ServiceVO">
         DELETE FROM service where id = #{id} or parent = #{id}
     </delete>
-
 
 
 </mapper>

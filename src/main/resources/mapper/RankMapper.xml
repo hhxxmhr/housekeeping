@@ -128,4 +128,16 @@
         select * from rank where name = #{name}
     </select>
 
+    <select id="findRankByUserId" resultMap="rankMapper" parameterType="java.lang.Integer">
+        SELECT
+rank.id,
+rank.`name`,
+rank.money
+FROM
+user_service
+INNER JOIN rank ON user_service.rank_id = rank.id
+WHERE
+user_service.user_id = #{id}
+    </select>
+
 </mapper>

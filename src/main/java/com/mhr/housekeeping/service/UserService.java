@@ -4,6 +4,7 @@ package com.mhr.housekeeping.service;
 import com.mhr.housekeeping.entity.UserDO;
 import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.utils.Result;
+import net.sf.json.JSONObject;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface UserService {
 
 	Result addUser(UserVO userVO, List<Integer> serviceList) throws Exception;
 
-	Result updateUser(UserVO userVO) throws Exception;
+	Result updateUser(UserVO userVO,Integer service) throws Exception;
 	
 	Result findDetailUser(UserVO userVO) throws Exception;
 	
@@ -41,4 +42,5 @@ public interface UserService {
 
     Result updateUserByUsername(UserVO userVO);
 
+	JSONObject findUserInfos(UserVO userVO);
 }

@@ -91,6 +91,9 @@
     async created() {
       this.initQuery();
       this.init();
+      let res = await this.$api('User/getMineInfo', {});
+      console.log(res)
+      console.log("rank")
     },
     watch: {
       '$route'() {

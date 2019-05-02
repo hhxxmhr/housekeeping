@@ -105,4 +105,9 @@ public class RankServiceImpl implements RankService {
         return Result.getFailure("删除失败");
     }
 
+    @Override
+    public Result findRankByUserId(Integer id) {
+        return rankMapper.findRankByUserId(id);
+    }
+
 }

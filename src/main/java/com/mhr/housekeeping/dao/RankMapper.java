@@ -2,6 +2,7 @@ package com.mhr.housekeeping.dao;
 
 import com.mhr.housekeeping.entity.RankDO;
 import com.mhr.housekeeping.entity.vo.RankVO;
+import com.mhr.housekeeping.utils.Result;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,4 +29,6 @@ public interface RankMapper {
     Integer deleteRank(RankVO rankVO);
 
     RankDO getRankByName(RankVO rankVO);
+
+    Result findRankByUserId(Integer id);
 }

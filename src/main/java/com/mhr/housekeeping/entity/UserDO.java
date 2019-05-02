@@ -211,4 +211,30 @@ public class UserDO implements Serializable {
     public void setProv(String prov) {
         this.prov = prov;
     }
+
+    @Override
+    public String toString() {
+        return "UserDO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", state=" + state +
+                ", sex='" + sex + '\'' +
+                ", age=" + age +
+                ", phone='" + phone + '\'' +
+                ", idCard='" + idCard + '\'' +
+                ", bankCard='" + bankCard + '\'' +
+                ", createTime=" + createTime +
+                ", photo='" + photo + '\'' +
+                ", address='" + address + '\'' +
+                ", married='" + married + '\'' +
+                ", education=" + education +
+                ", experience=" + experience +
+                ", introduction='" + introduction + '\'' +
+                ", city='" + city + '\'' +
+                ", prov='" + prov + '\'' +
+                '}';
+    }
 }

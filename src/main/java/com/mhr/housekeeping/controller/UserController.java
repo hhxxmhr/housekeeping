@@ -3,8 +3,9 @@ package com.mhr.housekeeping.controller;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.mhr.housekeeping.entity.UserDO;
-import com.mhr.housekeeping.entity.vo.UserServiceVO;
 import com.mhr.housekeeping.entity.vo.UserVO;
+import com.mhr.housekeeping.service.RankService;
+import com.mhr.housekeeping.service.ServiceService;
 import com.mhr.housekeeping.service.UserService;
 import com.mhr.housekeeping.service.UserServiceService;
 import com.mhr.housekeeping.utils.EnumType;
@@ -31,11 +32,15 @@ public class UserController {
     @Autowired
     UserServiceService userServiceService;
     @Autowired
-    HttpServletRequest request;
+    ServiceService serviceService;
+    @Autowired
+    RankService rankService;
+    /*@Autowired
+    HttpServletRequest request;*/
     static Integer code;
 
     @RequestMapping("/User/login")
-    public Result login(@RequestBody UserVO uservO) throws Exception {
+    public Result login(@RequestBody UserVO uservO, HttpServletRequest request) throws Exception {
         UserDO user = userService.getUserByUsername(uservO);
         if (user != null) {
             if (user.getPassword().equals(uservO.getPassword())) {
@@ -53,7 +58,7 @@ public class UserController {
     }
 
     @RequestMapping("/User/getMineInfo")
-    public Result getMineInfo() {
+    public Result getMineInfo(HttpServletRequest request) {
         UserDO user = (UserDO) request.getSession().getAttribute("user");
         if (user == null) {
             return new Result<>(true);
@@ -61,8 +66,21 @@ public class UserController {
         return new Result<>(user);
     }
 
+    /**
+     * 根据userId查询所有相关的数据并返回
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("/User/findUserInfos")
+    public JSONObject findUserInfos(HttpServletRequest request) {
+        UserDO user = (UserDO) request.getSession().getAttribute("user");
+        JSONObject userInfos = userService.findUserInfos(new UserVO(user.getId()));
+        return userInfos;
+    }
+
     @RequestMapping("/User/logout")
-    public Result Logout() {
+    public Result Logout(HttpServletRequest request) {
         request.getSession().removeAttribute("user");
         return new Result(200);
     }
@@ -115,7 +133,7 @@ public class UserController {
         }*/
         userVO.setCreateTime(System.currentTimeMillis() / 1000);
         userVO.setState(EnumType.check);
-        return userService.addUser(userVO,serviceList);
+        return userService.addUser(userVO, serviceList);
     }
 
     @RequestMapping("/User/forgetPwd")
@@ -132,7 +150,7 @@ public class UserController {
     }
 
     @RequestMapping("/User/editPwd")
-    public Result editPwd(@RequestBody HashMap hashMap) throws Exception {
+    public Result editPwd(@RequestBody HashMap hashMap, HttpServletRequest request) throws Exception {
         UserDO user = (UserDO) request.getSession().getAttribute("user");
         if (!user.getPassword().equals(hashMap.get("old_pwd"))) {
             return Result.getFailure("原密码错误");
@@ -140,7 +158,7 @@ public class UserController {
             user.setPassword((String) hashMap.get("new_pwd"));
             UserVO userVO = new UserVO();
             BeanUtils.copyProperties(user, userVO);
-            return userService.updateUser(userVO);
+            return userService.updateUser(userVO,null);
         }
     }
 
@@ -154,7 +172,7 @@ public class UserController {
 
     @RequestMapping("/User/changeEmployeeState")
     public Result changeState(@RequestBody UserVO userVO) throws Exception {
-        return userService.updateUser(userVO);
+        return userService.updateUser(userVO,null);
 
     }
 

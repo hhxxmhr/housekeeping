@@ -144,5 +144,10 @@ public class ServiceServiceImpl implements ServiceService {
         return Result.getFailure("删除失败");
     }
 
+    @Override
+    public Result findServiceByUserId(Integer id) {
+        return serviceMapper.findServiceByUserId(id);
+    }
+
 
 }

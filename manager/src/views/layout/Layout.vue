@@ -103,7 +103,7 @@
       if (!window.$mine) {
         const res = await this.$api('User/getMineInfo',{});
         if (!res) return false;
-        window.$mine = res;
+        window.$mine = res.data;
       }
 
       // 根据role来渲染菜单
@@ -140,44 +140,6 @@
           } else return
         }
       });
-      /*if (!window.$mine) {
-        const res = await this.$api('Login/getMineInfo',{});
-        if (!res) return false;
-        window.$mine = res;
-      }
-      //更具权限筛选路由
-      let role = window.$mine.role;
-      let ps = this.$router.options.routes;
-      for (let i in ps) {
-        if (!ps.hasOwnProperty(i)) {//跳过没有权限的
-          continue;
-        }
-        let cs = ps[i].children;
-        if (!cs) {//没有子节点
-          let p = ps[i].path;
-          let hidden = ps[i].hidden ? ps[i].hidden : false;
-          if (!hidden) {
-            this.routeMap.push("push2" + ps[i]);
-          }
-        } else {
-          let child = [];
-          for (let j in cs) {
-            if (!cs.hasOwnProperty(j)) continue;
-            let p = cs[j].path;
-            let hidden = cs[j].hidden ? cs[j].hidden : false;
-            if (!hidden) {
-              child.push(cs[j]);
-            }
-          }
-          if (child.length > 0) {
-            if (child.length === 1) {
-              ps[i].leaf = true;
-            }
-            ps[i].children = child;
-            this.routeMap.push(ps[i]);
-          }
-        }
-      }*/
     }
   }
 </script>

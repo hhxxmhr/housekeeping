@@ -9,6 +9,7 @@ import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.service.UserService;
 import com.mhr.housekeeping.service.UserServiceService;
 import com.mhr.housekeeping.utils.Result;
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.print.attribute.standard.NumberUp;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -59,17 +59,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result updateUser(UserVO userVO) throws Exception {
+    public Result updateUser(UserVO userVO, Integer service) throws Exception {
         List<UserDO> getUserForUpdate = userMapper.getUserForUpdate(userVO);
 
-        /*if (getUserForUpdate != null && getUserForUpdate.size() > 0  ) {
-            return Result.getFailure("账号、手机号已被注册");
-        } else {*/
         Integer count = userMapper.updateUser(userVO);
         if (count > 0) {
-            return Result.getSuccess("修改成功");
+            //更新user_service
+            if (service != null){
+                //添加服务
+                UserServiceVO userServiceVO = new UserServiceVO();
+                userServiceVO.setUserId(userVO.getId());
+                userServiceVO.setServiceId(service);
+                userServiceVO.setRankId(1);
+                userServiceService.addUserService(userServiceVO);
+            }
+                return Result.getSuccess("修改成功");
         }
-//        }
         return Result.getFailure("修改失败");
     }
 
@@ -132,7 +137,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result editPassword(String new_pwd, String old_pwd) {
-
+        //更新密码
 //        userMapper.findDetailUser();
         return null;
     }
@@ -159,6 +164,14 @@ public class UserServiceImpl implements UserService {
             return Result.getSuccess("修改成功");
         }
         return Result.getSuccess("修改失败");
+    }
+
+    @Override
+    public JSONObject findUserInfos(UserVO userVO) {
+        List<UserVO> userInfos = userMapper.findUserInfos(userVO);
+        JSONObject object = new JSONObject();
+        object.put("data", userInfos);
+        return object;
     }
 
 }

@@ -35,7 +35,7 @@ public class ManagerController {
         }else {
             userVO.setState(1);
         }
-        return userService.updateUser(userVO);
+        return userService.updateUser(userVO,null);
     }
 
     @RequestMapping("/Manager/addAdmin")

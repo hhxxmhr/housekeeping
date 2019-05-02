@@ -26,6 +26,36 @@
         <result property="prov" column="prov"/>
     </resultMap>
 
+    <resultMap id="userMapperMore" type="UserVO">
+        <result property="id" column="user_id"/>
+        <result property="name" column="name"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="role" column="role"/>
+        <result property="state" column="state"/>
+        <result property="sex" column="sex"/>
+        <result property="age" column="age"/>
+        <result property="phone" column="phone"/>
+        <result property="idCard" column="id_card"/>
+        <result property="bankCard" column="bank_card"/>
+        <result property="createTime" column="create_time"/>
+        <result property="photo" column="photo"/>
+        <result property="address" column="address"/>
+        <result property="married" column="married"/>
+        <result property="education" column="education"/>
+        <result property="experience" column="experience"/>
+        <result property="introduction" column="introduction"/>
+        <result property="city" column="city"/>
+        <result property="prov" column="prov"/>
+        <result property="rankName" column="rank_name"/>
+        <result property="money" column="money"/>
+        <result property="serviceName" column="service_name"/>
+        <result property="price" column="price"/>
+        <result property="parent" column="parent"/>
+        <result property="serviceId" column="service_id"/>
+        <result property="rankId" column="rank_id"/>
+    </resultMap>
+
     <sql id="_table">
         user
 	</sql>
@@ -312,6 +342,44 @@
         FROM
         <include refid="_table"/>
         <include refid="_primaryKey_condition"/>
+    </select>
+
+    <select id="findUserInfos" resultMap="userMapperMore" parameterType="UserVO">
+      SELECT
+        user_service.user_id,
+        user_service.service_id,
+        user_service.rank_id,
+        `user`.`name`,
+        `user`.username,
+        `user`.`password`,
+        `user`.role,
+        `user`.state,
+        `user`.sex,
+        `user`.age,
+        `user`.phone,
+        `user`.id_card,
+        `user`.bank_card,
+        `user`.create_time,
+        `user`.photo,
+        `user`.address,
+        `user`.married,
+        `user`.education,
+        `user`.experience,
+        `user`.introduction,
+        `user`.city,
+        `user`.prov,
+        rank.`name` AS rank_name,
+        rank.money,
+        service.`name` AS service_name,
+        service.price,
+        service.parent
+        FROM
+        user_service
+        INNER JOIN `user` ON user_service.user_id = `user`.id
+        INNER JOIN rank ON user_service.rank_id = rank.id
+        INNER JOIN service ON user_service.service_id = service.id
+        WHERE
+        `user`.id = #{id}
     </select>
 
     <select id="listUser" resultMap="userMapper" parameterType="UserVO">

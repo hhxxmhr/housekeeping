@@ -53,13 +53,8 @@
         <el-radio v-model="user.sex" label="男">男</el-radio>
         <el-radio v-model="user.sex" label="女" style="margin-left: 5px">女</el-radio>
       </el-form-item>-->
-      <el-form-item label="等级" style="margin-left: 8%"
-                    prop="grade">
-        <el-input type="text" disabled
-                  v-model="user.rank"></el-input>
-      </el-form-item>
       <el-form-item label="学历"
-                    prop="experience">
+                    prop="experience" style="margin-left: 8%">
         <el-select v-model="user.education" placeholder="请选择">
           <el-option v-for="item in Object.entries(UserDegree)"
                      :key="item[0]"
@@ -71,7 +66,7 @@
         <v-distpicker :province="user.prov" :city="user.city" @province="selectProv" @city="selectCity"
                       hide-area></v-distpicker>
       </el-form-item>
-      <el-form-item label="工作经验" style="margin-left: 8%"
+      <el-form-item label="工作经验"
                     prop="experience">
         <el-select v-model="user.experience" placeholder="请选择">
           <el-option v-for="item in Object.entries(UserExperience)"
@@ -80,16 +75,36 @@
                      :value="parseInt(item[0])"></el-option>
         </el-select>
       </el-form-item>
+
+      <el-form-item label="婚否" style="margin-left: 8%"
+                    prop="married">
+        <el-select v-model="user.married" placeholder="请选择">
+          <el-option label="是" value="是"></el-option>
+          <el-option label="否" value="否"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="身份证号"
                     prop="idCard">
         <el-input type="text" disabled
                   v-model="user.idCard"></el-input>
       </el-form-item>
-      <el-form-item label="婚否"
-                    prop="married">
-        <el-select v-model="user.married" placeholder="请选择">
-          <el-option label="是" value="是"></el-option>
-          <el-option label="否" value="否"></el-option>
+      <el-form-item label="银行卡号"
+                    prop="bankCard">
+        <el-input type="text" disabled
+                  v-model="user.bankCard"></el-input>
+      </el-form-item>
+      <el-form-item label="当前服务" style="margin-left: 8%">
+        <el-tag type="info" v-for="(item,index) in user.serviceRank" :key="index">{{item.service+'-'+item.rank}}
+        </el-tag>
+      </el-form-item>
+      <el-form-item label="添加服务" >
+        <el-select v-model="user.service" placeholder="请选择">
+          <el-option
+            v-for="item in noService"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id">
+          </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="自我介绍" style="margin-left: 8%"
@@ -97,11 +112,7 @@
         <el-input type="textarea" style="width: 590px"
                   v-model="user.introduction"></el-input>
       </el-form-item>
-      <el-form-item label="银行卡号"
-                    prop="bankCard">
-        <el-input type="text" disabled
-                  v-model="user.bankCard"></el-input>
-      </el-form-item>
+
       <br>
       <el-form-item>
         <el-button type="primary" @click="edit_submit" style="margin-left: 570px">确认</el-button>
@@ -138,11 +149,14 @@
         }
       };
       return {
+        serviceList: [],
         fileName: '',
         photo: '',
+        serviceRank: [],
+        noService: [],//没有选择的服务，下拉框
         user: {
           photo: '',
-          service:[],
+          service: null,//添加服务
         },
         rules: {
           name: {required: true, message: '姓名不能为空'},
@@ -205,6 +219,7 @@
           }
         });
         if (able) {
+          this.user.age = parseInt(this.user.age);
           let res = await this.$api("Employee/editInfo", this.user);
           this.$message({
             type: res.code === 200 ? 'success' : 'error',
@@ -216,9 +231,34 @@
       async getInfo() {
         let res = await this.$api("User/getMineInfo", {});
         this.user = res.data;
-      }
+        let r = await this.$api("User/findUserInfos", {});
+        let all = r.data;
+        this.serviceRank = [];
+        all.forEach(it => {
+          let service_rank = {};
+          service_rank.service = it.serviceName;
+          service_rank.serviceId = it.serviceId;
+          service_rank.rank = it.rankName;
+          this.serviceRank.push(service_rank);
+        });
+        this.user["serviceRank"] = this.serviceRank;
+        let amp = this.serviceRank;
+        //获得所有的服务
+        let tmp = await this.$api('Service/getAll', {});
+        //获得已选择的id数组
+        let ids = [];
+        this.noService = [];
+        amp.forEach(it => {
+          ids.push(it.serviceId);
+        });
+        tmp.serviceList.forEach(item => {
+          if (!ids.includes(item.id) && item.parent !== null) {
+            this.noService.push(item);
+          }
+        });
+      },
     },
-    created() {
+    async created() {
       this.getInfo();
     },
   };

@@ -9,18 +9,71 @@ import java.util.ArrayList;
  */
 public class UserVO extends Query implements Serializable {
     private static final long serialVersionUID = -4944675620658964018L;
+    private Integer serviceId;
+    private Integer rankId;
+    private Integer money;
+    private Integer price;
+    private Integer parent;
+    private String rankName;
+    private String serviceName;
 
-    /*private ArrayList<Integer> service;
-
-    public ArrayList<Integer> getService() {
-        return service;
+    public Integer getServiceId() {
+        return serviceId;
     }
 
-    public void setService(ArrayList<Integer> service) {
-        this.service = service;
-    }*/
+    public void setServiceId(Integer serviceId) {
+        this.serviceId = serviceId;
+    }
 
-    private Integer id;
+    public Integer getRankId() {
+        return rankId;
+    }
+
+    public void setRankId(Integer rankId) {
+        this.rankId = rankId;
+    }
+
+    public Integer getMoney() {
+        return money;
+    }
+
+    public void setMoney(Integer money) {
+        this.money = money;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public Integer getParent() {
+        return parent;
+    }
+
+    public void setParent(Integer parent) {
+        this.parent = parent;
+    }
+
+    public String getRankName() {
+        return rankName;
+    }
+
+    public void setRankName(String rankName) {
+        this.rankName = rankName;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    private Integer id;//user的
 
     private String name;
 
@@ -64,7 +117,8 @@ public class UserVO extends Query implements Serializable {
         this.id = id;
     }
 
-    public UserVO() { }
+    public UserVO() {
+    }
 
     public Integer getId() {
         return id;

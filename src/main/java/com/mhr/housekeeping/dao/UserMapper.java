@@ -38,4 +38,6 @@ public interface UserMapper {
     Integer updateUserByUsername(UserVO userVO);
 
     List<UserDO> getUserForUpdate(UserVO userVO);
+
+    List<UserVO> findUserInfos(UserVO userVO);
 }
