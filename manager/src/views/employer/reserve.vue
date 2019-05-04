@@ -130,7 +130,7 @@
           endTime: null,
           serviceId: null,//页面跳转传过来的id或者选中的ids
           employeeId: null,//页面跳转传过来的id
-          employerId:window.$mine.id
+          employerId: window.$mine.id
         },
         rules: {
           serviceId: [
@@ -222,13 +222,13 @@
         });
       },
       async submit() {
-        //提交订单
-        if (this.reserveForm.prov === '省' || this.reserveForm.city === '市') {
-          this.reserveForm.prov = null;
-          this.reserveForm.city = null;
-        }
         this.reserveForm.reverseTime = this.reserveForm.reverseTime / 1000;
-        await this.$api('Order/add', this.reserveForm);
+        let res = await this.$api('Order/add', this.reserveForm);
+        this.dialog_visible = false;
+        this.$message({
+          type: res.code === 200 ? 'success' : 'error',
+          message: res.msg
+        });
       },
       selectProv(data) {
         this.reserveForm.prov = data.value;
