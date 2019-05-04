@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+
 @RestController
 public class ServiceController {
     @Autowired
@@ -20,6 +22,13 @@ public class ServiceController {
         Result res = serviceService.listService(serviceVO);
         object.put("serviceList", res.getData());
         return object;
+    }
+
+    @RequestMapping("/Service/getServiceByUserId")
+    public Result getServiceByUserId(@RequestBody HashMap hashMap ) throws Exception {
+        Integer employeeId = (Integer) hashMap.get("id");
+        Result res = serviceService.findServiceByUserId(employeeId);
+        return res;
     }
 
     @RequestMapping("/Service/addService")

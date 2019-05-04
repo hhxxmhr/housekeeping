@@ -40,4 +40,6 @@ public interface UserMapper {
     List<UserDO> getUserForUpdate(UserVO userVO);
 
     List<UserVO> findUserInfos(UserVO userVO);
+
+    List<UserVO> listUserByServiceId(UserVO userVO);
 }

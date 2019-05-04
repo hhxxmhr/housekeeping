@@ -1,5 +1,7 @@
 package com.mhr.housekeeping.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.mhr.housekeeping.entity.UserDO;
@@ -11,7 +13,6 @@ import com.mhr.housekeeping.service.UserServiceService;
 import com.mhr.housekeeping.utils.EnumType;
 import com.mhr.housekeeping.utils.Result;
 import com.mhr.housekeeping.utils.SmsUtils;
-import net.sf.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -67,7 +68,7 @@ public class UserController {
     }
 
     /**
-     * 根据userId查询所有相关的数据并返回
+     * 根据userId查询所有相关service  rank 的数据并返回集合
      *
      * @param request
      * @return
@@ -79,10 +80,23 @@ public class UserController {
         return userInfos;
     }
 
+    //employer登陆使用
+    @RequestMapping("/User/findUserInfos2")
+    public JSONObject findUserInfos2(@RequestBody HashMap hashMap ) {
+        Integer employeeId = (Integer) hashMap.get("employeeId");
+        JSONObject userInfos = userService.findUserInfos(new UserVO(employeeId));
+        return userInfos;
+    }
+
     @RequestMapping("/User/logout")
     public Result Logout(HttpServletRequest request) {
         request.getSession().removeAttribute("user");
         return new Result(200);
+    }
+
+    @RequestMapping("/User/getUserById")
+    public Result getUserById(@RequestBody UserVO userVO) throws Exception {
+        return userService.findDetailUser(userVO);
     }
 
     @RequestMapping("/User/getCode")
@@ -112,8 +126,12 @@ public class UserController {
         List<Integer> serviceList = (List<Integer>) hashMap.get("service");
         System.out.println(serviceList);
         hashMap.remove("service");
-        JSONObject object = JSONObject.fromObject(hashMap);
-        UserVO userVO = (UserVO) JSONObject.toBean(object, UserVO.class);
+        //hashMap转json字符串
+        String jsonString = JSON.toJSONString(hashMap, true);
+//        JSONObject object = JSONObject.fromObject(hashMap);
+        //json字符串转实体类对象
+        UserVO userVO = JSONObject.parseObject(jsonString, UserVO.class);
+//        UserVO userVO = (UserVO) JSONObject.toBean(object, UserVO.class);
         //更新user表
 //        UserDO user = userService.getUserByUsername(userVO);
         /*if (user != null) {
@@ -158,10 +176,17 @@ public class UserController {
             user.setPassword((String) hashMap.get("new_pwd"));
             UserVO userVO = new UserVO();
             BeanUtils.copyProperties(user, userVO);
-            return userService.updateUser(userVO,null);
+            return userService.updateUser(userVO, null);
         }
     }
 
+    /**
+     * 1.0获得所有用户的信息
+     * 1.1返回值里面再添加该用户拥有的服务等级信息
+     * @param userVO
+     * @return
+     * @throws Exception
+     */
     @RequestMapping("/getAll")
     public JSONObject getAll(@RequestBody UserVO userVO) throws Exception {
         JSONObject object = new JSONObject();
@@ -170,9 +195,17 @@ public class UserController {
         return object;
     }
 
+    @RequestMapping("/User/listUserByServiceId")
+    public JSONObject listUserByServiceId(@RequestBody UserVO userVO) throws Exception {
+        Result result = userService.listUserByServiceId(userVO);
+        JSONObject object = new JSONObject();
+        object.put("list", result.getData());
+        return object;
+    }
+
     @RequestMapping("/User/changeEmployeeState")
     public Result changeState(@RequestBody UserVO userVO) throws Exception {
-        return userService.updateUser(userVO,null);
+        return userService.updateUser(userVO, null);
 
     }
 

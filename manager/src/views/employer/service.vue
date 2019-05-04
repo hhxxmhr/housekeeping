@@ -14,10 +14,16 @@
         <el-table-column prop="name" label="类别" align="center"></el-table-column>
         <el-table-column prop="childrenType" label="可选服务" align="center" width="400px">
           <template slot-scope="scope">
-            <el-tag :key="tag.id" v-for="tag in scope.row.childrenType"
-                    :disable-transitions="false" size="medium" slot="reference">
+            <el-radio v-model="serviceId" :label="tag.id" :key="tag.id" v-for="tag in scope.row.childrenType"
+                      v-if="scope.row.childrenType.length>0">
               {{tag.name+':'+tag.price+'元/次'}}
+
+            </el-radio>
+            <el-tag :disable-transitions="false" size="medium" slot="reference"
+                    v-if="scope.row.childrenType.length===0">
+              {{'暂无'}}
             </el-tag>
+
           </template>
         </el-table-column>
         <el-table-column prop="price" label="基础服务金额(元/次)" align="center" width="150px"></el-table-column>
@@ -35,6 +41,7 @@
   export default {
     data() {
       return {
+        serviceId: null,
         searchForm: {
           name: ''
         },
@@ -86,12 +93,13 @@
           });
           it["childrenType"] = childrenType;
         });
+        // console.log(this.serviceList)
       },
       choose(id) {
         //跳转到选人的页面
         this.$router.push({
           path: "/employer/chooseEmployee",
-          query: {serviceId: id}
+          query: {serviceId: this.serviceId != null ? parseInt(this.serviceId) : id}
         });
       },
       search() {

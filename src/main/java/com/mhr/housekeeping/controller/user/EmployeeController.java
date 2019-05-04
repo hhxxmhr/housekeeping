@@ -24,7 +24,6 @@ public class EmployeeController {
     @RequestMapping("/Employee/editInfo")
     public Result editInfo(@RequestBody HashMap hashMap, HttpServletRequest request) throws Exception {
         Integer service = (Integer) hashMap.get("service");
-        System.out.println(service);
         hashMap.remove("service");
         hashMap.remove("serviceRank");
         JSONObject object = JSONObject.fromObject(hashMap);

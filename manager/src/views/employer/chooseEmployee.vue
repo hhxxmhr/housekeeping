@@ -23,7 +23,6 @@
       </el-row>
 
       <div v-for="item in info" :key="item.id" class="meal-card">
-        <!--<a href="javascript:void(0)" @click="showDialog(item)">-->
         <el-card :body-style="{ padding: '0px' }">
           <img :src="'http://localhost:8888/'+item.photo" class="image" v-if="item.photo">
           <img src="../../../src/assets/xiao.jpg" class="image" v-else>
@@ -81,41 +80,7 @@
           <el-button @click="dialog_visible=false">关闭</el-button>
         </div>
       </el-dialog>
-      <!--人员预定-->
-      <!--<div class="dialog-wrapper">-->
-      <!--<el-dialog id="el-dialog__body" title="确认点餐" :visible.sync="dialogVisible" :width="dialogWidth"-->
-      <!--:lock-scroll="false">-->
-      <!--<el-form :model="form" :rules="rules" ref="form" label-width="70px" size="small">-->
-      <!--<el-form-item label="菜名">-->
-      <!--<span>{{item.name}}</span>-->
-      <!--</el-form-item>-->
-      <!--<el-form-item label="备注" v-if="item.desc && item.desc !== '无'">-->
-      <!--<span>{{item.desc}}</span>-->
-      <!--</el-form-item>-->
-      <!--<el-form-item label="商家">-->
-      <!--<span>{{item.shopName}}</span>-->
-      <!--</el-form-item>-->
-      <!--<el-form-item label="数量" prop="amount">-->
-      <!--<el-input-number v-model="form.amount" :min="1" label="描述文字" size="small"></el-input-number>-->
-      <!--</el-form-item>-->
-      <!--<el-form-item label="口味" prop="taste" v-if="item.taste !==undefined && item.taste.length > 0">-->
-      <!--<el-radio-group v-model="form.taste">-->
-      <!--<el-radio v-for="(it,index) in item.taste" :label="it" :key="index" border size="mini"-->
-      <!--style="width: 80px;"-->
-      <!--:class="isPhone?{a:index%2===0&&index!==0}:{a:index%3===0&&index!==0}">{{it}}-->
-      <!--</el-radio>-->
-      <!--</el-radio-group>-->
-      <!--</el-form-item>-->
-      <!--<el-form-item label="备注" prop="desc">-->
-      <!--<el-input v-model="form.desc" type="textarea" class="dialog-desc"></el-input>-->
-      <!--</el-form-item>-->
-      <!--</el-form>-->
-      <!--<div slot="footer" class="dialog-footer">-->
-      <!--<el-button @click="dialogVisible = false" size="small">取 消</el-button>-->
-      <!--<el-button type="primary" size="small" @click="saveOrder">确 定</el-button>-->
-      <!--</div>-->
-      <!--</el-dialog>-->
-      <!--</div>-->
+
     </div>
   </div>
 </template>
@@ -181,7 +146,8 @@
         dialogVisible: false,
         itemTaste: [],
         item: {},
-        form: {
+
+      form: {
           id: null,//所选菜品的id
           name: '',
           shopName: '',
@@ -201,11 +167,17 @@
     methods: {
       initQuery() {
         Object.assign(this.searchForm, this.$route.query);
-        this.searchForm.serviceId = this.searchForm.serviceId ? parseInt(this.searchForm.serviceId) : null;
-        this.searchForm.experience = this.searchForm.experience!= null ? parseInt(this.searchForm.experience) : null;
+        this.searchForm.serviceId = this.searchForm.serviceId ? parseInt(this.searchForm.serviceId) : null;//接受跳转页面的参数
+        this.searchForm.experience = this.searchForm.experience != null ? parseInt(this.searchForm.experience) : null;//页面搜索
       },
       async getInfo() {
-        let res = await this.$api("getAll", this.searchForm);
+        let res;
+        if (this.searchForm.serviceId == null){
+           res = await this.$api("getAll", this.searchForm);
+           // console.log(res)
+        }else {
+          res = await this.$api("User/listUserByServiceId", this.searchForm);
+        }
         this.info = res.list;
       },
       //详细资料按钮点击

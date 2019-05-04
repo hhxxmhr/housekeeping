@@ -9,6 +9,16 @@ import java.io.Serializable;
 public class ServiceVO extends Query implements Serializable {
     private static final long serialVersionUID = -8722208901994957538L;
 
+    private Integer employeeId;
+
+    public Integer getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Integer employeeId) {
+        this.employeeId = employeeId;
+    }
+
     private Integer id;
 
     private String name;
@@ -52,7 +62,8 @@ public class ServiceVO extends Query implements Serializable {
     @Override
     public String toString() {
         return "ServiceVO{" +
-                "id=" + id +
+                "employeeId=" + employeeId +
+                ", id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", parent=" + parent +

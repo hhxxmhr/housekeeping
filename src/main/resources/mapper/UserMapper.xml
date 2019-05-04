@@ -382,6 +382,62 @@
         `user`.id = #{id}
     </select>
 
+    <select id="listUserByServiceId" resultMap="userMapperMore" parameterType="UserVO">
+      SELECT
+        user_service.user_id,
+        user_service.service_id,
+        user_service.rank_id,
+        `user`.`name`,
+        `user`.username,
+        `user`.`password`,
+        `user`.role,
+        `user`.state,
+        `user`.sex,
+        `user`.age,
+        `user`.phone,
+        `user`.id_card,
+        `user`.bank_card,
+        `user`.create_time,
+        `user`.photo,
+        `user`.address,
+        `user`.married,
+        `user`.education,
+        `user`.experience,
+        `user`.introduction,
+        `user`.city,
+        `user`.prov,
+        rank.`name` AS rank_name,
+        rank.money,
+        service.`name` AS service_name,
+        service.price,
+        service.parent
+        FROM
+        user_service
+        INNER JOIN `user` ON user_service.user_id = `user`.id
+        INNER JOIN rank ON user_service.rank_id = rank.id
+        INNER JOIN service ON user_service.service_id = service.id
+        WHERE
+        service.id = #{serviceId}
+        <if test="education!=null">
+            AND education = #{education}
+        </if>
+        <if test="experience!=null">
+            AND experience = #{experience}
+        </if>
+        <if test="city!=null and ''!=city">
+            AND city = #{city}
+        </if>
+        <if test="prov!=null and ''!=prov">
+            AND prov = #{prov}
+        </if>
+        <if test="rankId!=null">
+            AND rankId = #{rankId}
+        </if>
+
+
+
+    </select>
+
     <select id="listUser" resultMap="userMapper" parameterType="UserVO">
         SELECT
         <include refid="_fields"/>
@@ -390,6 +446,7 @@
         <include refid="_condition"/>
         <include refid="_order"/>
     </select>
+
 
     <select id="listUserPage" resultMap="userMapper" parameterType="UserVO">
         SELECT

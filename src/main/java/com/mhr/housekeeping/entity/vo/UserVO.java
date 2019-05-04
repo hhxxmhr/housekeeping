@@ -2,6 +2,7 @@ package com.mhr.housekeeping.entity.vo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <br/>
@@ -16,6 +17,16 @@ public class UserVO extends Query implements Serializable {
     private Integer parent;
     private String rankName;
     private String serviceName;
+
+    public List<UserVO> getVoList() {
+        return voList;
+    }
+
+    public void setVoList(List<UserVO> voList) {
+        this.voList = voList;
+    }
+
+    private List<UserVO> voList;
 
     public Integer getServiceId() {
         return serviceId;
@@ -283,7 +294,15 @@ public class UserVO extends Query implements Serializable {
     @Override
     public String toString() {
         return "UserVO{" +
-                "id=" + id +
+                "serviceId=" + serviceId +
+                ", rankId=" + rankId +
+                ", money=" + money +
+                ", price=" + price +
+                ", parent=" + parent +
+                ", rankName='" + rankName + '\'' +
+                ", serviceName='" + serviceName + '\'' +
+                ", voList=" + voList +
+                ", id=" + id +
                 ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
@@ -305,5 +324,4 @@ public class UserVO extends Query implements Serializable {
                 ", prov='" + prov + '\'' +
                 '}';
     }
-
 }

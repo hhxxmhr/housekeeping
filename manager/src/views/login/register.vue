@@ -68,10 +68,12 @@
                 <el-radio v-model="registerForm.sex" label="男">男</el-radio>
                 <el-radio v-model="registerForm.sex" label="女">女</el-radio>
               </el-form-item>
-              <el-form-item label="手机号码" prop="phone" :class="{ style1:registerForm.role==='employer'||registerForm.role!==200 }">
+              <el-form-item label="手机号码" prop="phone"
+                            :class="{ style1:registerForm.role==='employer'||registerForm.role!==200 }">
                 <el-input v-model="registerForm.phone" placeholder="手机号码用于找回密码、接收通知短信"></el-input>
               </el-form-item>
-              <el-form-item label="工作经验" prop="experience" v-if="registerForm.role==='employee'||registerForm.role===200">
+              <el-form-item label="工作经验" prop="experience"
+                            v-if="registerForm.role==='employee'||registerForm.role===200">
                 <el-select v-model="registerForm.experience" placeholder="请选择" style="width: 189px">
                   <el-option v-for="item in Object.entries(UserExperience)"
                              :key="item[0]"
@@ -109,13 +111,15 @@
                 </el-select>
               </el-form-item>
 
-              <el-form-item label="自我介绍" prop="introduction" v-if="registerForm.role==='employee'||registerForm.role===200">
+              <el-form-item label="自我介绍" prop="introduction"
+                            v-if="registerForm.role==='employee'||registerForm.role===200">
                 <el-input type="textarea" v-model="registerForm.introduction" autosize :rows="2"
                           style="width: 400px"></el-input>
               </el-form-item>
               <el-form-item label="可做服务" prop="service" v-if="registerForm.role==='employee'||registerForm.role===200">
                 <el-checkbox-group v-model="registerForm.service" size="mini" v-for="(serviceItem,index) in serviceList"
-                                   :key="serviceItem.id" :label="serviceItem.id" :class="{'do':index%3===1,'does':index%3===2}">
+                                   :key="serviceItem.id" :label="serviceItem.id"
+                                   :class="{'do':index%3===1,'does':index%3===2}">
                   <div v-if="serviceItem.childrenType.length===0">
                     <el-checkbox v-if style="color: #EC8C47" :label="serviceItem.id">{{serviceItem.name}}</el-checkbox>
                   </div>
@@ -169,6 +173,7 @@
         }
       };
       return {
+        serviceList: [],
         phoneCode: '',
         activeName: 'employer',
         dialog: false,
@@ -213,7 +218,7 @@
           name: [
             {required: true, message: '请输入真实姓名', trigger: 'blur'},
           ],
-         /* age: [{validator: checkAge, trigger: 'blur'}, {pattern: /^[1-9]\d*$/, message: '请输入数字'}],
+          age: [{validator: checkAge, trigger: 'blur'}, {pattern: /^[1-9]\d*$/, message: '请输入数字'}],
           sex: [
             {required: true, message: '请选择性别', trigger: 'change'},
           ],
@@ -244,9 +249,7 @@
           code: [
             {required: true, message: '请输入短信验证码', trigger: 'blur'},
             {pattern: /^[0-9]{6}$/, message: '请输入正确的短信验证码'}
-          ],*/
-
-
+          ],
         }
       }
     },
@@ -294,7 +297,6 @@
           return false;
         }
         let res = await this.$api('User/getCode', {phone: this.registerForm.phone});
-        console.log(res)
         //give  me 15895345237
         this.$message({
           type: res.code === 200 ? 'success' : 'error',
@@ -313,9 +315,8 @@
         this.$refs['registerForm_2'].validate(async valid => {
           this.registerForm.role = this.registerForm.role === 'employee' ? 200 : 300;
           if (valid) {
-            // if (parseInt(this.registerForm.code) === this.phoneCode) {
+            if (parseInt(this.registerForm.code) === this.phoneCode) {
               let res = await this.$api('User/register', this.registerForm);
-              console.log(res)
               if (res.code === 200) {
                 this.$message.success('注册成功，请重新登录');
                 // localStorage.setItem('username', res.username);
@@ -330,17 +331,16 @@
                   message: res.msg
                 });
               }
-            // }
-            // else {
-            //   this.$message({
-            //     type: 'error',
-            //     message: "验证码错误"
-            //   });
-            // }
+            } else {
+              this.$message({
+                type: 'error',
+                message: "验证码错误"
+              });
+            }
 
           }
         });
-        this.activeName= this.registerForm.role === 200 ? 'employee' : 'employer';
+        this.activeName = this.registerForm.role === 200 ? 'employee' : 'employer';
       },
       selectProv(data) {
         this.registerForm.prov = data.value;
@@ -367,6 +367,7 @@
     margin-left: 340px;
     margin-top: -85px;
   }
+
   .does {
     margin-left: 650px;
     margin-top: -85px;

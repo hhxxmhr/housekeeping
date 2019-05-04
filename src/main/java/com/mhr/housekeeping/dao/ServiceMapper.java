@@ -36,5 +36,5 @@ public interface ServiceMapper {
 
     List<ServiceDO> listServiceByName(ServiceVO serviceVO);
 
-    Result findServiceByUserId(Integer id);
+    List<ServiceDO> findServiceByUserId(Integer id);
 }

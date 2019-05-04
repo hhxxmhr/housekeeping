@@ -66,7 +66,6 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public Result listService(ServiceVO serviceVO) throws Exception {
-        System.out.println(serviceVO);
         //搜索条件不为空的时候，查询的如果是大类别，需要将他的小类别也返回,反之一样
         if (serviceVO != null && !DataUtils.isEmpty(serviceVO.getName())) {
             List<ServiceDO> listService = serviceMapper.listServiceByName(serviceVO);
@@ -146,7 +145,8 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public Result findServiceByUserId(Integer id) {
-        return serviceMapper.findServiceByUserId(id);
+        List<ServiceDO> serviceByUserId = serviceMapper.findServiceByUserId(id);
+        return new Result<>(serviceByUserId);
     }
 
 

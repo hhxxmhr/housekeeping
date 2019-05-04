@@ -1,10 +1,11 @@
 package com.mhr.housekeeping.service;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.mhr.housekeeping.entity.UserDO;
 import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.utils.Result;
-import net.sf.json.JSONObject;
 
 import java.util.List;
 
@@ -43,4 +44,6 @@ public interface UserService {
     Result updateUserByUsername(UserVO userVO);
 
 	JSONObject findUserInfos(UserVO userVO);
+
+	Result listUserByServiceId(UserVO userVO);
 }

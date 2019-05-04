@@ -1,5 +1,7 @@
 package com.mhr.housekeeping.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.mhr.housekeeping.dao.UserMapper;
 import com.mhr.housekeeping.dao.UserServiceMapper;
 import com.mhr.housekeeping.entity.UserDO;
@@ -9,16 +11,20 @@ import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.service.UserService;
 import com.mhr.housekeeping.service.UserServiceService;
 import com.mhr.housekeeping.utils.Result;
-import net.sf.json.JSONObject;
+//import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <br/>
@@ -65,7 +71,7 @@ public class UserServiceImpl implements UserService {
         Integer count = userMapper.updateUser(userVO);
         if (count > 0) {
             //更新user_service
-            if (service != null){
+            if (service != null) {
                 //添加服务
                 UserServiceVO userServiceVO = new UserServiceVO();
                 userServiceVO.setUserId(userVO.getId());
@@ -73,20 +79,21 @@ public class UserServiceImpl implements UserService {
                 userServiceVO.setRankId(1);
                 userServiceService.addUserService(userServiceVO);
             }
-                return Result.getSuccess("修改成功");
+            return Result.getSuccess("修改成功");
         }
         return Result.getFailure("修改失败");
     }
 
     @Override
     public Result findDetailUser(UserVO userVO) throws Exception {
-        return null;
+        UserDO detailUser = userMapper.findDetailUser(userVO);
+        return new Result<>(detailUser);
     }
 
     @Override
     public Result listUser(UserVO userVO) throws Exception {
         List<UserDO> users = userMapper.listUser(userVO);
-        return new Result<>(Result.CODE_SUCCESS, users);
+        return new Result<>(users);
     }
 
     @Override
@@ -172,6 +179,12 @@ public class UserServiceImpl implements UserService {
         JSONObject object = new JSONObject();
         object.put("data", userInfos);
         return object;
+    }
+
+    @Override
+    public Result listUserByServiceId(UserVO userVO) {
+        List<UserVO> userVOS = userMapper.listUserByServiceId(userVO);
+        return new Result<>(userVOS);
     }
 
 }
