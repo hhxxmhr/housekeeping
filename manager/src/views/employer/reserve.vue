@@ -24,9 +24,9 @@
       <!--<el-form-item label="预约时长" prop="amount" :label-width="formLabelWidth">
         <el-input-number v-model="addAdsl.amount" style="width: 217px" :min="1"></el-input-number>
       </el-form-item>-->
-      <el-form-item label="上门时间" prop="startTime" required style="margin-top: 50px">
+      <el-form-item label="上门时间" prop="reverseTime" required style="margin-top: 50px">
         <el-date-picker
-          v-model="reserveForm.startTime"
+          v-model="reserveForm.reverseTime"
           format="yyyy-MM-dd HH:mm "
           value-format="timestamp"
           type="datetime"
@@ -54,7 +54,7 @@
         <el-input type="textarea" v-model="reserveForm.tip" style="width: 41%"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="reserveButton(reserveForm)">立即预定</el-button>
+        <el-button type="primary" @click="reserveButton">立即预定</el-button>
         <el-button @click="resetForm('reserveForm')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -71,7 +71,7 @@
           {{reserveForm.phone}}
         </el-form-item>
         <el-form-item label="上门时间：" :label-width="formLabelWidth">
-          {{$formatTime(reserveForm.startTime/1000)}}
+          {{$formatTime(reserveForm.reverseTime/1000)}}
         </el-form-item>
         <el-form-item label="服务地址：" :label-width="formLabelWidth">
           {{reserveForm.prov+'-'+reserveForm.city+'-'+reserveForm.address}}
@@ -85,8 +85,8 @@
 
       </el-form>
       <div slot="footer" style="margin-top: -30px">
-        <el-button @click="dialog_visible=false">关闭</el-button>
-        <el-button @click="submit">确认</el-button>
+        <el-button @click="dialog_visible=false">返回</el-button>
+        <at-button @click="submit" type="primary">确认</at-button>
       </div>
     </el-dialog>
   </div>
@@ -106,6 +106,7 @@
           else callback(new Error('手机号码格式错误'));
         }
       };
+
       return {
         allService: [],
         originService: [],//页面跳转携带的employeeId查询到的拥有的可选服务
@@ -125,16 +126,17 @@
           address: '',
           phone: '',
           orderPrice: null,
-          startTime: this.timestamp() * 1000 - (1000 * 60 * 60 * 24),
+          reverseTime: this.timestamp() * 1000 - (1000 * 60 * 60 * 24),
           endTime: null,
           serviceId: null,//页面跳转传过来的id或者选中的ids
           employeeId: null,//页面跳转传过来的id
+          employerId:window.$mine.id
         },
         rules: {
           serviceId: [
             {required: true, message: '请选择服务', trigger: 'change'},
           ],
-          startTime: [
+          reverseTime: [
             {required: true, message: '请选择上门时间', trigger: 'blur'}
           ],
           phone: [
@@ -175,7 +177,6 @@
           });
           it["childrenType"] = childrenType;
         });
-        // console.log(this.serviceList);
       },
       async initQuery() {
         Object.assign(this.reserveForm, this.$route.query);
@@ -192,11 +193,13 @@
       reserveButton() {
         this.$refs['reserveForm'].validate(async valid => {
           if (valid) {
-            let tmp = this.originService.find(item => item.serviceId === this.reserveForm.serviceId);
-            this.information.serviceName = tmp.serviceName + '-' + tmp.rankName;
-            this.reserveForm.orderPrice = tmp.money + tmp.price;
-            this.information.employeeName = this.employeeInfo.name + '-' + this.employeeInfo.phone;
-            this.dialog_visible = true;
+            if (this.reserveForm.city === this.employeeInfo.city) {
+              let tmp = this.originService.find(item => item.serviceId === this.reserveForm.serviceId);
+              this.information.serviceName = tmp.serviceName + '-' + tmp.rankName;
+              this.reserveForm.orderPrice = tmp.money + tmp.price;
+              this.information.employeeName = this.employeeInfo.name + '-' + this.employeeInfo.phone;
+              this.dialog_visible = true;
+            } else this.$message.error("请核实地区重新选择人员")
           }
         });
       },
@@ -207,20 +210,25 @@
         }
         //首先要选中一个服务以及地址，地区不吻合也是不行的----尚未完成
         this.$refs.reserveForm.validateField('serviceId', (error) => {
-          if (!error) {
-            //当校验通过时，这里面写逻辑代码
-            //跳转到选人的页面
-            this.$router.push({
-              path: "/employer/chooseEmployee",
-              query: {serviceId: this.reserveForm.serviceId, prov: this.reserveForm.prov, city: this.reserveForm.city}
-            });
+          if (!error) {//当校验通过时，这里面写逻辑代码
+            if (this.reserveForm.city !== null) {
+              //跳转到选人的页面
+              this.$router.push({
+                path: "/employer/chooseEmployee",
+                query: {serviceId: this.reserveForm.serviceId, prov: this.reserveForm.prov, city: this.reserveForm.city}
+              });
+            } else this.$message.error("请先选择住址所在区域")
           } else this.$message.error("请先选择服务")
         });
       },
       async submit() {
         //提交订单
-        this.reserveForm.startTime = this.reserveForm.startTime / 1000;
-        await this.$api('order/add', this.reserveForm);
+        if (this.reserveForm.prov === '省' || this.reserveForm.city === '市') {
+          this.reserveForm.prov = null;
+          this.reserveForm.city = null;
+        }
+        this.reserveForm.reverseTime = this.reserveForm.reverseTime / 1000;
+        await this.$api('Order/add', this.reserveForm);
       },
       selectProv(data) {
         this.reserveForm.prov = data.value;

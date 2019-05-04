@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mhr.housekeeping.dao.OrdersMapper">
+
+	<resultMap id="ordersMapper" type="OrdersDO">
+        <result property="id" column="id"/>
+        <result property="serviceId" column="service_id"/>
+        <result property="employeeId" column="employee_id"/>
+        <result property="reverseTime" column="reverse_time"/>
+        <result property="address" column="address"/>
+        <result property="phone" column="phone"/>
+        <result property="tip" column="tip"/>
+        <result property="state" column="state"/>
+        <result property="servicePrice" column="service_price"/>
+        <result property="employerId" column="employer_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="rate" column="rate"/>
+        <result property="prov" column="prov"/>
+        <result property="city" column="city"/>
+	</resultMap>
+
+    <sql id="_table">
+        orders
+	</sql>
+
+	<sql id="_fields">
+		id,service_id,employee_id,reverse_time,address,phone,tip,state,service_price,employer_id,create_time,end_time,rate,prov,city
+	</sql>
+
+	<sql id="_condition">
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id!=null">
+				AND id = #{id}
+			</if>
+            <if test="serviceId!=null">
+				AND service_id = #{serviceId}
+			</if>
+            <if test="employeeId!=null">
+				AND employee_id = #{employeeId}
+			</if>
+            <if test="reverseTime!=null">
+				AND reverse_time = #{reverseTime}
+			</if>
+            <if test="address!=null and ''!=address">
+				AND address = #{address}
+			</if>
+            <if test="phone!=null and ''!=phone">
+				AND phone = #{phone}
+			</if>
+            <if test="tip!=null and ''!=tip">
+				AND tip = #{tip}
+			</if>
+            <if test="state!=null">
+				AND state = #{state}
+			</if>
+            <if test="servicePrice!=null">
+				AND service_price = #{servicePrice}
+			</if>
+            <if test="employerId!=null">
+				AND employer_id = #{employerId}
+			</if>
+            <if test="createTime!=null">
+				AND create_time = #{createTime}
+			</if>
+            <if test="endTime!=null">
+				AND end_time = #{endTime}
+			</if>
+            <if test="rate!=null">
+				AND rate = #{rate}
+			</if>
+            <if test="prov!=null and ''!=prov">
+				AND prov = #{prov}
+			</if>
+            <if test="city!=null and ''!=city">
+				AND city = #{city}
+			</if>
+		</trim>
+	</sql>
+
+	<sql id="_primaryKey_condition">
+		WHERE id = #{id}
+	</sql>
+
+	<sql id="_order">
+        <if test="sortByParams!= null and sortByParams.size()>0" >
+            ORDER BY
+            <foreach collection="sortByParams.keys" index="index" item="sortByParamKey" separator=",">
+                <![CDATA[${sortByParamKey} ${sortByParams[sortByParamKey]}]]>
+            </foreach>
+        </if>
+	</sql>
+
+    <insert id="addOrders" parameterType="OrdersVO" keyProperty="id">
+        INSERT INTO <include refid="_table"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+				id,
+			</if>
+            <if test="serviceId!=null">
+				service_id,
+			</if>
+            <if test="employeeId!=null">
+				employee_id,
+			</if>
+            <if test="reverseTime!=null">
+				reverse_time,
+			</if>
+            <if test="address!=null and ''!=address">
+				address,
+			</if>
+            <if test="phone!=null and ''!=phone">
+				phone,
+			</if>
+            <if test="tip!=null and ''!=tip">
+				tip,
+			</if>
+            <if test="state!=null">
+				state,
+			</if>
+            <if test="servicePrice!=null">
+				service_price,
+			</if>
+            <if test="employerId!=null">
+				employer_id,
+			</if>
+            <if test="createTime!=null">
+				create_time,
+			</if>
+            <if test="endTime!=null">
+				end_time,
+			</if>
+            <if test="rate!=null">
+				rate,
+			</if>
+            <if test="prov!=null and ''!=prov">
+				prov,
+			</if>
+            <if test="city!=null and ''!=city">
+				city,
+			</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+				#{id},
+			</if>
+            <if test="serviceId!=null">
+				#{serviceId},
+			</if>
+            <if test="employeeId!=null">
+				#{employeeId},
+			</if>
+            <if test="reverseTime!=null">
+				#{reverseTime},
+			</if>
+            <if test="address!=null and ''!=address">
+				#{address},
+			</if>
+            <if test="phone!=null and ''!=phone">
+				#{phone},
+			</if>
+            <if test="tip!=null and ''!=tip">
+				#{tip},
+			</if>
+            <if test="state!=null">
+				#{state},
+			</if>
+            <if test="servicePrice!=null">
+				#{servicePrice},
+			</if>
+            <if test="employerId!=null">
+				#{employerId},
+			</if>
+            <if test="createTime!=null">
+				#{createTime},
+			</if>
+            <if test="endTime!=null">
+				#{endTime},
+			</if>
+            <if test="rate!=null">
+				#{rate},
+			</if>
+            <if test="prov!=null and ''!=prov">
+				#{prov},
+			</if>
+            <if test="city!=null and ''!=city">
+				#{city},
+			</if>
+        </trim>
+    </insert>
+
+    <update id="updateOrders" parameterType="OrdersVO">
+        UPDATE <include refid="_table"/>
+        <set>
+            <if test="serviceId!=null">
+				service_id = #{serviceId},
+			</if>
+            <if test="employeeId!=null">
+				employee_id = #{employeeId},
+			</if>
+            <if test="reverseTime!=null">
+				reverse_time = #{reverseTime},
+			</if>
+            <if test="address!=null and ''!=address">
+				address = #{address},
+			</if>
+            <if test="phone!=null and ''!=phone">
+				phone = #{phone},
+			</if>
+            <if test="tip!=null and ''!=tip">
+				tip = #{tip},
+			</if>
+            <if test="state!=null">
+				state = #{state},
+			</if>
+            <if test="servicePrice!=null">
+				service_price = #{servicePrice},
+			</if>
+            <if test="employerId!=null">
+				employer_id = #{employerId},
+			</if>
+            <if test="createTime!=null">
+				create_time = #{createTime},
+			</if>
+            <if test="endTime!=null">
+				end_time = #{endTime},
+			</if>
+            <if test="rate!=null">
+				rate = #{rate},
+			</if>
+            <if test="prov!=null and ''!=prov">
+				prov = #{prov},
+			</if>
+            <if test="city!=null and ''!=city">
+				city = #{city},
+			</if>
+        </set>
+        <include refid="_primaryKey_condition"/>
+    </update>
+
+    <select id="findDetailOrders" resultMap="ordersMapper" parameterType="OrdersVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM <include refid="_table"/>
+        <include refid="_primaryKey_condition"/>
+    </select>
+
+    <select id="listOrders" resultMap="ordersMapper" parameterType="OrdersVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM <include refid="_table"/>
+        <include refid="_condition"/>
+	    <include refid="_order"/>
+    </select>
+
+    <select id="listOrdersPage" resultMap="ordersMapper" parameterType="OrdersVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM <include refid="_table"/>
+        <include refid="_condition"/>
+        <include refid="_order"/>
+        <if test="startRecord != null and pageSize != null and pageSize >0">
+            limit #{startRecord},#{pageSize}
+        </if>
+	    <if test="!(startRecord != null and pageSize != null and pageSize >0)">
+		    limit 0,15
+	    </if>
+    </select>
+
+    <select id="countOrders" resultType="java.lang.Integer" parameterType="OrdersVO">
+        SELECT
+        COUNT(*)
+        FROM <include refid="_table"/>
+        <include refid="_condition"/>
+    </select>
+
+    <delete id="deleteOrders" parameterType="OrdersVO">
+        DELETE FROM <include refid="_table"/>
+        <include refid="_primaryKey_condition"/>
+    </delete>
+
+</mapper>
