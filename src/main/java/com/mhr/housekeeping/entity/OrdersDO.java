@@ -8,7 +8,7 @@ import java.math.BigDecimal;
  * Created by min on 2019/05/04
  */
 public class OrdersDO implements Serializable {
-    private static final long serialVersionUID = -7469599746478568017L;
+    private static final long serialVersionUID = -8759412087232755768L;
 
     private Integer id;
 
@@ -29,7 +29,7 @@ public class OrdersDO implements Serializable {
 
     private Integer state;
 
-    private Integer servicePrice;
+    private Integer orderPrice;
 
     private Integer employerId;
 
@@ -97,11 +97,11 @@ public class OrdersDO implements Serializable {
     public void setState(Integer state) {
 		this.state = state;
 	}
-    public Integer getServicePrice() {
-		return servicePrice;
+    public Integer getOrderPrice() {
+		return orderPrice;
 	}
-    public void setServicePrice(Integer servicePrice) {
-		this.servicePrice = servicePrice;
+    public void setOrderPrice(Integer orderPrice) {
+		this.orderPrice = orderPrice;
 	}
     public Integer getEmployerId() {
 		return employerId;

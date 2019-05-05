@@ -7,10 +7,29 @@ import java.math.BigDecimal;
  * <br/>
  * Created by min on 2019/05/04
  */
-public class OrdersVO implements Serializable {
-    private static final long serialVersionUID = -5988109771103853280L;
+public class OrdersVO extends Query implements Serializable {
+    private static final long serialVersionUID = -5184197486620321135L;
 
-    private Integer id;
+    private Integer role;
+    private Integer userId;
+
+	public Integer getRole() {
+		return role;
+	}
+
+	public void setRole(Integer role) {
+		this.role = role;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	private Integer id;
 
     private Integer serviceId;
 
@@ -29,7 +48,7 @@ public class OrdersVO implements Serializable {
 
     private Integer state;
 
-    private Integer servicePrice;
+    private Integer orderPrice;
 
     private Integer employerId;
 
@@ -97,11 +116,11 @@ public class OrdersVO implements Serializable {
     public void setState(Integer state) {
 		this.state = state;
 	}
-    public Integer getServicePrice() {
-		return servicePrice;
+    public Integer getOrderPrice() {
+		return orderPrice;
 	}
-    public void setServicePrice(Integer servicePrice) {
-		this.servicePrice = servicePrice;
+    public void setOrderPrice(Integer orderPrice) {
+		this.orderPrice = orderPrice;
 	}
     public Integer getEmployerId() {
 		return employerId;
@@ -138,5 +157,28 @@ public class OrdersVO implements Serializable {
 	}
     public void setCity(String city) {
 		this.city = city;
+	}
+
+	@Override
+	public String toString() {
+		return "OrdersVO{" +
+				"role=" + role +
+				", userId=" + userId +
+				", id=" + id +
+				", serviceId=" + serviceId +
+				", employeeId=" + employeeId +
+				", reverseTime=" + reverseTime +
+				", address='" + address + '\'' +
+				", phone='" + phone + '\'' +
+				", tip='" + tip + '\'' +
+				", state=" + state +
+				", orderPrice=" + orderPrice +
+				", employerId=" + employerId +
+				", createTime=" + createTime +
+				", endTime=" + endTime +
+				", rate=" + rate +
+				", prov='" + prov + '\'' +
+				", city='" + city + '\'' +
+				'}';
 	}
 }

@@ -12,7 +12,7 @@
         <result property="phone" column="phone"/>
         <result property="tip" column="tip"/>
         <result property="state" column="state"/>
-        <result property="servicePrice" column="service_price"/>
+        <result property="orderPrice" column="order_price"/>
         <result property="employerId" column="employer_id"/>
         <result property="createTime" column="create_time"/>
         <result property="endTime" column="end_time"/>
@@ -26,7 +26,7 @@
 	</sql>
 
 	<sql id="_fields">
-		id,service_id,employee_id,reverse_time,address,phone,tip,state,service_price,employer_id,create_time,end_time,rate,prov,city
+		id,service_id,employee_id,reverse_time,address,phone,tip,state,order_price,employer_id,create_time,end_time,rate,prov,city
 	</sql>
 
 	<sql id="_condition">
@@ -55,8 +55,8 @@
             <if test="state!=null">
 				AND state = #{state}
 			</if>
-            <if test="servicePrice!=null">
-				AND service_price = #{servicePrice}
+            <if test="orderPrice!=null">
+				AND order_price = #{orderPrice}
 			</if>
             <if test="employerId!=null">
 				AND employer_id = #{employerId}
@@ -119,8 +119,8 @@
             <if test="state!=null">
 				state,
 			</if>
-            <if test="servicePrice!=null">
-				service_price,
+            <if test="orderPrice!=null">
+				order_price,
 			</if>
             <if test="employerId!=null">
 				employer_id,
@@ -166,8 +166,8 @@
             <if test="state!=null">
 				#{state},
 			</if>
-            <if test="servicePrice!=null">
-				#{servicePrice},
+            <if test="orderPrice!=null">
+				#{orderPrice},
 			</if>
             <if test="employerId!=null">
 				#{employerId},
@@ -214,8 +214,8 @@
             <if test="state!=null">
 				state = #{state},
 			</if>
-            <if test="servicePrice!=null">
-				service_price = #{servicePrice},
+            <if test="orderPrice!=null">
+				order_price = #{orderPrice},
 			</if>
             <if test="employerId!=null">
 				employer_id = #{employerId},

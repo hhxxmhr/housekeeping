@@ -3,7 +3,7 @@ import Vue from 'vue'
 Vue.prototype.pages = [20, 50, 100, 500];
 
 Vue.prototype.$role = {
-  Root:1,//系统管理员
+  Root: 1,//系统管理员
   Manager: 100,//普通管理员
   Employee: 200,//雇员
   Employer: 300//雇主
@@ -48,6 +48,7 @@ Vue.prototype.UserDegree = {
   4: "高中",
   5: "大学",
 };
+
 Vue.prototype.UserExperience = {
   0: "半年以下",
   1: "半年经验",
@@ -55,6 +56,14 @@ Vue.prototype.UserExperience = {
   3: "两年经验",
   4: "三年经验",
   5: "四年经验以上",
+};
+
+Vue.prototype.OrderState = {
+  0: "等待雇员确认",
+  1: "雇主已取消",//在两个小时之内可以免费取消，超出时间取消则收取服务费的5%
+  2: "雇员已确认",
+  3: "已完成待评论",
+  4: "已完成评论",
 };
 
 Vue.prototype.timestamp = function () {

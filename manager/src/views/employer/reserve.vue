@@ -1,19 +1,22 @@
 <template>
   <div>
+    <!--:class="{'do':index%3===1,'does':index%3===2,'doing':index%4===3}"-->
     <el-form :model="reserveForm" :rules="rules" ref="reserveForm" label-width="120px" class="demo-reserveForm"
              style="width: 100%">
-      <el-form-item label="所选服务" prop="serviceId">
+      <el-form-item label="所选服务" prop="serviceId" style="width: 1200px">
         <el-radio-group v-model="reserveForm.serviceId" size="mini" v-for="(item,index) in serviceList"
                         :key="item.id" :label="item.id" v-if="reserveForm.employeeId===null"
-                        :class="{'do':index%4===1,'does':index%4===2,'doing':index%4===3}">
-          <div v-if="item.childrenType.length===0">
-            <el-radio v-if style="font-style: italic" :label="item.id">{{item.name}}</el-radio>
+                        style="margin-left: 5px">
+          <div v-if="item.childrenType.length===0" >
+            <el-radio :label="item.id" style="color: #4ba3f8">{{item.name}}</el-radio>
           </div>
-          <span class="type" v-else style="font-style: italic">{{item.name}}</span>
-          <el-radio v-for="(serviceChild,index) in item.childrenType" :label="serviceChild.id"
-                    :key="index">
-            {{serviceChild.name}}
-          </el-radio>
+          <div v-else>
+            <el-tag >{{item.name}}</el-tag>
+            <el-radio v-for="(serviceChild,index) in item.childrenType" :label="serviceChild.id"
+                      :key="index" >
+              {{serviceChild.name}}
+            </el-radio>
+          </div>
         </el-radio-group>
         <el-radio-group v-model="reserveForm.serviceId">
           <el-radio v-for="(item,index) in originService" :key="index" :label=item.serviceId>
@@ -24,7 +27,7 @@
       <!--<el-form-item label="预约时长" prop="amount" :label-width="formLabelWidth">
         <el-input-number v-model="addAdsl.amount" style="width: 217px" :min="1"></el-input-number>
       </el-form-item>-->
-      <el-form-item label="上门时间" prop="reverseTime" required style="margin-top: 50px">
+      <el-form-item label="上门时间" prop="reverseTime" required >
         <el-date-picker
           v-model="reserveForm.reverseTime"
           format="yyyy-MM-dd HH:mm "
@@ -229,6 +232,13 @@
           type: res.code === 200 ? 'success' : 'error',
           message: res.msg
         });
+        if (res.code === 200) {
+          //跳转到订单列表页面
+          this.$router.push({
+            path: "/manager/orders",
+          });
+        }
+
       },
       selectProv(data) {
         this.reserveForm.prov = data.value;
@@ -255,7 +265,10 @@
   .type {
     color: #606266;
     font-weight: 500;
-    font-size: 14px;
+    margin-top: 13px;
+    margin-bottom: 10px;
+    margin-left: 20px;
+    font-size: 15px;
     cursor: pointer;
     display: block;
     position: relative;
@@ -270,9 +283,9 @@
   .does {
     margin-left: 600px;
     margin-top: -85px;
-  }
+  }*/
 
-  .doing {
+  /*.doing {
     margin-left: 890px;
     margin-top: -85px;
   }*/
