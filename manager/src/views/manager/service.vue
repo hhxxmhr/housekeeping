@@ -78,7 +78,7 @@
       </el-dialog>
       <el-table :data="serviceList" border style="width: 100%">
         <el-table-column prop="id" label="ID" align="center" width="150px"></el-table-column>
-        <el-table-column prop="name" label="类别" align="center"></el-table-column>
+        <el-table-column prop="name" label="类别" align="center" width="180px"></el-table-column>
         <el-table-column prop="childrenType" label="可选服务" align="center" width="400px">
           <template slot-scope="scope">
             <el-tag :key="tag.id" v-for="tag in scope.row.childrenType" closable
@@ -95,6 +95,7 @@
             <at-button size="mini" type="danger" confirmText="确定要删除此服务类别" @click="delService(scope.row.id)">删除
             </at-button>
             <el-button size="mini" type="success" @click="dialog_showChild(scope.row.id)">添加子服务</el-button>
+            <at-button size="mini" type="info" @click="filterEmployee(scope.row)">从事人员</at-button>
           </template>
         </el-table-column>
       </el-table>
@@ -106,6 +107,7 @@
   export default {
     data() {
       return {
+        serviceIds: [],
         searchForm: {
           name: ''
         },
@@ -162,6 +164,18 @@
             }
           });
           it["childrenType"] = childrenType;
+        });
+      },
+      filterEmployee(data) {
+        this.serviceIds = [];
+        data.childrenType.forEach(it => {
+          this.serviceIds.push(it.id)
+        });
+        this.serviceIds.push(data.id);
+        //跳转到选人的页面
+        this.$router.push({
+          path: "/manager/doEmployee",
+          query: {serviceIds:this.serviceIds}
         });
       },
       async delService(id) {
@@ -226,7 +240,7 @@
             let res;
             if (this.service.id == null) {
               res = await this.$api("Service/addService", {
-                parent:parseInt(this.service.parent),
+                parent: parseInt(this.service.parent),
                 name: this.service.name,
                 price: parseInt(this.service.price),
               });

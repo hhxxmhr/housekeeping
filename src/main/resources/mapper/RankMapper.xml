@@ -90,6 +90,19 @@
         <include refid="_primaryKey_condition"/>
     </select>
 
+    <select id="findRankByOrder" resultMap="rankMapper" parameterType="java.lang.Integer">
+                SELECT
+        rank.id ,
+        rank.`name` ,
+        rank.money
+        FROM
+        user_service
+        INNER JOIN rank ON user_service.rank_id = rank.id
+        WHERE
+        user_id = #{employeeId} AND
+        service_id = #{serviceId}
+    </select>
+
     <select id="listRank" resultMap="rankMapper" parameterType="RankVO">
         SELECT
         <include refid="_fields"/>

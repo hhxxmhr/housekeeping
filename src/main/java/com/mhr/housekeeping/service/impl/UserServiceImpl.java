@@ -2,8 +2,11 @@ package com.mhr.housekeeping.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.mhr.housekeeping.dao.OrdersMapper;
+import com.mhr.housekeeping.dao.ServiceMapper;
 import com.mhr.housekeeping.dao.UserMapper;
 import com.mhr.housekeeping.dao.UserServiceMapper;
+import com.mhr.housekeeping.entity.ServiceDO;
 import com.mhr.housekeeping.entity.UserDO;
 import com.mhr.housekeeping.entity.UserServiceDO;
 import com.mhr.housekeeping.entity.vo.UserServiceVO;
@@ -11,20 +14,15 @@ import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.service.UserService;
 import com.mhr.housekeeping.service.UserServiceService;
 import com.mhr.housekeeping.utils.Result;
-//import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <br/>
@@ -39,6 +37,10 @@ public class UserServiceImpl implements UserService {
     HttpServletRequest request;
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private OrdersMapper ordersMapper;
+    @Resource
+    private ServiceMapper serviceMapper;
     @Resource
     private UserServiceMapper userServiceMapper;
     @Autowired
@@ -91,9 +93,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result listUser(UserVO userVO) throws Exception {
-        List<UserDO> users = userMapper.listUser(userVO);
-        return new Result<>(users);
+    public List<UserVO> listUser(UserVO userVO) throws Exception {
+        List<UserVO> users = userMapper.listUser(userVO);
+        if (users != null && users.size() > 0) {
+            users.forEach(it -> {
+                //根据员工id查询所拥有的服务
+                List<ServiceDO> serviceByUserId = serviceMapper.findServiceByUserId(it.getId());
+                it.setServices(serviceByUserId);
+                //根据员工id查询完成的订单数
+                Integer orderCount = ordersMapper.countOrdersByEmployeeId(it);
+                it.setOrderCount(orderCount);
+            });
+        }
+        return users;
     }
 
     @Override
@@ -184,6 +196,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result listUserByServiceId(UserVO userVO) {
         List<UserVO> userVOS = userMapper.listUserByServiceId(userVO);
+        if (userVOS != null && userVOS.size() > 0) {
+            userVOS.forEach(it -> {
+                //根据员工id查询所拥有的服务
+                List<ServiceDO> serviceByUserId = serviceMapper.findServiceByUserId(it.getId());
+                it.setServices(serviceByUserId);
+                //根据员工id查询完成的订单数
+                Integer orderCount = ordersMapper.countOrdersByEmployeeId(it);
+                it.setOrderCount(orderCount);
+            });
+        }
         return new Result<>(userVOS);
     }
 

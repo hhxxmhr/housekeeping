@@ -1,6 +1,7 @@
 package com.mhr.housekeeping.dao;
 import com.mhr.housekeeping.entity.OrdersDO;
 import com.mhr.housekeeping.entity.vo.OrdersVO;
+import com.mhr.housekeeping.entity.vo.UserVO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public interface OrdersMapper {
 
     OrdersDO findDetailOrders(OrdersVO ordersVO);
 
-    List<OrdersDO> listOrders(OrdersVO ordersVO);
+    List<OrdersVO> listOrders(OrdersVO ordersVO);
 
     List<OrdersDO> listOrdersPage(OrdersVO ordersVO);
 
@@ -26,4 +27,9 @@ public interface OrdersMapper {
 
     Integer deleteOrders(OrdersVO ordersVO);
 
+    List<OrdersVO> listEmployeeOrders(Integer userId,Integer state);
+
+    List<OrdersVO> listEmployerOrders(Integer userId, Integer state);
+
+    Integer countOrdersByEmployeeId(UserVO it);
 }

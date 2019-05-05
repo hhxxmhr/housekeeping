@@ -18,8 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * 管理登陆的操作
@@ -82,7 +81,7 @@ public class UserController {
 
     //employer登陆使用
     @RequestMapping("/User/findUserInfos2")
-    public JSONObject findUserInfos2(@RequestBody HashMap hashMap ) {
+    public JSONObject findUserInfos2(@RequestBody HashMap hashMap) {
         Integer employeeId = (Integer) hashMap.get("employeeId");
         JSONObject userInfos = userService.findUserInfos(new UserVO(employeeId));
         return userInfos;
@@ -183,6 +182,8 @@ public class UserController {
     /**
      * 1.0获得所有用户的信息
      * 1.1返回值里面再添加该用户拥有的服务等级信息
+     * 1.2完成订单数量
+     *
      * @param userVO
      * @return
      * @throws Exception
@@ -190,8 +191,8 @@ public class UserController {
     @RequestMapping("/getAll")
     public JSONObject getAll(@RequestBody UserVO userVO) throws Exception {
         JSONObject object = new JSONObject();
-        Result result = userService.listUser(userVO);
-        object.put("list", result.getData());
+        List<UserVO> list = userService.listUser(userVO);
+        object.put("list", list);
         return object;
     }
 
@@ -200,6 +201,31 @@ public class UserController {
         Result result = userService.listUserByServiceId(userVO);
         JSONObject object = new JSONObject();
         object.put("list", result.getData());
+        return object;
+    }
+
+    @RequestMapping("/User/listUserByServiceIds")
+    public JSONObject listUserByServiceIds(@RequestBody UserVO userVO) throws Exception {
+        List<UserVO> userVOS = new ArrayList<>();
+        List<Integer> serviceIds = userVO.getServiceIds();
+        if (serviceIds != null && serviceIds.size() > 0) {
+            serviceIds.forEach(serviceId -> {
+                userVO.setServiceId(serviceId);
+                Result result = userService.listUserByServiceId(userVO);
+                List<UserVO> data = (List<UserVO>) result.getData();
+                userVOS.addAll(data);
+            });
+        }
+        //去除id相同的对象
+        for (int i = 0; i < userVOS.size() - 1; i++) {
+            for (int j = userVOS.size() - 1; j > i; j--) {
+                if (userVOS.get(j).getId() == userVOS.get(i).getId()) {
+                    userVOS.remove(j);
+                }
+            }
+        }
+        JSONObject object = new JSONObject();
+        object.put("list", userVOS);
         return object;
     }
 

@@ -17,7 +17,6 @@
                          :value="parseInt(item[0])"></el-option>
             </el-select>
           </el-form-item>
-          <el-button @click="search" style="margin-left: 10px;" icon="el-icon-star-off">好评优先</el-button>
           <el-button @click="search" style="margin-left: 10px;" icon="el-icon-search" type="primary">搜索</el-button>
         </el-form>
       </el-row>
@@ -32,17 +31,13 @@
               </el-button>
             </p>
             <p style="margin-top: 5px;">性别: {{item.sex}}</p>
-            <p style="margin-top: 5px;">家政经验: {{item.experience?UserExperience[item.experience]:'无'}}</p>
+            <p style="margin-top: 5px;">家政经验: {{item.experience?UserExperience[item.experience]:'未填'}}</p>
             <p style="margin-top: 5px">从事服务: {{getServices(item.services)|ellipsis}}</p>
             <p style="margin-top: 5px">完成订单: {{item.orderCount}}单</p>
             <p style="margin-top: 5px">好评率值: {{'尚未完成'}}</p>
             <!--<p>口味选项: {{(item.taste.length>0?item.taste.toString():"无")|ellipsis}}</p>-->
             <p style="margin-top: 5px">自我介绍: {{item.introduction}}</p>
           </div>
-          <el-button type="primary" plain class="reserve" style="margin-left: 10px" @click="reserve(item)"
-                     icon="el-icon-d-arrow-right">去预定
-          </el-button>
-
         </el-card>
         <!--</a>-->
       </div>
@@ -70,7 +65,7 @@
             {{getServices(moreInfo.services)}}
           </el-form-item>
           <el-form-item label="家政经验：" :label-width="formLabelWidth">
-            {{UserExperience[moreInfo.experience]+' '}}
+            {{moreInfo.experience?UserExperience[moreInfo.experience]:'未填'}}
           </el-form-item>
           <el-form-item label="自我介绍：" :label-width="formLabelWidth">
             {{moreInfo.introduction}}
@@ -128,12 +123,13 @@
       isPhone = !(system.win || system.mac || system.xll || system.ipad);
       let sixHalf = new Date(new Date().setHours(0, 0, 0, 0)) / 1000 + 18 * 3600 + 5 * 360;
       return {
+
         dialog_title: '',
         dialog_visible: false,
         formLabelWidth: "90px",
         moreInfo: {},
         searchForm: {
-          serviceId: null,//从服务中心页面跳转过来的参数
+          serviceIds: [],//从服务管理页面跳转过来的参数   传过来的参数id数组
           experience: null,
           prov: '',
           city: '',
@@ -147,7 +143,7 @@
         itemTaste: [],
         item: {},
 
-      form: {
+        form: {
           id: null,//所选菜品的id
           name: '',
           shopName: '',
@@ -165,6 +161,20 @@
       }
     },
     methods: {
+      initQuery() {
+        Object.assign(this.searchForm, this.$route.query);
+        // this.serviceIds = this.$route.query.serviceIds;
+        this.searchForm.experience = this.searchForm.experience != null ? parseInt(this.searchForm.experience) : null;//页面搜索
+      },
+      async getInfo() {
+        let res;
+        if (this.searchForm.serviceIds.length === 0) {
+          res = await this.$api("getAll", this.searchForm);
+        } else {
+          res = await this.$api("User/listUserByServiceIds", this.searchForm);
+        }
+        this.info = res.list;
+      },
       getServices(services) {
         let newArr = [];
         if (services != null && services.length > 0) {
@@ -173,21 +183,6 @@
           });
         }
         return newArr.toLocaleString();
-      },
-      initQuery() {
-        Object.assign(this.searchForm, this.$route.query);
-        this.searchForm.serviceId = this.searchForm.serviceId ? parseInt(this.searchForm.serviceId) : null;//接受跳转页面的参数
-        this.searchForm.experience = this.searchForm.experience != null ? parseInt(this.searchForm.experience) : null;//页面搜索
-      },
-      async getInfo() {
-        let res;
-        if (this.searchForm.serviceId == null){
-           res = await this.$api("getAll", this.searchForm);
-           // console.log(res)
-        }else {
-          res = await this.$api("User/listUserByServiceId", this.searchForm);
-        }
-        this.info = res.list;
       },
       //详细资料按钮点击
       showDialogInfo(item) {
@@ -203,13 +198,6 @@
         this.$router.push({
           path: this.$route.path,
           query: this.searchForm
-        });
-      },
-      reserve(employee) {
-        //跳转到预定页面
-        this.$router.push({
-          path: "/employer/reserve",
-          query: {employeeId: employee.id, serviceId: this.searchForm.serviceId}
         });
       },
       selectProv(data) {

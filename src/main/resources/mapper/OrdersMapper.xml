@@ -3,7 +3,7 @@
 
 <mapper namespace="com.mhr.housekeeping.dao.OrdersMapper">
 
-	<resultMap id="ordersMapper" type="OrdersDO">
+    <resultMap id="ordersMapper" type="OrdersDO">
         <result property="id" column="id"/>
         <result property="serviceId" column="service_id"/>
         <result property="employeeId" column="employee_id"/>
@@ -19,222 +19,255 @@
         <result property="rate" column="rate"/>
         <result property="prov" column="prov"/>
         <result property="city" column="city"/>
-	</resultMap>
+    </resultMap>
+    <resultMap id="ordersMoreMapper" type="OrdersVO">
+        <result property="id" column="id"/>
+        <result property="serviceId" column="service_id"/>
+        <result property="employeeId" column="employee_id"/>
+        <result property="reverseTime" column="reverse_time"/>
+        <result property="address" column="address"/>
+        <result property="phone" column="phone"/>
+        <result property="tip" column="tip"/>
+        <result property="state" column="state"/>
+        <result property="orderPrice" column="order_price"/>
+        <result property="employerId" column="employer_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="rate" column="rate"/>
+        <result property="prov" column="prov"/>
+        <result property="city" column="city"/>
+        <result property="serviceName" column="service_name"/>
+        <result property="servicePrice" column="service_price"/>
+        <result property="serviceParent" column="service_parent"/>
+        <result property="realName" column="real_name"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="role" column="role"/>
+        <result property="sex" column="sex"/>
+        <result property="age" column="age"/>
+        <result property="education" column="education"/>
+        <result property="experience" column="experience"/>
+        <result property="rankId" column="rank_id"/>
+        <result property="rankName" column="rank_name"/>
+        <result property="rankMoney" column="rank_money"/>
+    </resultMap>
 
     <sql id="_table">
         orders
 	</sql>
 
-	<sql id="_fields">
+    <sql id="_fields">
 		id,service_id,employee_id,reverse_time,address,phone,tip,state,order_price,employer_id,create_time,end_time,rate,prov,city
 	</sql>
 
-	<sql id="_condition">
-		<trim prefix="WHERE" prefixOverrides="AND|OR">
+    <sql id="_condition">
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="id!=null">
-				AND id = #{id}
-			</if>
+                AND id = #{id}
+            </if>
             <if test="serviceId!=null">
-				AND service_id = #{serviceId}
-			</if>
+                AND service_id = #{serviceId}
+            </if>
             <if test="employeeId!=null">
-				AND employee_id = #{employeeId}
-			</if>
+                AND employee_id = #{employeeId}
+            </if>
             <if test="reverseTime!=null">
-				AND reverse_time = #{reverseTime}
-			</if>
+                AND reverse_time = #{reverseTime}
+            </if>
             <if test="address!=null and ''!=address">
-				AND address = #{address}
-			</if>
+                AND address = #{address}
+            </if>
             <if test="phone!=null and ''!=phone">
-				AND phone = #{phone}
-			</if>
+                AND phone = #{phone}
+            </if>
             <if test="tip!=null and ''!=tip">
-				AND tip = #{tip}
-			</if>
+                AND tip = #{tip}
+            </if>
             <if test="state!=null">
-				AND state = #{state}
-			</if>
+                AND state = #{state}
+            </if>
             <if test="orderPrice!=null">
-				AND order_price = #{orderPrice}
-			</if>
+                AND order_price = #{orderPrice}
+            </if>
             <if test="employerId!=null">
-				AND employer_id = #{employerId}
-			</if>
+                AND employer_id = #{employerId}
+            </if>
             <if test="createTime!=null">
-				AND create_time = #{createTime}
-			</if>
+                AND create_time = #{createTime}
+            </if>
             <if test="endTime!=null">
-				AND end_time = #{endTime}
-			</if>
+                AND end_time = #{endTime}
+            </if>
             <if test="rate!=null">
-				AND rate = #{rate}
-			</if>
+                AND rate = #{rate}
+            </if>
             <if test="prov!=null and ''!=prov">
-				AND prov = #{prov}
-			</if>
+                AND prov = #{prov}
+            </if>
             <if test="city!=null and ''!=city">
-				AND city = #{city}
-			</if>
-		</trim>
-	</sql>
+                AND city = #{city}
+            </if>
+        </trim>
+    </sql>
 
-	<sql id="_primaryKey_condition">
+    <sql id="_primaryKey_condition">
 		WHERE id = #{id}
 	</sql>
 
-	<sql id="_order">
-        <if test="sortByParams!= null and sortByParams.size()>0" >
+    <sql id="_order">
+        <if test="sortByParams!= null and sortByParams.size()>0">
             ORDER BY
             <foreach collection="sortByParams.keys" index="index" item="sortByParamKey" separator=",">
                 <![CDATA[${sortByParamKey} ${sortByParams[sortByParamKey]}]]>
             </foreach>
         </if>
-	</sql>
+    </sql>
 
     <insert id="addOrders" parameterType="OrdersVO" keyProperty="id">
-        INSERT INTO <include refid="_table"/>
+        INSERT INTO
+        <include refid="_table"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id!=null">
-				id,
-			</if>
+                id,
+            </if>
             <if test="serviceId!=null">
-				service_id,
-			</if>
+                service_id,
+            </if>
             <if test="employeeId!=null">
-				employee_id,
-			</if>
+                employee_id,
+            </if>
             <if test="reverseTime!=null">
-				reverse_time,
-			</if>
+                reverse_time,
+            </if>
             <if test="address!=null and ''!=address">
-				address,
-			</if>
+                address,
+            </if>
             <if test="phone!=null and ''!=phone">
-				phone,
-			</if>
+                phone,
+            </if>
             <if test="tip!=null and ''!=tip">
-				tip,
-			</if>
+                tip,
+            </if>
             <if test="state!=null">
-				state,
-			</if>
+                state,
+            </if>
             <if test="orderPrice!=null">
-				order_price,
-			</if>
+                order_price,
+            </if>
             <if test="employerId!=null">
-				employer_id,
-			</if>
+                employer_id,
+            </if>
             <if test="createTime!=null">
-				create_time,
-			</if>
+                create_time,
+            </if>
             <if test="endTime!=null">
-				end_time,
-			</if>
+                end_time,
+            </if>
             <if test="rate!=null">
-				rate,
-			</if>
+                rate,
+            </if>
             <if test="prov!=null and ''!=prov">
-				prov,
-			</if>
+                prov,
+            </if>
             <if test="city!=null and ''!=city">
-				city,
-			</if>
+                city,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
-				#{id},
-			</if>
+                #{id},
+            </if>
             <if test="serviceId!=null">
-				#{serviceId},
-			</if>
+                #{serviceId},
+            </if>
             <if test="employeeId!=null">
-				#{employeeId},
-			</if>
+                #{employeeId},
+            </if>
             <if test="reverseTime!=null">
-				#{reverseTime},
-			</if>
+                #{reverseTime},
+            </if>
             <if test="address!=null and ''!=address">
-				#{address},
-			</if>
+                #{address},
+            </if>
             <if test="phone!=null and ''!=phone">
-				#{phone},
-			</if>
+                #{phone},
+            </if>
             <if test="tip!=null and ''!=tip">
-				#{tip},
-			</if>
+                #{tip},
+            </if>
             <if test="state!=null">
-				#{state},
-			</if>
+                #{state},
+            </if>
             <if test="orderPrice!=null">
-				#{orderPrice},
-			</if>
+                #{orderPrice},
+            </if>
             <if test="employerId!=null">
-				#{employerId},
-			</if>
+                #{employerId},
+            </if>
             <if test="createTime!=null">
-				#{createTime},
-			</if>
+                #{createTime},
+            </if>
             <if test="endTime!=null">
-				#{endTime},
-			</if>
+                #{endTime},
+            </if>
             <if test="rate!=null">
-				#{rate},
-			</if>
+                #{rate},
+            </if>
             <if test="prov!=null and ''!=prov">
-				#{prov},
-			</if>
+                #{prov},
+            </if>
             <if test="city!=null and ''!=city">
-				#{city},
-			</if>
+                #{city},
+            </if>
         </trim>
     </insert>
 
     <update id="updateOrders" parameterType="OrdersVO">
-        UPDATE <include refid="_table"/>
+        UPDATE
+        <include refid="_table"/>
         <set>
             <if test="serviceId!=null">
-				service_id = #{serviceId},
-			</if>
+                service_id = #{serviceId},
+            </if>
             <if test="employeeId!=null">
-				employee_id = #{employeeId},
-			</if>
+                employee_id = #{employeeId},
+            </if>
             <if test="reverseTime!=null">
-				reverse_time = #{reverseTime},
-			</if>
+                reverse_time = #{reverseTime},
+            </if>
             <if test="address!=null and ''!=address">
-				address = #{address},
-			</if>
+                address = #{address},
+            </if>
             <if test="phone!=null and ''!=phone">
-				phone = #{phone},
-			</if>
+                phone = #{phone},
+            </if>
             <if test="tip!=null and ''!=tip">
-				tip = #{tip},
-			</if>
+                tip = #{tip},
+            </if>
             <if test="state!=null">
-				state = #{state},
-			</if>
+                state = #{state},
+            </if>
             <if test="orderPrice!=null">
-				order_price = #{orderPrice},
-			</if>
+                order_price = #{orderPrice},
+            </if>
             <if test="employerId!=null">
-				employer_id = #{employerId},
-			</if>
+                employer_id = #{employerId},
+            </if>
             <if test="createTime!=null">
-				create_time = #{createTime},
-			</if>
+                create_time = #{createTime},
+            </if>
             <if test="endTime!=null">
-				end_time = #{endTime},
-			</if>
+                end_time = #{endTime},
+            </if>
             <if test="rate!=null">
-				rate = #{rate},
-			</if>
+                rate = #{rate},
+            </if>
             <if test="prov!=null and ''!=prov">
-				prov = #{prov},
-			</if>
+                prov = #{prov},
+            </if>
             <if test="city!=null and ''!=city">
-				city = #{city},
-			</if>
+                city = #{city},
+            </if>
         </set>
         <include refid="_primaryKey_condition"/>
     </update>
@@ -242,41 +275,134 @@
     <select id="findDetailOrders" resultMap="ordersMapper" parameterType="OrdersVO">
         SELECT
         <include refid="_fields"/>
-        FROM <include refid="_table"/>
+        FROM
+        <include refid="_table"/>
         <include refid="_primaryKey_condition"/>
     </select>
 
-    <select id="listOrders" resultMap="ordersMapper" parameterType="OrdersVO">
+    <select id="listOrders" resultMap="ordersMoreMapper" parameterType="OrdersVO">
         SELECT
         <include refid="_fields"/>
-        FROM <include refid="_table"/>
+        FROM
+        <include refid="_table"/>
         <include refid="_condition"/>
-	    <include refid="_order"/>
+        <include refid="_order"/>
+    </select>
+
+    <select id="listEmployeeOrders" resultMap="ordersMoreMapper" parameterType="java.lang.Integer">
+        SELECT
+        orders.id,
+        orders.service_id,
+        orders.employee_id,
+        orders.reverse_time,
+        orders.address,
+        orders.phone,
+        orders.tip,
+        orders.state,
+        orders.order_price,
+        orders.employer_id,
+        orders.create_time,
+        orders.end_time,
+        orders.rate,
+        orders.prov,
+        orders.city,
+        service.`name` AS service_name,
+        service.price AS service_price,
+        service.parent AS service_parent,
+        `user`.`name` AS real_name,
+        `user`.username,
+        `user`.`password`,
+        `user`.role,
+        `user`.sex,
+        `user`.age,
+        `user`.education,
+        `user`.experience,
+        rank.id AS rank_id,
+        rank.`name` AS rank_name,
+        rank.money AS rank_money
+        FROM
+        orders
+        INNER JOIN service ON orders.service_id = service.id
+        INNER JOIN `user` ON orders.employee_id = `user`.id
+        INNER JOIN user_service ON user_service.user_id = `user`.id AND user_service.service_id = service.id
+        INNER JOIN rank ON user_service.rank_id = rank.id
+        WHERE
+        orders.employee_id = #{userId}
+        <if test="state!=null">
+            AND orders.state = #{state}
+        </if>
+
+    </select>
+    <select id="listEmployerOrders" resultMap="ordersMoreMapper" parameterType="java.lang.Integer">
+        SELECT
+        orders.id,
+        orders.service_id,
+        orders.employee_id,
+        orders.reverse_time,
+        orders.address,
+        orders.phone,
+        orders.tip,
+        orders.state,
+        orders.order_price,
+        orders.employer_id,
+        orders.create_time,
+        orders.end_time,
+        orders.rate,
+        orders.prov,
+        orders.city,
+        service.`name` AS service_name,
+        service.price AS service_price,
+        service.parent AS service_parent,
+        `user`.`name` AS real_name,
+        `user`.username,
+        `user`.`password`,
+        `user`.role,
+        `user`.sex,
+        `user`.age,
+        `user`.education,
+        `user`.experience
+        FROM
+        orders
+        INNER JOIN service ON orders.service_id = service.id
+        INNER JOIN `user` ON orders.employer_id = `user`.id
+        WHERE
+        orders.employer_id = #{userId}
+        <if test="state!=null">
+            AND orders.state = #{state}
+        </if>
+
     </select>
 
     <select id="listOrdersPage" resultMap="ordersMapper" parameterType="OrdersVO">
         SELECT
         <include refid="_fields"/>
-        FROM <include refid="_table"/>
+        FROM
+        <include refid="_table"/>
         <include refid="_condition"/>
         <include refid="_order"/>
         <if test="startRecord != null and pageSize != null and pageSize >0">
             limit #{startRecord},#{pageSize}
         </if>
-	    <if test="!(startRecord != null and pageSize != null and pageSize >0)">
-		    limit 0,15
-	    </if>
+        <if test="!(startRecord != null and pageSize != null and pageSize >0)">
+            limit 0,15
+        </if>
     </select>
 
     <select id="countOrders" resultType="java.lang.Integer" parameterType="OrdersVO">
         SELECT
         COUNT(*)
-        FROM <include refid="_table"/>
+        FROM
+        <include refid="_table"/>
         <include refid="_condition"/>
     </select>
 
+    <select id="countOrdersByEmployeeId" resultType="java.lang.Integer" parameterType="UserVO">
+        SELECT COUNT(*) FROM orders WHERE employee_id = #{id} and state in (3,4)
+    </select>
+
     <delete id="deleteOrders" parameterType="OrdersVO">
-        DELETE FROM <include refid="_table"/>
+        DELETE FROM
+        <include refid="_table"/>
         <include refid="_primaryKey_condition"/>
     </delete>
 

@@ -22,20 +22,21 @@ public class ManagerController {
     public Result getAdminList() throws Exception {
         UserVO userVO = new UserVO();
         userVO.setRole(100);
-        return userService.listUser(userVO);
+        List<UserVO> userVOS = userService.listUser(userVO);
+        return new Result<>(userVOS);
     }
 
     @RequestMapping("/Manager/editAdmin")
-    public Result editAdmin(@RequestParam int id,@RequestParam String username,@RequestParam boolean state) throws Exception {
+    public Result editAdmin(@RequestParam int id, @RequestParam String username, @RequestParam boolean state) throws Exception {
         UserVO userVO = new UserVO();
         userVO.setUsername(username);
         userVO.setId(id);
-        if (state){
+        if (state) {
             userVO.setState(0);
-        }else {
+        } else {
             userVO.setState(1);
         }
-        return userService.updateUser(userVO,null);
+        return userService.updateUser(userVO, null);
     }
 
     @RequestMapping("/Manager/addAdmin")
@@ -44,13 +45,13 @@ public class ManagerController {
         userVO.setRole(100);
         userVO.setPassword(password);
         userVO.setUsername(username);
-        if (state){
+        if (state) {
             userVO.setState(0);
-        }else {
+        } else {
             userVO.setState(1);
         }
-        List<Integer> list = new ArrayList<>() ;
-        return userService.addUser(userVO,list);
+        List<Integer> list = new ArrayList<>();
+        return userService.addUser(userVO, list);
     }
 
     @RequestMapping("/Manager/changeState")
@@ -65,8 +66,9 @@ public class ManagerController {
     public Result deleteAdmin(@RequestParam int id) throws Exception {
         return userService.deleteUser(new UserVO(id));
     }
+
     @RequestMapping("/User/editPassword")
-    public Result edit(@RequestParam String new_pwd,@RequestParam String old_pwd ) throws Exception {
-        return userService.editPassword(new_pwd,old_pwd);
+    public Result edit(@RequestParam String new_pwd, @RequestParam String old_pwd) throws Exception {
+        return userService.editPassword(new_pwd, old_pwd);
     }
 }

@@ -48,4 +48,14 @@ public class ServiceDO implements Serializable {
     public void setParent(Integer parent) {
         this.parent = parent;
     }
+
+    @Override
+    public String toString() {
+        return "ServiceDO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", parent=" + parent +
+                '}';
+    }
 }

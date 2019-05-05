@@ -19,7 +19,7 @@ public interface UserMapper {
 
     UserDO findDetailUser(UserVO userVO);
 
-    List<UserDO> listUser(UserVO userVO);
+    List<UserVO> listUser(UserVO userVO);
 
     List<UserDO> listUserPage(UserVO userVO);
 

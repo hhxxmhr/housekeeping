@@ -54,6 +54,7 @@ const routes = [
     children: [
       {path: '/manager/rank', name: '等级管理', component: () => import('./views/manager/rank'), meta: {login: true}},
       {path: '/manager/service', name: '服务管理', component: () => import('./views/manager/service'), meta: {login: true}},
+      {path: '/manager/doEmployee', name: '从事人员', component: () => import('./views/manager/doEmployee'), meta: {login: true},hidden: true},
     ]
   },
   {

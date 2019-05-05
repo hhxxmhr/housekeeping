@@ -1,7 +1,8 @@
 package com.mhr.housekeeping.entity.vo;
 
+import com.mhr.housekeeping.entity.ServiceDO;
+
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,6 +11,39 @@ import java.util.List;
  */
 public class UserVO extends Query implements Serializable {
     private static final long serialVersionUID = -4944675620658964018L;
+    //雇员完成的订单数
+    private Integer orderCount;
+
+    public Integer getOrderCount() {
+        return orderCount;
+    }
+
+    public void setOrderCount(Integer orderCount) {
+        this.orderCount = orderCount;
+    }
+
+    //雇员的所拥有的服务
+    private List<ServiceDO> services;
+
+    public List<ServiceDO> getServices() {
+        return services;
+    }
+
+    public void setServices(List<ServiceDO> services) {
+        this.services = services;
+    }
+
+    //所传参数---大小类别id的集合
+    private List<Integer> serviceIds;
+
+    public List<Integer> getServiceIds() {
+        return serviceIds;
+    }
+
+    public void setServiceIds(List<Integer> serviceIds) {
+        this.serviceIds = serviceIds;
+    }
+
     private Integer serviceId;
     private Integer rankId;
     private Integer money;

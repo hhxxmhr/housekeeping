@@ -20,8 +20,8 @@ public interface UserService {
 	Result updateUser(UserVO userVO,Integer service) throws Exception;
 	
 	Result findDetailUser(UserVO userVO) throws Exception;
-	
-	Result listUser(UserVO userVO) throws Exception;
+
+	List<UserVO> listUser(UserVO userVO) throws Exception;
 
     Result listUserPage(UserVO userVO) throws Exception;
 	

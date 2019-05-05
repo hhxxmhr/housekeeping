@@ -25,6 +25,28 @@
         <result property="city" column="city"/>
         <result property="prov" column="prov"/>
     </resultMap>
+    <resultMap id="userMapperVo" type="UserVO">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="role" column="role"/>
+        <result property="state" column="state"/>
+        <result property="sex" column="sex"/>
+        <result property="age" column="age"/>
+        <result property="phone" column="phone"/>
+        <result property="idCard" column="id_card"/>
+        <result property="bankCard" column="bank_card"/>
+        <result property="createTime" column="create_time"/>
+        <result property="photo" column="photo"/>
+        <result property="address" column="address"/>
+        <result property="married" column="married"/>
+        <result property="education" column="education"/>
+        <result property="experience" column="experience"/>
+        <result property="introduction" column="introduction"/>
+        <result property="city" column="city"/>
+        <result property="prov" column="prov"/>
+    </resultMap>
 
     <resultMap id="userMapperMore" type="UserVO">
         <result property="id" column="user_id"/>
@@ -438,7 +460,7 @@
 
     </select>
 
-    <select id="listUser" resultMap="userMapper" parameterType="UserVO">
+    <select id="listUser" resultMap="userMapperVo" parameterType="UserVO">
         SELECT
         <include refid="_fields"/>
         FROM
