@@ -24,4 +24,6 @@ public interface RankService {
 	Result deleteRank(RankVO rankVO) throws Exception;
 
     Result findRankByUserId(Integer id);
+
+	Result findRankByUidAndSid(Integer userId, Integer serviceId);
 }

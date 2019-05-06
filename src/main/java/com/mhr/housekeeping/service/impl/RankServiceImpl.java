@@ -34,9 +34,9 @@ public class RankServiceImpl implements RankService {
     public Result addRank(RankVO rankVO) throws Exception {
         //查询数据库中是否存在此名字的等级
         RankDO rankDO = rankMapper.getRankByName(rankVO);
-        if (rankDO != null ) {
+        if (rankDO != null) {
             return Result.getFailure("此等级已存在");
-        }else {
+        } else {
             Integer count = rankMapper.addRank(rankVO);
             if (count > 0) {
                 return Result.getSuccess("增添成功");
@@ -49,9 +49,9 @@ public class RankServiceImpl implements RankService {
     public Result updateRank(RankVO rankVO) throws Exception {
         //查询数据库中是否存在此名字的等级
         RankDO rankDO = rankMapper.getRankByName(rankVO);
-        if (rankDO != null ) {
+        if (rankDO != null) {
             return Result.getFailure("此等级已存在,无需重复");
-        }else {
+        } else {
             Integer count = rankMapper.updateRank(rankVO);
             if (count > 0) {
                 return Result.getSuccess("修改成功");
@@ -108,6 +108,12 @@ public class RankServiceImpl implements RankService {
     @Override
     public Result findRankByUserId(Integer id) {
         return rankMapper.findRankByUserId(id);
+    }
+
+    @Override
+    public Result findRankByUidAndSid(Integer userId, Integer serviceId) {
+        RankDO rankByOrder = rankMapper.findRankByOrder(userId, serviceId);
+        return new Result<>(rankByOrder);
     }
 
 }

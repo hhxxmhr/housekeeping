@@ -26,7 +26,7 @@
         <el-table-column prop="id" align="center" label="ID"></el-table-column>
         <el-table-column prop="username" align="center" label="账号"></el-table-column>
         <el-table-column prop="password" align="center" label="密码"></el-table-column>
-        <el-table-column prop="married" align="center" label="婚否" >
+        <el-table-column prop="married" align="center" label="婚否">
           <template slot-scope="scope">
             <div v-if="scope.row.married === 0" style="color:#20a0ff">
               {{'是'}}
@@ -36,8 +36,16 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="rank" align="center" label="拥有等级"></el-table-column>
-        <el-table-column prop="orders" align="center" label="有效订单"></el-table-column>
+        <el-table-column prop="rank" align="center" label="拥有服务-等级" width="180px">
+          <template slot-scope="scope">
+            <el-tag size="mini" v-for="service in scope.row.services" :key="service.id"
+                    @click="getRank(scope.row.id,service.id)">
+              {{service.name}}
+            </el-tag>
+          </template>
+
+        </el-table-column>
+        <el-table-column prop="orderCount" align="center" label="有效订单"></el-table-column>
         <el-table-column prop="praise" align="center" label="好评率"></el-table-column>
         <el-table-column prop="createTime" align="center" label="创建时间" width="180px">
           <template slot-scope="scope">
@@ -52,7 +60,7 @@
             <div v-if="scope.row.state === 4" style="color:#67C23A;">{{'值岗'}}</div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="260px">
+        <el-table-column label="操作" width="260px" align="center">
           <template slot-scope="scope">
             <at-button confirmText="确定启用此账号?" size="mini" type="success" v-if="scope.row.state===1||scope.row.state===2"
                        @click="changeState(scope.row,3)">启用
@@ -63,7 +71,8 @@
             <at-button confirmText="确定删除此账号?" size="mini" type="warning"
                        @click="deleteEmployee(scope.row)">删除
             </at-button>
-            <el-dropdown size="mini" split-button type="info" @command="handleCommand($event, scope.row.id)" style="margin-left: 5px">
+            <el-dropdown size="mini" split-button type="info" @command="handleCommand($event, scope.row.id)"
+                         style="margin-left: 5px">
               更多操作
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="showOrders">他的订单</el-dropdown-item>
@@ -186,7 +195,7 @@
         let res = await this.$api('getAll', this.searchForm);
         this.employeeList = res.list;
       },
-      search() {
+      async search() {
         //携带查询的参数再次查询一下列表
         this.$router.push({
           path: "/manager/employeeList",
@@ -238,6 +247,11 @@
           message: res.msg
         });
         this.init();
+      },
+      async getRank(userId, serviceId) {
+        //根据员工id和服务id查询等级
+        let res = await this.$api('Rank/findRankByUidAndSid', {userId: userId, serviceId: serviceId});
+        alert("该人员在此服务中的等级为："+res.data.name)
       },
       async changeState(row, state) {
         let res = await this.$api('User/changeEmployeeState', {id: row.id, state: state});

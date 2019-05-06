@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+
 @RestController
 public class RankController {
     @Autowired
@@ -35,5 +37,12 @@ public class RankController {
     @RequestMapping("/Rank/edit")
     public Result edit(@RequestBody RankVO rankVO) throws Exception {
         return rankService.updateRank(rankVO);
+    }
+
+    @RequestMapping("/Rank/findRankByUidAndSid")
+    public Result findRankByUidAndSid(@RequestBody HashMap hashMap) throws Exception {
+        Integer userId = (Integer) hashMap.get("userId");
+        Integer serviceId = (Integer) hashMap.get("serviceId");
+        return rankService.findRankByUidAndSid(userId,serviceId);
     }
 }
