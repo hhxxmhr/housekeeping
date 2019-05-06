@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -80,8 +81,21 @@ public class OrdersServiceImpl implements OrdersService {
                     order.setRankMoney(rankDO.getMoney());
                 });
             }
+            if (ordersVO.getEid() == null) {
+                return new Result<>(orders);
+            } else {
+                //将所有的订单进行过滤，返回某个雇主或者雇员的订单信息
+                List<OrdersVO> list = new ArrayList<>();
+                if (orders != null && orders.size() > 0) {
+                    orders.forEach(order -> {
+                        if (order.getEmployeeId().equals(ordersVO.getEid()) || order.getEmployerId().equals(ordersVO.getEid())) {
+                            list.add(order);
+                        }
+                    });
+                }
+                return new Result<>(list);
+            }
 
-            return new Result<>(orders);
         } else {
             //根据userId显示对应的订单
             if (ordersVO.getRole() == 200) {

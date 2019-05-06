@@ -215,7 +215,7 @@
         //跳转到订单列表页面
         this.$router.push({
           path: "/manager/orders",
-          query: {id: id}
+          query: {eid: id}
         });
       },
       showComment(id) {

@@ -26,7 +26,7 @@
         <el-table-column prop="id" align="center" label="ID"></el-table-column>
         <el-table-column prop="username" align="center" label="账号"></el-table-column>
         <el-table-column prop="password" align="center" label="密码"></el-table-column>
-        <el-table-column prop="orders" align="center" label="有效订单"></el-table-column>
+        <el-table-column prop="orderCount" align="center" label="有效订单"></el-table-column>
         <el-table-column prop="praise" align="center" label="好评率"></el-table-column>
         <el-table-column prop="createTime" align="center" label="创建时间" width="180px">
           <template slot-scope="scope">
@@ -175,7 +175,7 @@
         //跳转到订单列表页面
         this.$router.push({
           path: "/manager/orders",
-          query: {id: id}
+          query: {eid: id}
         });
       },
       showComment(id) {

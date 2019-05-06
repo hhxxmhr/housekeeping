@@ -10,6 +10,16 @@ import java.math.BigDecimal;
 public class OrdersVO extends Query implements Serializable {
     private static final long serialVersionUID = -5184197486620321135L;
 
+    private Integer eid;//用来传递参数的id，表示员工的id，或者雇主的id
+
+    public Integer getEid() {
+        return eid;
+    }
+
+    public void setEid(Integer eid) {
+        this.eid = eid;
+    }
+
     private Integer role;
     private Integer userId;
     private String employerName;

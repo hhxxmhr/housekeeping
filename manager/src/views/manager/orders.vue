@@ -24,8 +24,10 @@
       <!--订单列表-->
       <el-table :data="orderList" border style="width: 100%">
         <el-table-column prop="id" align="center" label="ID" width="60px"></el-table-column>
-        <el-table-column prop="employerUsername" align="center" label="雇主账号" v-if="searchForm.role===100"></el-table-column>
-        <el-table-column prop="employeeUsername" align="center" label="雇员账号" v-if="searchForm.role===100"></el-table-column>
+        <el-table-column prop="employerUsername" align="center" label="雇主账号"
+                         v-if="searchForm.role===100"></el-table-column>
+        <el-table-column prop="employeeUsername" align="center" label="雇员账号"
+                         v-if="searchForm.role===100"></el-table-column>
         <el-table-column prop="employeeName" align="center" label="服务人员" v-if="searchForm.role===300"></el-table-column>
         <el-table-column prop="employerName" align="center" label="雇主名字" v-if="searchForm.role===200"></el-table-column>
         <el-table-column prop="serviceName" align="center" label="服务类型"></el-table-column>
@@ -97,7 +99,8 @@
       return {
         orderList: [],
         searchForm: {
-          userId:null,//当前登陆者的id
+          eid: null,//雇员列表或者雇主列表 更多操作跳转过来携带的参数
+          userId: null,//当前登陆者的id
           employeeUN: '',
           employerUN: '',
           state: null,
@@ -123,12 +126,13 @@
       initQuery() {
         Object.assign(this.searchForm, this.$route.query);
         this.searchForm.state = this.searchForm.state != null ? parseInt(this.searchForm.state) : null;
+        this.searchForm.eid = this.searchForm.eid != null ? parseInt(this.searchForm.eid) : null;
       },
       async init() {
         //查询所有的订单信息
         let res = await this.$api('Order/getAll', this.searchForm);
         this.orderList = res.data;
-        console.log(this.orderList)
+        // console.log(this.orderList)
       },
       search() {
         //携带查询的参数再次查询一下列表
