@@ -183,7 +183,6 @@
         let res;
         if (this.searchForm.serviceId == null){
            res = await this.$api("getAll", this.searchForm);
-           console.log(res)
         }else {
           res = await this.$api("User/listUserByServiceId", this.searchForm);
         }

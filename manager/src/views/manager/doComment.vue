@@ -2,14 +2,14 @@
   <div>
     <div>
       <el-form ref="form" :model="form" label-width="80px" v-loading="loading">
-        <div>
+        <div class="divs">
           <img v-if="employeeInfo.photo" :src="'http://localhost:8888/'+employeeInfo.photo" alt=""
-               style="width: 178px;margin-left: 30%">
-          <b style="margin-left: 2%">{{serviceInfo.name}}服务评分</b>
-          <el-rate style="margin-left: 55%;margin-top: -60px" v-model="form.rate" show-text></el-rate>
+               style="margin-left: 30%;vertical-align:middle" class="imgs">
+          <div class="infos"><p style="margin-left: 30px;">{{serviceInfo.name}}の服务评分</p></div>
+          <el-rate style="margin-left: 55%;margin-top: -70px" v-model="form.rate" show-text></el-rate>
         </div>
-        <hr/>
-        <div style="margin-top: 50px">
+        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+        <div style="margin-top: 45px">
           <el-input type="textarea" :rows="8" placeholder="服务满足您的期待吗？说说你的评价吧" v-model="form.comment" :maxlength="200"
                     @input="countWords" show-word-limit></el-input>
           <span style="float:right;color:#999;">{{remnant}}/200</span>
@@ -159,5 +159,21 @@
 </script>
 
 <style scoped>
+  .divs .imgs {
+    width: 125px;
+    height: 120px;
+    display: inline-block;
+    vertical-align: middle;
+    border-radius:80%
+  }
 
+  .divs .infos {
+    display: inline-block;
+  }
+  .divs{ margin:10px auto}
+  .avatar {
+    width: 175px;
+    height: 150px;
+    display: block;
+  }
 </style>
