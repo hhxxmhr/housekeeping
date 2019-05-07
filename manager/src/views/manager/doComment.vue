@@ -80,6 +80,8 @@
       async onSubmit() {
         //发表评论
         let res = await this.$api("Comment/add", this.form);
+        //更新订单状态
+        await this.$api("Order/edit", {state: 4});
         this.$message({
           type: res.code === 200 ? 'success' : 'error',
           message: res.msg
