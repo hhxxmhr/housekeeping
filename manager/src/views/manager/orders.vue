@@ -3,12 +3,6 @@
     <div>
       <el-row class="margin-bottom">
         <el-form :model="searchForm" :inline="true">
-          <el-form-item label="雇员账号" v-if="searchForm.role===100">
-            <el-input v-model="searchForm.employeeUN" placeholder="请输入账号"></el-input>
-          </el-form-item>
-          <el-form-item label="雇主账号" v-if="searchForm.role===100">
-            <el-input v-model="searchForm.employerUN" placeholder="请输入账号"></el-input>
-          </el-form-item>
           <el-form-item label="订单状态">
             <el-select v-model="searchForm.state" style="width: 90px">
               <el-option label="全部" :value=null></el-option>
@@ -22,7 +16,7 @@
         </el-form>
       </el-row>
       <!--订单列表-->
-      <el-table :data="orderList" border style="width: 100%">
+      <el-table :data="orderList" border style="width: 100%" v-loading="loading">
         <el-table-column prop="id" align="center" label="ID" width="60px"></el-table-column>
         <el-table-column prop="employerUsername" align="center" label="雇主账号"
                          v-if="searchForm.role===100"></el-table-column>
@@ -69,18 +63,20 @@
                        v-if="scope.row.state===0&&searchForm.role===200"
                        @click="changeState(scope.row,2)">确认
             </at-button>
-            <!--取消进行时间限制-->
-            <at-button confirmText="确定取消此订单?" size="mini" type="danger"
-                       v-if="scope.row.state===0&&searchForm.role===300"
-                       @click="changeState(scope.row,1)">取消
+            <at-button confirmText="已经完成此订单?" size="mini" type="success"
+                       v-if="scope.row.state===2&&searchForm.role===200"
+                       @click="changeState(scope.row,3)">完成
             </at-button>
             <at-button size="mini" type="danger"
-                       v-if="scope.row.state===3&&searchForm.role===300"
-            >评论
+                       v-if="(scope.row.state===0||scope.row.state===2)&&searchForm.role===300"
+                       @click="changeState(scope.row,1)">取消
+            </at-button>
+            <at-button size="mini" type="primary"
+                       v-if="scope.row.state===3&&searchForm.role===300" @click="comment(scope.row.id)">评论
             </at-button>
             <at-button confirmText="确定删除此订单?" size="mini" type="warning"
                        v-if="scope.row.state===1&&searchForm.role===300"
-                       @click="deleteOrder(scope.row)">删除
+                       @click="deleteOrder(scope.row.id)">删除
             </at-button>
             <at-button confirmText="确定通知两个账号?" size="mini" type="info"
                        v-if="scope.row.state===1&&searchForm.role===100"
@@ -97,12 +93,12 @@
   export default {
     data() {
       return {
+        loading: true,
+        tips: '',
         orderList: [],
         searchForm: {
           eid: null,//雇员列表或者雇主列表 更多操作跳转过来携带的参数
           userId: null,//当前登陆者的id
-          employeeUN: '',
-          employerUN: '',
           state: null,
           role: null
         },
@@ -129,8 +125,10 @@
         this.searchForm.eid = this.searchForm.eid != null ? parseInt(this.searchForm.eid) : null;
       },
       async init() {
+        this.loading = true;
         //查询所有的订单信息
         let res = await this.$api('Order/getAll', this.searchForm);
+        this.loading = false;
         this.orderList = res.data;
         // console.log(this.orderList)
       },
@@ -141,16 +139,70 @@
           query: this.searchForm
         });
       },
+      comment(orderId) {
+        //跳转到评价页面
+        this.$router.push({
+          path: "/manager/doComment",
+          query: {orderId: orderId}
+        });
+
+      },
       async changeState(row, state) {
-        let res = await this.$api('User/changeEmployeeState', {id: row.id, state: state});
+        let isTimeOut = this.checkTime(row.createTime);
+        if (this.searchForm.role === 300) {
+          if (isTimeOut) {
+            //提示要收取违约费
+            this.$confirm('已超出2小时，若继续取消将收取此单的5%即' + row.orderPrice * 0.05 + '元，确定继续取消订单吗', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(async () => {
+              let res = await this.$api("Order/edit", {id: row.id, state: state, pay: row.orderPrice * 0.05});
+              this.$message({
+                type: res.code === 200 ? 'success' : 'error',
+                message: res.msg
+              });
+              this.init();
+            }).catch(() => {
+              this.$message.warning("取消操作")
+            });
+          } else {
+            this.$confirm('确定取消订单吗', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(async () => {
+              let res = await this.$api("Order/edit", {id: row.id, state: state});
+              this.$message({
+                type: res.code === 200 ? 'success' : 'error',
+                message: res.msg
+              });
+              this.init();
+            }).catch(() => {
+              this.$message.warning("取消操作")
+            });
+          }
+        } else if (this.searchForm.role === 200) {
+          let res = await this.$api("Order/edit", {id: row.id, state: state});
+          this.$message({
+            type: res.code === 200 ? 'success' : 'error',
+            message: res.msg
+          });
+          this.init();
+        }
+
+      },
+      checkTime(createTime) {
+        //校验时间---在下完单之后的两个小时之内是可以取消订单的
+        return this.timestamp() - createTime > 2 * 60 * 60;
+      },
+      async deleteOrder(id) {
+        let res = await this.$api("Order/delete", {id: id});
         this.$message({
           type: res.code === 200 ? 'success' : 'error',
           message: res.msg
         });
         this.init();
-      },
-      async deleteOrder() {
-
       },
     }
   }

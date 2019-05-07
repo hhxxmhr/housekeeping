@@ -1,6 +1,7 @@
 package com.mhr.housekeeping.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mhr.housekeeping.entity.ServiceDO;
 import com.mhr.housekeeping.entity.vo.ServiceVO;
 import com.mhr.housekeeping.service.ServiceService;
 import com.mhr.housekeeping.utils.Result;
@@ -49,6 +50,12 @@ public class ServiceController {
     @RequestMapping("/Service/deleteChild")
     public Result deleteChild(@RequestBody ServiceVO serviceVO) throws Exception {
         return serviceService.deleteService(serviceVO);
+    }
+
+    @RequestMapping("/Service/findServiceByOrder")
+    public ServiceDO findServiceByOrder(@RequestBody HashMap hashMap) throws Exception {
+        Integer orderId = (Integer) hashMap.get("orderId");
+        return serviceService.findServiceByOrder(orderId);
     }
 
 

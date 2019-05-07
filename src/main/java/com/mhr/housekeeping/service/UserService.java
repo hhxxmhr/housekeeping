@@ -46,4 +46,6 @@ public interface UserService {
 	JSONObject findUserInfos(UserVO userVO);
 
 	Result listUserByServiceId(UserVO userVO);
+
+	UserDO findUserByOrder(Integer orderId);
 }

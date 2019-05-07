@@ -42,4 +42,6 @@ public interface UserMapper {
     List<UserVO> findUserInfos(UserVO userVO);
 
     List<UserVO> listUserByServiceId(UserVO userVO);
+
+    UserDO findUserByOrder(Integer orderId);
 }

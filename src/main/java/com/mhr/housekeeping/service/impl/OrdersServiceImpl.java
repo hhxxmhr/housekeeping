@@ -50,7 +50,11 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     public Result updateOrders(OrdersVO ordersVO) throws Exception {
-        return null;
+        Integer count = ordersMapper.updateOrders(ordersVO);
+        if (count > 0) {
+            return Result.getSuccess("操作成功");
+        }
+        return Result.getFailure("操作失败");
     }
 
     @Override
@@ -140,7 +144,11 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     public Result deleteOrders(OrdersVO ordersVO) throws Exception {
-        return null;
+        Integer count = ordersMapper.deleteOrders(ordersVO);
+        if (count > 0) {
+            return Result.getSuccess("删除成功");
+        }
+        return Result.getFailure("删除失败");
     }
 
 }

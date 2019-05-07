@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mhr.housekeeping.dao.CommentMapper">
+
+	<resultMap id="commentMapper" type="CommentDO">
+        <result property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="comment" column="comment"/>
+        <result property="rate" column="rate"/>
+        <result property="photo" column="photo"/>
+	</resultMap>
+
+    <sql id="_table">
+        comment
+	</sql>
+
+	<sql id="_fields">
+		id,order_id,`comment`,rate,photo
+	</sql>
+
+	<sql id="_condition">
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id!=null">
+				AND id = #{id}
+			</if>
+            <if test="orderId!=null">
+				AND order_id = #{orderId}
+			</if>
+            <if test="comment!=null and ''!=comment">
+				AND `comment` = #{comment}
+			</if>
+            <if test="rate!=null">
+				AND rate = #{rate}
+			</if>
+            <if test="photo!=null and ''!=photo">
+				AND photo = #{photo}
+			</if>
+		</trim>
+	</sql>
+
+	<sql id="_primaryKey_condition">
+		WHERE id = #{id}
+	</sql>
+
+	<sql id="_order">
+        <if test="sortByParams!= null and sortByParams.size()>0" >
+            ORDER BY
+            <foreach collection="sortByParams.keys" index="index" item="sortByParamKey" separator=",">
+                <![CDATA[${sortByParamKey} ${sortByParams[sortByParamKey]}]]>
+            </foreach>
+        </if>
+	</sql>
+
+    <insert id="addComment" parameterType="CommentVO" keyProperty="id">
+        INSERT INTO <include refid="_table"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+				id,
+			</if>
+            <if test="orderId!=null">
+				order_id,
+			</if>
+            <if test="comment!=null and ''!=comment">
+				`comment`,
+			</if>
+            <if test="rate!=null">
+				rate,
+			</if>
+            <if test="photo!=null and ''!=photo">
+				photo,
+			</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+				#{id},
+			</if>
+            <if test="orderId!=null">
+				#{orderId},
+			</if>
+            <if test="comment!=null and ''!=comment">
+				#{comment},
+			</if>
+            <if test="rate!=null">
+				#{rate},
+			</if>
+            <if test="photo!=null and ''!=photo">
+				#{photo},
+			</if>
+        </trim>
+    </insert>
+
+    <update id="updateComment" parameterType="CommentVO">
+        UPDATE <include refid="_table"/>
+        <set>
+            <if test="orderId!=null">
+				order_id = #{orderId},
+			</if>
+            <if test="comment!=null and ''!=comment">
+				`comment` = #{comment},
+			</if>
+            <if test="rate!=null">
+				rate = #{rate},
+			</if>
+            <if test="photo!=null and ''!=photo">
+				photo = #{photo},
+			</if>
+        </set>
+        <include refid="_primaryKey_condition"/>
+    </update>
+
+    <select id="findDetailComment" resultMap="commentMapper" parameterType="CommentVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM <include refid="_table"/>
+        <include refid="_primaryKey_condition"/>
+    </select>
+
+    <select id="listComment" resultMap="commentMapper" parameterType="CommentVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM <include refid="_table"/>
+        <include refid="_condition"/>
+	    <include refid="_order"/>
+    </select>
+
+    <select id="listCommentPage" resultMap="commentMapper" parameterType="CommentVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM <include refid="_table"/>
+        <include refid="_condition"/>
+        <include refid="_order"/>
+        <if test="startRecord != null and pageSize != null and pageSize >0">
+            limit #{startRecord},#{pageSize}
+        </if>
+	    <if test="!(startRecord != null and pageSize != null and pageSize >0)">
+		    limit 0,15
+	    </if>
+    </select>
+
+    <select id="countComment" resultType="java.lang.Integer" parameterType="CommentVO">
+        SELECT
+        COUNT(*)
+        FROM <include refid="_table"/>
+        <include refid="_condition"/>
+    </select>
+
+    <delete id="deleteComment" parameterType="CommentVO">
+        DELETE FROM <include refid="_table"/>
+        <include refid="_primaryKey_condition"/>
+    </delete>
+
+</mapper>

@@ -24,13 +24,30 @@ public class OrderController {
     }
 
     /**
+     * 取消订单---更改状态
+     * @param ordersVO
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/Order/edit")
+    public Result edit(@RequestBody OrdersVO ordersVO) throws Exception {
+        return ordersService.updateOrders(ordersVO);
+    }
+
+    @RequestMapping("/Order/delete")
+    public Result delete(@RequestBody OrdersVO ordersVO) throws Exception {
+        return ordersService.deleteOrders(ordersVO);
+    }
+
+    /**
      * 查询所有的订单
+     *
      * @param hashMap
      * @return
      * @throws Exception
      */
     @RequestMapping("/Order/getAll")
-    public Result getAll(@RequestBody HashMap hashMap ) throws Exception {
+    public Result getAll(@RequestBody HashMap hashMap) throws Exception {
         JSONObject object = JSONObject.fromObject(hashMap);
         OrdersVO ordersVO = (OrdersVO) JSONObject.toBean(object, OrdersVO.class);
         return ordersService.listOrders(ordersVO);

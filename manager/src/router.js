@@ -54,7 +54,13 @@ const routes = [
     children: [
       {path: '/manager/rank', name: '等级管理', component: () => import('./views/manager/rank'), meta: {login: true}},
       {path: '/manager/service', name: '服务管理', component: () => import('./views/manager/service'), meta: {login: true}},
-      {path: '/manager/doEmployee', name: '从事人员', component: () => import('./views/manager/doEmployee'), meta: {login: true},hidden: true},
+      {
+        path: '/manager/doEmployee',
+        name: '从事人员',
+        component: () => import('./views/manager/doEmployee'),
+        meta: {login: true},
+        hidden: true
+      },
     ]
   },
   {
@@ -76,18 +82,45 @@ const routes = [
   },
 
   {
-    path: '/', name: '家政服务', roles:[300], component: layout, meta: {icon: 'el-icon-setting', login: true},
+    path: '/', name: '家政服务', roles: [300], component: layout, meta: {icon: 'el-icon-setting', login: true},
     children: [
-      {path: '/employer/service', name: '服务中心', component: () => import('./views/employer/service'), meta: {login: true}},
-      {path: '/employer/chooseEmployee', name: '人员浏览', component: () => import('./views/employer/chooseEmployee'), meta: {login: true}},
-      {path: '/employer/reserve', name: '家政预定', component: () => import('./views/employer/reserve'), meta: {login: true}},
+      {
+        path: '/employer/service',
+        name: '服务中心',
+        component: () => import('./views/employer/service'),
+        meta: {login: true}
+      },
+      {
+        path: '/employer/chooseEmployee',
+        name: '人员浏览',
+        component: () => import('./views/employer/chooseEmployee'),
+        meta: {login: true}
+      },
+      {
+        path: '/employer/reserve',
+        name: '家政预定',
+        component: () => import('./views/employer/reserve'),
+        meta: {login: true}
+      },
     ]
   },
   {
     path: '/', name: '订单管理', component: layout, meta: {icon: 'el-icon-setting', login: true},
     children: [
       {path: '/manager/orders', name: '订单列表', component: () => import('./views/manager/orders'), meta: {login: true}},
-      {path: '/manager/comment', name: '查看评论', component: () => import('./views/manager/comment'), meta: {login: true}},
+      {
+        path: '/manager/doComment',
+        name: '发表评论',
+        component: () => import('./views/manager/doComment'),
+        meta: {login: true},
+        hidden: true
+      },
+      {
+        path: '/manager/myComment',
+        name: '我的评论',
+        component: () => import('./views/manager/myComment'),
+        meta: {login: true}
+      },
     ]
   },
 
@@ -96,7 +129,12 @@ const routes = [
     children: [
 
       {path: '/manager/orders', name: '服务统计', component: () => import('./views/manager/orders'), meta: {login: true}},
-      {path: '/manager/comment', name: '资金统计', component: () => import('./views/manager/comment'), meta: {login: true}},
+      {
+        path: '/manager/comment',
+        name: '资金统计',
+        component: () => import('./views/manager/myComment'),
+        meta: {login: true}
+      },
     ]
   },
 ];

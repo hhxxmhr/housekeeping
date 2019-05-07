@@ -459,6 +459,12 @@
 
 
     </select>
+    <select id="findUserByOrder" resultMap="userMapper" parameterType="java.lang.Integer">
+        SELECT *
+        FROM
+        `user`
+        INNER JOIN orders ON orders.employee_id = `user`.id where orders.id=#{orderId}
+    </select>
 
     <select id="listUser" resultMap="userMapperVo" parameterType="UserVO">
         SELECT

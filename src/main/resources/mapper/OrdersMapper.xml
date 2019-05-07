@@ -19,6 +19,7 @@
         <result property="rate" column="rate"/>
         <result property="prov" column="prov"/>
         <result property="city" column="city"/>
+        <result property="pay" column="pay"/>
     </resultMap>
     <resultMap id="ordersMoreMapper" type="OrdersVO">
         <result property="id" column="id"/>
@@ -36,6 +37,7 @@
         <result property="rate" column="rate"/>
         <result property="prov" column="prov"/>
         <result property="city" column="city"/>
+        <result property="pay" column="pay"/>
         <result property="serviceName" column="service_name"/>
         <result property="servicePrice" column="service_price"/>
         <result property="serviceParent" column="service_parent"/>
@@ -57,7 +59,7 @@
 	</sql>
 
     <sql id="_fields">
-		id,service_id,employee_id,reverse_time,address,phone,tip,state,order_price,employer_id,create_time,end_time,rate,prov,city
+		id,service_id,employee_id,reverse_time,address,phone,tip,state,order_price,employer_id,create_time,end_time,rate,prov,city,pay
 	</sql>
 
     <sql id="_condition">
@@ -107,6 +109,9 @@
             <if test="city!=null and ''!=city">
                 AND city = #{city}
             </if>
+            <if test="pay!=null">
+                AND pay = #{pay}
+            </if>
         </trim>
     </sql>
 
@@ -115,7 +120,7 @@
 	</sql>
 
     <sql id="_order">
-        <if test="sortByParams!= null and sortByParams.size()>0">
+        <if test="sortByParams!= null and sortByParams.size()>0" >
             ORDER BY
             <foreach collection="sortByParams.keys" index="index" item="sortByParamKey" separator=",">
                 <![CDATA[${sortByParamKey} ${sortByParams[sortByParamKey]}]]>
@@ -124,8 +129,7 @@
     </sql>
 
     <insert id="addOrders" parameterType="OrdersVO" keyProperty="id">
-        INSERT INTO
-        <include refid="_table"/>
+        INSERT INTO <include refid="_table"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id!=null">
                 id,
@@ -171,6 +175,9 @@
             </if>
             <if test="city!=null and ''!=city">
                 city,
+            </if>
+            <if test="pay!=null">
+                pay,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -219,12 +226,14 @@
             <if test="city!=null and ''!=city">
                 #{city},
             </if>
+            <if test="pay!=null">
+                #{pay},
+            </if>
         </trim>
     </insert>
 
     <update id="updateOrders" parameterType="OrdersVO">
-        UPDATE
-        <include refid="_table"/>
+        UPDATE <include refid="_table"/>
         <set>
             <if test="serviceId!=null">
                 service_id = #{serviceId},
@@ -268,6 +277,9 @@
             <if test="city!=null and ''!=city">
                 city = #{city},
             </if>
+            <if test="pay!=null">
+                pay = #{pay},
+            </if>
         </set>
         <include refid="_primaryKey_condition"/>
     </update>
@@ -275,16 +287,14 @@
     <select id="findDetailOrders" resultMap="ordersMapper" parameterType="OrdersVO">
         SELECT
         <include refid="_fields"/>
-        FROM
-        <include refid="_table"/>
+        FROM <include refid="_table"/>
         <include refid="_primaryKey_condition"/>
     </select>
 
     <select id="listOrders" resultMap="ordersMoreMapper" parameterType="OrdersVO">
         SELECT
         <include refid="_fields"/>
-        FROM
-        <include refid="_table"/>
+        FROM <include refid="_table"/>
         <include refid="_condition"/>
         <include refid="_order"/>
     </select>
@@ -306,6 +316,7 @@
         orders.rate,
         orders.prov,
         orders.city,
+        orders.pay,
         service.`name` AS service_name,
         service.price AS service_price,
         service.parent AS service_parent,
@@ -350,6 +361,7 @@
         orders.rate,
         orders.prov,
         orders.city,
+        orders.pay,
         service.`name` AS service_name,
         service.price AS service_price,
         service.parent AS service_parent,
@@ -376,8 +388,7 @@
     <select id="listOrdersPage" resultMap="ordersMapper" parameterType="OrdersVO">
         SELECT
         <include refid="_fields"/>
-        FROM
-        <include refid="_table"/>
+        FROM <include refid="_table"/>
         <include refid="_condition"/>
         <include refid="_order"/>
         <if test="startRecord != null and pageSize != null and pageSize >0">
@@ -391,8 +402,7 @@
     <select id="countOrders" resultType="java.lang.Integer" parameterType="OrdersVO">
         SELECT
         COUNT(*)
-        FROM
-        <include refid="_table"/>
+        FROM <include refid="_table"/>
         <include refid="_condition"/>
     </select>
 

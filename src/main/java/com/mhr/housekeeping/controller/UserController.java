@@ -13,6 +13,7 @@ import com.mhr.housekeeping.service.UserServiceService;
 import com.mhr.housekeeping.utils.EnumType;
 import com.mhr.housekeeping.utils.Result;
 import com.mhr.housekeeping.utils.SmsUtils;
+import org.apache.catalina.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -232,6 +233,13 @@ public class UserController {
     @RequestMapping("/User/changeEmployeeState")
     public Result changeState(@RequestBody UserVO userVO) throws Exception {
         return userService.updateUser(userVO, null);
+
+    }
+
+    @RequestMapping("/User/findUserByOrder")
+    public UserDO findUserByOrder(@RequestBody HashMap hashMap) throws Exception {
+        Integer orderId = (Integer) hashMap.get("orderId");
+        return userService.findUserByOrder(orderId);
 
     }
 

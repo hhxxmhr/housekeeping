@@ -7,13 +7,13 @@
         <el-radio-group v-model="reserveForm.serviceId" size="mini" v-for="(item,index) in serviceList"
                         :key="item.id" :label="item.id" v-if="reserveForm.employeeId===null"
                         style="margin-left: 5px">
-          <div v-if="item.childrenType.length===0" >
+          <div v-if="item.childrenType.length===0">
             <el-radio :label="item.id" style="color: #4ba3f8">{{item.name}}</el-radio>
           </div>
           <div v-else>
-            <el-tag >{{item.name}}</el-tag>
+            <el-tag>{{item.name}}</el-tag>
             <el-radio v-for="(serviceChild,index) in item.childrenType" :label="serviceChild.id"
-                      :key="index" >
+                      :key="index">
               {{serviceChild.name}}
             </el-radio>
           </div>
@@ -27,7 +27,7 @@
       <!--<el-form-item label="预约时长" prop="amount" :label-width="formLabelWidth">
         <el-input-number v-model="addAdsl.amount" style="width: 217px" :min="1"></el-input-number>
       </el-form-item>-->
-      <el-form-item label="上门时间" prop="reverseTime" required >
+      <el-form-item label="上门时间" prop="reverseTime" required>
         <el-date-picker
           v-model="reserveForm.reverseTime"
           format="yyyy-MM-dd HH:mm "
@@ -85,6 +85,11 @@
         <el-form-item label="服务金额：" :label-width="formLabelWidth">
           {{reserveForm.orderPrice}}元
         </el-form-item>
+        <!--<el-form-item label="注意事项：" :label-width="formLabelWidth">-->
+          <span style="color: #f78989">订单预定后，2小时之内可免费取消。</span>
+          <span style="color: #f78989">若超出2小时取消订单，将收取订单价格的5%,即{{reserveForm.orderPrice*0.05}}元</span>
+
+        <!--</el-form-item>-->
 
       </el-form>
       <div slot="footer" style="margin-top: -30px">

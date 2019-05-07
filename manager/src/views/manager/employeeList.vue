@@ -87,7 +87,7 @@
       <el-dialog width="500px"
                  title="更多资料"
                  :visible.sync="dialog_visible"
-                 :close-on-click-modal="false">
+                 :close-on-click-modal="true">
         <el-form :model="moreInfo" size="small">
           <el-form-item label="账号" autocomplete="off"
                         :label-width="formLabelWidth">

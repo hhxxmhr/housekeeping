@@ -149,5 +149,10 @@ public class ServiceServiceImpl implements ServiceService {
         return new Result<>(serviceByUserId);
     }
 
+    @Override
+    public ServiceDO findServiceByOrder(Integer orderId) {
+        return serviceMapper.findServiceByOrder(orderId);
+    }
+
 
 }

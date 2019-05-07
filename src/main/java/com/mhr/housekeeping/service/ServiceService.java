@@ -1,6 +1,7 @@
 package com.mhr.housekeeping.service;
 
 
+import com.mhr.housekeeping.entity.ServiceDO;
 import com.mhr.housekeeping.entity.vo.ServiceVO;
 import com.mhr.housekeeping.utils.Result;
 
@@ -28,4 +29,5 @@ public interface ServiceService {
 
     Result findServiceByUserId(Integer id);
 
+    ServiceDO findServiceByOrder(Integer orderId);
 }

@@ -231,6 +231,11 @@ public class OrdersVO extends Query implements Serializable {
 
     private String city;
 
+    /**
+     * 超时取消费
+     */
+    private Integer pay;
+
     public Integer getId() {
         return id;
     }
@@ -351,39 +356,13 @@ public class OrdersVO extends Query implements Serializable {
         this.city = city;
     }
 
-    @Override
-    public String toString() {
-        return "OrdersVO{" +
-                "role=" + role +
-                ", userId=" + userId +
-                ", serviceName='" + serviceName + '\'' +
-                ", servicePrice=" + servicePrice +
-                ", serviceParent=" + serviceParent +
-                ", realName='" + realName + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", sex='" + sex + '\'' +
-                ", age=" + age +
-                ", education=" + education +
-                ", experience=" + experience +
-                ", rankId=" + rankId +
-                ", rankName='" + rankName + '\'' +
-                ", rankMoney=" + rankMoney +
-                ", id=" + id +
-                ", serviceId=" + serviceId +
-                ", employeeId=" + employeeId +
-                ", reverseTime=" + reverseTime +
-                ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
-                ", tip='" + tip + '\'' +
-                ", state=" + state +
-                ", orderPrice=" + orderPrice +
-                ", employerId=" + employerId +
-                ", createTime=" + createTime +
-                ", endTime=" + endTime +
-                ", rate=" + rate +
-                ", prov='" + prov + '\'' +
-                ", city='" + city + '\'' +
-                '}';
+    public Integer getPay() {
+        return pay;
     }
+
+    public void setPay(Integer pay) {
+        this.pay = pay;
+    }
+
+
 }

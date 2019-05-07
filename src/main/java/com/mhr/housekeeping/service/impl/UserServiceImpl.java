@@ -209,4 +209,9 @@ public class UserServiceImpl implements UserService {
         return new Result<>(userVOS);
     }
 
+    @Override
+    public UserDO findUserByOrder(Integer orderId) {
+        return userMapper.findUserByOrder(orderId);
+    }
+
 }

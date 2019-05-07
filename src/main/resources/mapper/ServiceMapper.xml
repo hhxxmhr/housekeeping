@@ -163,6 +163,18 @@
     WHERE
     user_service.user_id = #{id}
     </select>
+    <select id="findServiceByOrder" parameterType="Integer" resultMap="serviceMapper">
+             SELECT
+        service.id,
+        service.`name`,
+        service.price,
+        service.parent
+        FROM
+        service
+        INNER JOIN orders ON orders.service_id = service.id
+        WHERE
+        orders.id = #{orderId}
+    </select>
 
     <delete id="deleteService" parameterType="ServiceVO">
         DELETE FROM
