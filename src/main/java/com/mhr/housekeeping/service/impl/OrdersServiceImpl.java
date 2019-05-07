@@ -1,9 +1,7 @@
 package com.mhr.housekeeping.service.impl;
 
-import com.mhr.housekeeping.dao.OrdersMapper;
-import com.mhr.housekeeping.dao.RankMapper;
-import com.mhr.housekeeping.dao.ServiceMapper;
-import com.mhr.housekeeping.dao.UserMapper;
+import com.mhr.housekeeping.dao.*;
+import com.mhr.housekeeping.entity.CommentDO;
 import com.mhr.housekeeping.entity.RankDO;
 import com.mhr.housekeeping.entity.ServiceDO;
 import com.mhr.housekeeping.entity.UserDO;
@@ -38,6 +36,8 @@ public class OrdersServiceImpl implements OrdersService {
     ServiceMapper serviceMapper;
     @Autowired
     RankMapper rankMapper;
+    @Autowired
+    CommentMapper commentMapper;
 
     @Override
     public Result addOrders(OrdersVO ordersVO) throws Exception {
@@ -83,6 +83,12 @@ public class OrdersServiceImpl implements OrdersService {
                     RankDO rankDO = rankMapper.findRankByOrder(order.getEmployeeId(), order.getServiceId());
                     order.setRankName(rankDO.getName());
                     order.setRankMoney(rankDO.getMoney());
+                    //根据订单id获取评论信息
+                    CommentDO commentDO = commentMapper.findCommentByOrder(order.getId());
+                    if (commentDO != null) {
+                        order.setRate(commentDO.getRate());
+                    }
+
                 });
             }
             if (ordersVO.getEid() == null) {
@@ -110,6 +116,11 @@ public class OrdersServiceImpl implements OrdersService {
                     voList.forEach(vo -> {
                         UserDO detailUser = userMapper.findDetailUser(new UserVO(vo.getEmployerId()));
                         vo.setEmployerName(detailUser.getName());
+                        //根据订单id获取评论信息
+                        CommentDO commentDO = commentMapper.findCommentByOrder(vo.getId());
+                        if (commentDO != null) {
+                            vo.setRate(commentDO.getRate());
+                        }
                     });
                 }
                 return new Result<>(voList);
@@ -124,6 +135,12 @@ public class OrdersServiceImpl implements OrdersService {
                         //获取等级信息
                         RankDO rankDO = rankMapper.findRankByOrder(vo.getEmployeeId(), vo.getServiceId());
                         vo.setRankName(rankDO.getName());
+                        //根据订单id获取评论信息
+                        CommentDO commentDO = commentMapper.findCommentByOrder(vo.getId());
+                        if (commentDO != null) {
+                            vo.setRate(commentDO.getRate());
+                        }
+
                     });
                 }
                 return new Result<>(voList);

@@ -45,7 +45,7 @@
         </el-table-column>
         <el-table-column prop="praise" align="center" label="好评" width="60px">
           <template slot-scope="scope">
-            {{scope.row.rate?scope.row.rate:'无'}}
+            {{scope.row.rate?checkRate(scope.row.rate):'待评'}}
           </template>
         </el-table-column>
         <el-table-column prop="state" align="center" label="状态">
@@ -130,7 +130,7 @@
         let res = await this.$api('Order/getAll', this.searchForm);
         this.loading = false;
         this.orderList = res.data;
-        // console.log(this.orderList)
+        console.log(this.orderList)
       },
       search() {
         //携带查询的参数再次查询一下列表
@@ -146,6 +146,9 @@
           query: {orderId: orderId}
         });
 
+      },
+      checkRate(rate) {
+        return rate > 2 ? '是' : '否';
       },
       async changeState(row, state) {
         let isTimeOut = this.checkTime(row.createTime);
@@ -183,11 +186,20 @@
             });
           }
         } else if (this.searchForm.role === 200) {
-          let res = await this.$api("Order/edit", {id: row.id, state: state});
-          this.$message({
-            type: res.code === 200 ? 'success' : 'error',
-            message: res.msg
-          });
+          if (row.state === 2) {
+            //员工完成的时间是订单完成的时间
+            let res = await this.$api("Order/edit", {id: row.id, state: state, endTime: this.timestamp()});
+            this.$message({
+              type: res.code === 200 ? 'success' : 'error',
+              message: res.msg
+            });
+          } else {
+            let res = await this.$api("Order/edit", {id: row.id, state: state});
+            this.$message({
+              type: res.code === 200 ? 'success' : 'error',
+              message: res.msg
+            });
+          }
           this.init();
         }
 

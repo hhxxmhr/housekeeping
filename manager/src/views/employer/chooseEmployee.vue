@@ -32,10 +32,10 @@
               </el-button>
             </p>
             <p style="margin-top: 5px;">性别: {{item.sex}}</p>
+            <p style="margin-top: 5px">好评率: {{item.totalComment?(item.goodComment/item.totalComment)*100:0}}%</p>
             <p style="margin-top: 5px;">家政经验: {{item.experience?UserExperience[item.experience]:'无'}}</p>
             <p style="margin-top: 5px">从事服务: {{getServices(item.services)|ellipsis}}</p>
             <p style="margin-top: 5px">完成订单: {{item.orderCount}}单</p>
-            <p style="margin-top: 5px">好评率值: {{'尚未完成'}}</p>
             <!--<p>口味选项: {{(item.taste.length>0?item.taste.toString():"无")|ellipsis}}</p>-->
             <p style="margin-top: 5px">自我介绍: {{item.introduction}}</p>
           </div>
@@ -183,7 +183,7 @@
         let res;
         if (this.searchForm.serviceId == null){
            res = await this.$api("getAll", this.searchForm);
-           // console.log(res)
+           console.log(res)
         }else {
           res = await this.$api("User/listUserByServiceId", this.searchForm);
         }

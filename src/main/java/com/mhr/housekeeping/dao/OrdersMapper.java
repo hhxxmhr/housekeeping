@@ -32,4 +32,6 @@ public interface OrdersMapper {
     List<OrdersVO> listEmployerOrders(Integer userId, Integer state);
 
     Integer countOrdersByEmployeeId(UserVO it);
+
+    Integer countGoodOrders(OrdersVO orderVO);
 }

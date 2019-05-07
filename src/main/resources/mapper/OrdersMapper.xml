@@ -120,7 +120,7 @@
 	</sql>
 
     <sql id="_order">
-        <if test="sortByParams!= null and sortByParams.size()>0" >
+        <if test="sortByParams!= null and sortByParams.size()>0">
             ORDER BY
             <foreach collection="sortByParams.keys" index="index" item="sortByParamKey" separator=",">
                 <![CDATA[${sortByParamKey} ${sortByParams[sortByParamKey]}]]>
@@ -129,7 +129,8 @@
     </sql>
 
     <insert id="addOrders" parameterType="OrdersVO" keyProperty="id">
-        INSERT INTO <include refid="_table"/>
+        INSERT INTO
+        <include refid="_table"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id!=null">
                 id,
@@ -233,7 +234,8 @@
     </insert>
 
     <update id="updateOrders" parameterType="OrdersVO">
-        UPDATE <include refid="_table"/>
+        UPDATE
+        <include refid="_table"/>
         <set>
             <if test="serviceId!=null">
                 service_id = #{serviceId},
@@ -287,14 +289,16 @@
     <select id="findDetailOrders" resultMap="ordersMapper" parameterType="OrdersVO">
         SELECT
         <include refid="_fields"/>
-        FROM <include refid="_table"/>
+        FROM
+        <include refid="_table"/>
         <include refid="_primaryKey_condition"/>
     </select>
 
     <select id="listOrders" resultMap="ordersMoreMapper" parameterType="OrdersVO">
         SELECT
         <include refid="_fields"/>
-        FROM <include refid="_table"/>
+        FROM
+        <include refid="_table"/>
         <include refid="_condition"/>
         <include refid="_order"/>
     </select>
@@ -388,7 +392,8 @@
     <select id="listOrdersPage" resultMap="ordersMapper" parameterType="OrdersVO">
         SELECT
         <include refid="_fields"/>
-        FROM <include refid="_table"/>
+        FROM
+        <include refid="_table"/>
         <include refid="_condition"/>
         <include refid="_order"/>
         <if test="startRecord != null and pageSize != null and pageSize >0">
@@ -402,8 +407,15 @@
     <select id="countOrders" resultType="java.lang.Integer" parameterType="OrdersVO">
         SELECT
         COUNT(*)
-        FROM <include refid="_table"/>
+        FROM
+        <include refid="_table"/>
         <include refid="_condition"/>
+    </select>
+    <select id="countGoodOrders" resultType="java.lang.Integer" parameterType="OrdersVO">
+                SELECT count(*)
+        FROM
+        orders
+        WHERE state=#{state} and employee_id= #{employeeId} and rate &gt; 2
     </select>
 
     <select id="countOrdersByEmployeeId" resultType="java.lang.Integer" parameterType="UserVO">

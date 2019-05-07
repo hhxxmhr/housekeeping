@@ -27,4 +27,5 @@ public interface CommentMapper {
 
     Integer deleteComment(CommentVO commentVO);
 
+    CommentDO findCommentByOrder(Integer id);
 }

@@ -124,6 +124,12 @@
 	    <include refid="_order"/>
     </select>
 
+    <select id="findCommentByOrder" resultMap="commentMapper" parameterType="java.lang.Integer">
+        SELECT * FROM comment INNER JOIN orders ON comment.order_id = orders.id
+        WHERE
+        orders.id = #{id}
+    </select>
+
     <select id="listCommentPage" resultMap="commentMapper" parameterType="CommentVO">
         SELECT
         <include refid="_fields"/>

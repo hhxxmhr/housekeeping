@@ -81,7 +81,7 @@
         //发表评论
         let res = await this.$api("Comment/add", this.form);
         //更新订单状态
-        await this.$api("Order/edit", {state: 4});
+        await this.$api("Order/edit", {id: this.form.orderId, state: 4, rate: this.form.rate});
         this.$message({
           type: res.code === 200 ? 'success' : 'error',
           message: res.msg

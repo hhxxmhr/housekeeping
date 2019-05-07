@@ -1,7 +1,6 @@
 package com.mhr.housekeeping.entity.vo;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 /**
  * <br/>
@@ -225,7 +224,7 @@ public class OrdersVO extends Query implements Serializable {
     /**
      * 评分
      */
-    private BigDecimal rate;
+    private Integer rate;
 
     private String prov;
 
@@ -332,11 +331,11 @@ public class OrdersVO extends Query implements Serializable {
         this.endTime = endTime;
     }
 
-    public BigDecimal getRate() {
+    public Integer getRate() {
         return rate;
     }
 
-    public void setRate(BigDecimal rate) {
+    public void setRate(Integer rate) {
         this.rate = rate;
     }
 

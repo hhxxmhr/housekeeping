@@ -9,6 +9,7 @@ import com.mhr.housekeeping.dao.UserServiceMapper;
 import com.mhr.housekeeping.entity.ServiceDO;
 import com.mhr.housekeeping.entity.UserDO;
 import com.mhr.housekeeping.entity.UserServiceDO;
+import com.mhr.housekeeping.entity.vo.OrdersVO;
 import com.mhr.housekeeping.entity.vo.UserServiceVO;
 import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.service.UserService;
@@ -95,17 +96,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserVO> listUser(UserVO userVO) throws Exception {
         List<UserVO> users = userMapper.listUser(userVO);
-        if (users != null && users.size() > 0) {
-            users.forEach(it -> {
-                //根据员工id查询所拥有的服务
-                List<ServiceDO> serviceByUserId = serviceMapper.findServiceByUserId(it.getId());
-                it.setServices(serviceByUserId);
-                //根据员工id查询完成的订单数
-                Integer orderCount = ordersMapper.countOrdersByEmployeeId(it);
-                it.setOrderCount(orderCount);
-            });
-        }
+        moreInfo(users);
         return users;
+    }
+
+    @Override
+    public Result listUserByServiceId(UserVO userVO) {
+        List<UserVO> userVOS = userMapper.listUserByServiceId(userVO);
+        moreInfo(userVOS);
+        return new Result<>(userVOS);
     }
 
     @Override
@@ -194,8 +193,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result listUserByServiceId(UserVO userVO) {
-        List<UserVO> userVOS = userMapper.listUserByServiceId(userVO);
+    public UserDO findUserByOrder(Integer orderId) {
+        return userMapper.findUserByOrder(orderId);
+    }
+
+    public void moreInfo(List<UserVO> userVOS) {
         if (userVOS != null && userVOS.size() > 0) {
             userVOS.forEach(it -> {
                 //根据员工id查询所拥有的服务
@@ -204,14 +206,18 @@ public class UserServiceImpl implements UserService {
                 //根据员工id查询完成的订单数
                 Integer orderCount = ordersMapper.countOrdersByEmployeeId(it);
                 it.setOrderCount(orderCount);
+                //计算此员工的好评率
+                // 1、这个员工一共有几条带评论的订单数 2、 这总数里面有几条是好评的  3、计算
+                OrdersVO orderVO = new OrdersVO();
+                orderVO.setState(4);
+                orderVO.setEmployeeId(it.getId());
+                Integer totalComment = ordersMapper.countOrders(orderVO);
+                Integer goodComment = ordersMapper.countGoodOrders(orderVO);
+                it.setTotalComment(totalComment);
+                it.setGoodComment(goodComment);
+                System.out.println(goodComment);
             });
         }
-        return new Result<>(userVOS);
-    }
-
-    @Override
-    public UserDO findUserByOrder(Integer orderId) {
-        return userMapper.findUserByOrder(orderId);
     }
 
 }
