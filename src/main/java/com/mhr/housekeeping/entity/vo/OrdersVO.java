@@ -19,6 +19,25 @@ public class OrdersVO extends Query implements Serializable {
         this.eid = eid;
     }
 
+    private Integer page;//当前页
+    private Integer size;//页面数据数量
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
+
     private Integer role;
     private Integer userId;
     private String employerName;
@@ -363,5 +382,45 @@ public class OrdersVO extends Query implements Serializable {
         this.pay = pay;
     }
 
-
+    @Override
+    public String toString() {
+        return "OrdersVO{" +
+                "eid=" + eid +
+                ", role=" + role +
+                ", userId=" + userId +
+                ", employerName='" + employerName + '\'' +
+                ", employerUsername='" + employerUsername + '\'' +
+                ", employeeName='" + employeeName + '\'' +
+                ", employeeUsername='" + employeeUsername + '\'' +
+                ", serviceName='" + serviceName + '\'' +
+                ", servicePrice=" + servicePrice +
+                ", serviceParent=" + serviceParent +
+                ", realName='" + realName + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", sex='" + sex + '\'' +
+                ", age=" + age +
+                ", education=" + education +
+                ", experience=" + experience +
+                ", rankId=" + rankId +
+                ", rankName='" + rankName + '\'' +
+                ", rankMoney=" + rankMoney +
+                ", id=" + id +
+                ", serviceId=" + serviceId +
+                ", employeeId=" + employeeId +
+                ", reverseTime=" + reverseTime +
+                ", address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                ", tip='" + tip + '\'' +
+                ", state=" + state +
+                ", orderPrice=" + orderPrice +
+                ", employerId=" + employerId +
+                ", createTime=" + createTime +
+                ", endTime=" + endTime +
+                ", rate=" + rate +
+                ", prov='" + prov + '\'' +
+                ", city='" + city + '\'' +
+                ", pay=" + pay +
+                '}';
+    }
 }

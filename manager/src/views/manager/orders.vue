@@ -63,7 +63,7 @@
                        v-if="scope.row.state===0&&searchForm.role===200"
                        @click="changeState(scope.row,2)">确认
             </at-button>
-            <at-button confirmText="已经完成此订单?" size="mini" type="success"
+            <at-button confirmText="已经完成此订单?" size="mini" type="primary" style="border-color:lightsalmon ;background-color: lightsalmon"
                        v-if="scope.row.state===2&&searchForm.role===200"
                        @click="changeState(scope.row,3)">完成
             </at-button>
@@ -85,6 +85,18 @@
           </template>
         </el-table-column>
       </el-table>
+      <div style="text-align: right ;margin-top: 10px">
+        <el-pagination style="margin: auto"
+                       background
+                       :current-page="searchForm.page"
+                       :page-size="searchForm.size"
+                       :page-sizes="[15,30,45]"
+                       layout="sizes, prev, pager, next, jumper"
+                       :total="total"
+                       @current-change="currentChange"
+                       @size-change="handleSizeChange">
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -96,7 +108,10 @@
         loading: true,
         tips: '',
         orderList: [],
+        total: 0,
         searchForm: {
+          page:1,//当前页
+          size:15,//每页记录的数目
           eid: null,//雇员列表或者雇主列表 更多操作跳转过来携带的参数
           userId: null,//当前登陆者的id
           state: null,
@@ -123,16 +138,21 @@
         Object.assign(this.searchForm, this.$route.query);
         this.searchForm.state = this.searchForm.state != null ? parseInt(this.searchForm.state) : null;
         this.searchForm.eid = this.searchForm.eid != null ? parseInt(this.searchForm.eid) : null;
+        this.searchForm.page = this.searchForm.page ? parseInt(this.searchForm.page) : 1;
+        this.searchForm.size = this.searchForm.size ? parseInt(this.searchForm.size) : 15;
       },
       async init() {
         this.loading = true;
         //查询所有的订单信息
         let res = await this.$api('Order/getAll', this.searchForm);
         this.loading = false;
-        this.orderList = res.data;
-        console.log(this.orderList)
+        this.orderList = res.list;
+        this.total = res.total;
+        this.loading = false;
       },
       search() {
+        this.searchForm.page = 1;
+        this.searchForm.size = 15;
         //携带查询的参数再次查询一下列表
         this.$router.push({
           path: "/manager/orders",
@@ -207,6 +227,15 @@
       checkTime(createTime) {
         //校验时间---在下完单之后的两个小时之内是可以取消订单的
         return this.timestamp() - createTime > 2 * 60 * 60;
+      },
+      async currentChange(current) {
+        this.searchForm.page = current;
+        await this.init();
+      },
+      async handleSizeChange(val) {
+        this.searchForm.size = val;
+        await this.init();
+        // await this.currentChange(1);
       },
       async deleteOrder(id) {
         let res = await this.$api("Order/delete", {id: id});

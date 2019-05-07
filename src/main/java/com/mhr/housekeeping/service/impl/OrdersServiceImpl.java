@@ -1,5 +1,7 @@
 package com.mhr.housekeeping.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mhr.housekeeping.dao.*;
 import com.mhr.housekeeping.entity.CommentDO;
 import com.mhr.housekeeping.entity.RankDO;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ import java.util.List;
  * Created by min on 2019/05/04
  */
 @Service("ordersService")
+@Transactional
 public class OrdersServiceImpl implements OrdersService {
 
     private final static Logger LOG = LoggerFactory.getLogger(OrdersServiceImpl.class);
@@ -63,7 +67,8 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public Result listOrders(OrdersVO ordersVO) throws Exception {
+    public PageInfo<OrdersVO> listOrders(OrdersVO ordersVO) throws Exception {
+        PageHelper.startPage(ordersVO.getPage(), ordersVO.getSize());
         //如果登陆的是管理员，则显示所有的订单
         if (ordersVO.getRole() == 100) {
             List<OrdersVO> orders = ordersMapper.listOrders(ordersVO);
@@ -92,7 +97,7 @@ public class OrdersServiceImpl implements OrdersService {
                 });
             }
             if (ordersVO.getEid() == null) {
-                return new Result<>(orders);
+                return new PageInfo<>(orders);
             } else {
                 //将所有的订单进行过滤，返回某个雇主或者雇员的订单信息
                 List<OrdersVO> list = new ArrayList<>();
@@ -103,7 +108,7 @@ public class OrdersServiceImpl implements OrdersService {
                         }
                     });
                 }
-                return new Result<>(list);
+                return new PageInfo<>(list);
             }
 
         } else {
@@ -112,7 +117,7 @@ public class OrdersServiceImpl implements OrdersService {
                 //如果当前登陆的是雇员，查询订单列表，显示他个人的所有列表
                 List<OrdersVO> voList = ordersMapper.listEmployeeOrders(ordersVO.getUserId(), ordersVO.getState());
                 //根据雇员的id查询雇员的名字
-                if (voList != null && voList.size() > 0) {
+                if (voList.size() > 0) {
                     voList.forEach(vo -> {
                         UserDO detailUser = userMapper.findDetailUser(new UserVO(vo.getEmployerId()));
                         vo.setEmployerName(detailUser.getName());
@@ -123,11 +128,11 @@ public class OrdersServiceImpl implements OrdersService {
                         }
                     });
                 }
-                return new Result<>(voList);
+                return new PageInfo<>(voList);
             } else if (ordersVO.getRole() == 300) {
                 //当前登陆的是雇主，显示雇主显示的所有的订单
                 List<OrdersVO> voList = ordersMapper.listEmployerOrders(ordersVO.getUserId(), ordersVO.getState());
-                if (voList != null && voList.size() > 0) {
+                if (voList.size() > 0) {
                     voList.forEach(vo -> {
                         //获取雇员信息
                         UserDO detailUser = userMapper.findDetailUser(new UserVO(vo.getEmployeeId()));
@@ -140,10 +145,9 @@ public class OrdersServiceImpl implements OrdersService {
                         if (commentDO != null) {
                             vo.setRate(commentDO.getRate());
                         }
-
                     });
                 }
-                return new Result<>(voList);
+                return new PageInfo<>(voList);
             }
         }
         return null;
@@ -167,5 +171,6 @@ public class OrdersServiceImpl implements OrdersService {
         }
         return Result.getFailure("删除失败");
     }
+
 
 }

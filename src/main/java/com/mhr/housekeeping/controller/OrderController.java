@@ -1,5 +1,6 @@
 package com.mhr.housekeeping.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.mhr.housekeeping.entity.vo.OrdersVO;
 import com.mhr.housekeeping.service.OrdersService;
 import com.mhr.housekeeping.utils.Result;
@@ -25,6 +26,7 @@ public class OrderController {
 
     /**
      * 取消订单---更改状态
+     *
      * @param ordersVO
      * @return
      * @throws Exception
@@ -47,9 +49,11 @@ public class OrderController {
      * @throws Exception
      */
     @RequestMapping("/Order/getAll")
-    public Result getAll(@RequestBody HashMap hashMap) throws Exception {
+    public PageInfo<OrdersVO> getAll(@RequestBody HashMap hashMap) throws Exception {
         JSONObject object = JSONObject.fromObject(hashMap);
         OrdersVO ordersVO = (OrdersVO) JSONObject.toBean(object, OrdersVO.class);
         return ordersService.listOrders(ordersVO);
     }
+
+
 }

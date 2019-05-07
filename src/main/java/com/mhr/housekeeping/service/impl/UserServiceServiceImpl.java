@@ -8,6 +8,7 @@ import com.mhr.housekeeping.utils.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  * <br/>
  * Created by min on 2019/04/28
  */
+@Transactional
 @Service("userServiceService")
 public class UserServiceServiceImpl implements UserServiceService {
 

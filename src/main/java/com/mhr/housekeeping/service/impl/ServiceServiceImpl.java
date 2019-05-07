@@ -12,6 +12,7 @@ import com.mhr.housekeeping.utils.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.List;
  * Created by min on 2019/04/28
  */
 @Service("serviceService")
+@Transactional
 public class ServiceServiceImpl implements ServiceService {
 
     private final static Logger LOG = LoggerFactory.getLogger(ServiceServiceImpl.class);

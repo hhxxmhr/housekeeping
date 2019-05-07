@@ -21,7 +21,7 @@ public interface OrdersMapper {
 
     List<OrdersVO> listOrders(OrdersVO ordersVO);
 
-    List<OrdersDO> listOrdersPage(OrdersVO ordersVO);
+    List<OrdersVO> listOrdersPage(OrdersVO ordersVO);
 
     Integer countOrders(OrdersVO ordersVO);
 
@@ -34,4 +34,6 @@ public interface OrdersMapper {
     Integer countOrdersByEmployeeId(UserVO it);
 
     Integer countGoodOrders(OrdersVO orderVO);
+
+    List<OrdersVO> getAllOrderByPage(Integer page, Integer size);
 }

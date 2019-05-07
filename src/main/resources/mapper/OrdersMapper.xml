@@ -389,17 +389,17 @@
 
     </select>
 
-    <select id="listOrdersPage" resultMap="ordersMapper" parameterType="OrdersVO">
+    <select id="listOrdersPage" resultMap="ordersMoreMapper" parameterType="OrdersVO">
         SELECT
         <include refid="_fields"/>
         FROM
         <include refid="_table"/>
         <include refid="_condition"/>
         <include refid="_order"/>
-        <if test="startRecord != null and pageSize != null and pageSize >0">
-            limit #{startRecord},#{pageSize}
+        <if test="page != null and size != null and size >0">
+            limit #{page},#{size}
         </if>
-        <if test="!(startRecord != null and pageSize != null and pageSize >0)">
+        <if test="!(page != null and size != null and size >0)">
             limit 0,15
         </if>
     </select>
@@ -428,4 +428,7 @@
         <include refid="_primaryKey_condition"/>
     </delete>
 
+    <select id="getAllOrderByPage" resultMap="ordersMapper" parameterType="java.lang.Integer">
+      select * from orders limit #{page}, #{size}
+    </select>
 </mapper>

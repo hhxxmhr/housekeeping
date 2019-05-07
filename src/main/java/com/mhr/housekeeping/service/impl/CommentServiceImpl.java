@@ -7,6 +7,7 @@ import com.mhr.housekeeping.utils.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -15,6 +16,7 @@ import javax.annotation.Resource;
  * Created by min on 2019/05/07
  */
 @Service("commentService")
+@Transactional
 public class CommentServiceImpl implements CommentService {
 
     private final static Logger LOG = LoggerFactory.getLogger(CommentServiceImpl.class);

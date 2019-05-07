@@ -1,6 +1,7 @@
 package com.mhr.housekeeping.service;
 
 
+import com.github.pagehelper.PageInfo;
 import com.mhr.housekeeping.entity.vo.OrdersVO;
 import com.mhr.housekeeping.utils.Result;
 
@@ -15,12 +16,13 @@ public interface OrdersService {
 	Result updateOrders(OrdersVO ordersVO) throws Exception;
 	
 	Result findDetailOrders(OrdersVO ordersVO) throws Exception;
-	
-	Result listOrders(OrdersVO ordersVO) throws Exception;
+
+	PageInfo<OrdersVO> listOrders(OrdersVO ordersVO) throws Exception;
 
     Result listOrdersPage(OrdersVO ordersVO) throws Exception;
 	
 	Result countOrders(OrdersVO ordersVO) throws Exception;
 	
 	Result deleteOrders(OrdersVO ordersVO) throws Exception;
+
 }
