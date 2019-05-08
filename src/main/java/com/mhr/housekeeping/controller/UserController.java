@@ -197,6 +197,11 @@ public class UserController {
         return object;
     }
 
+    @RequestMapping("/User/findUserById")
+    public Result findUserById(@RequestBody UserVO userVO) throws Exception {
+        return userService.findDetailUser(userVO);
+    }
+
     @RequestMapping("/User/listUserByServiceId")
     public JSONObject listUserByServiceId(@RequestBody UserVO userVO) throws Exception {
         Result result = userService.listUserByServiceId(userVO);

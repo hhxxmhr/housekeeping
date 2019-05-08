@@ -8,8 +8,8 @@
           <div class="infos"><p style="margin-left: 30px;">{{serviceInfo.name}}の服务评分</p></div>
           <el-rate style="margin-left: 55%;margin-top: -70px" v-model="form.rate" show-text></el-rate>
         </div>
-        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-        <div style="margin-top: 45px">
+        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
+        <div style="margin-top: 40px">
           <el-input type="textarea" :rows="8" placeholder="服务满足您的期待吗？说说你的评价吧" v-model="form.comment" :maxlength="200"
                     @input="countWords" show-word-limit></el-input>
           <span style="float:right;color:#999;">{{remnant}}/200</span>
@@ -59,6 +59,7 @@
           photo: '',  // 活动图片
           comment: '',
           rate: null,
+          createTime: this.timestamp(),//当前时间戳
           orderId: null,//从订单页面跳转过来的
         },
         remnant: 200,//剩余评论字数
@@ -164,13 +165,17 @@
     height: 120px;
     display: inline-block;
     vertical-align: middle;
-    border-radius:80%
+    border-radius: 80%
   }
 
   .divs .infos {
     display: inline-block;
   }
-  .divs{ margin:10px auto}
+
+  .divs {
+    margin: 10px auto
+  }
+
   .avatar {
     width: 175px;
     height: 150px;

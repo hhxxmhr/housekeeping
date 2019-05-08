@@ -9,6 +9,7 @@
         <result property="comment" column="comment"/>
         <result property="rate" column="rate"/>
         <result property="photo" column="photo"/>
+        <result property="createTime" column="create_time"/>
 	</resultMap>
 
     <sql id="_table">
@@ -16,7 +17,7 @@
 	</sql>
 
 	<sql id="_fields">
-		id,order_id,`comment`,rate,photo
+		id,order_id,`comment`,rate,photo,create_time
 	</sql>
 
 	<sql id="_condition">
@@ -36,6 +37,9 @@
             <if test="photo!=null and ''!=photo">
 				AND photo = #{photo}
 			</if>
+            <if test="createTime!=null">
+                AND create_time = #{createTime}
+            </if>
 		</trim>
 	</sql>
 
@@ -70,6 +74,9 @@
             <if test="photo!=null and ''!=photo">
 				photo,
 			</if>
+            <if test="createTime!=null">
+                create_time,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
@@ -87,6 +94,9 @@
             <if test="photo!=null and ''!=photo">
 				#{photo},
 			</if>
+            <if test="createTime!=null">
+                #{createTime},
+            </if>
         </trim>
     </insert>
 
@@ -105,6 +115,9 @@
             <if test="photo!=null and ''!=photo">
 				photo = #{photo},
 			</if>
+            <if test="createTime!=null">
+                create_time = #{createTime},
+            </if>
         </set>
         <include refid="_primaryKey_condition"/>
     </update>

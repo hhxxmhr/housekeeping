@@ -2,7 +2,7 @@ package com.mhr.housekeeping.entity.vo;
 
 import java.io.Serializable;
 
-/** 
+/**
  * <br/>
  * Created by min on 2019/05/07
  */
@@ -16,40 +16,59 @@ public class CommentVO extends Query implements Serializable {
     private String comment;
 
     /**
-	 * 几星
-	 */
-	private Integer rate;
+     * 几星
+     */
+    private Integer rate;
 
     private String photo;
 
+    private Long createTime;
+
     public Integer getId() {
-		return id;
-	}
+        return id;
+    }
+
     public void setId(Integer id) {
-		this.id = id;
-	}
+        this.id = id;
+    }
+
     public Integer getOrderId() {
-		return orderId;
-	}
+        return orderId;
+    }
+
     public void setOrderId(Integer orderId) {
-		this.orderId = orderId;
-	}
+        this.orderId = orderId;
+    }
+
     public String getComment() {
-		return comment;
-	}
+        return comment;
+    }
+
     public void setComment(String comment) {
-		this.comment = comment;
-	}
+        this.comment = comment;
+    }
+
     public Integer getRate() {
-		return rate;
-	}
+        return rate;
+    }
+
     public void setRate(Integer rate) {
-		this.rate = rate;
-	}
+        this.rate = rate;
+    }
+
     public String getPhoto() {
-		return photo;
-	}
+        return photo;
+    }
+
     public void setPhoto(String photo) {
-		this.photo = photo;
-	}
+        this.photo = photo;
+    }
+
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
 }
