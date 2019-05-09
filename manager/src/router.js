@@ -50,7 +50,7 @@ const routes = [
     ]
   },
   {
-    path: '/', name: '服务中心', roles: [100], component: layout, meta: {icon: 'el-icon-setting', login: true},
+    path: '/', name: '服务中心', roles: [100], component: layout, meta: {icon: 'el-icon-news', login: true},
     children: [
       {path: '/manager/rank', name: '等级管理', component: () => import('./views/manager/rank'), meta: {login: true}},
       {path: '/manager/service', name: '服务管理', component: () => import('./views/manager/service'), meta: {login: true}},
@@ -64,7 +64,7 @@ const routes = [
     ]
   },
   {
-    path: '/', name: '人员管理', roles: [100], component: layout, meta: {icon: 'el-icon-setting', login: true},
+    path: '/', name: '人员管理', roles: [100], component: layout, meta: {icon: 'el-icon-edit-outline', login: true},
     children: [
       {
         path: '/manager/employeeList',
@@ -105,7 +105,7 @@ const routes = [
     ]
   },
   {
-    path: '/', name: '订单管理', component: layout, meta: {icon: 'el-icon-setting', login: true},
+    path: '/', name: '订单管理', component: layout, meta: {icon: 'el-icon-tickets', login: true},
     children: [
       {path: '/manager/orders', name: '订单列表', component: () => import('./views/manager/orders'), meta: {login: true}},
       {
@@ -118,7 +118,7 @@ const routes = [
       {
         path: '/manager/myComment',
         name: '我的评论',
-        roles: [200,300],
+        roles: [200, 300],
         component: () => import('./views/manager/myComment'),
         meta: {login: true}
       },
@@ -133,14 +133,18 @@ const routes = [
   },
 
   {
-    path: '/', name: '数据统计', component: layout, meta: {icon: 'el-icon-setting', login: true},
+    path: '/', name: '数据统计', component: layout, meta: {icon: 'el-icon-sort', login: true},
     children: [
-
-      {path: '/manager/orders', name: '服务统计', component: () => import('./views/manager/orders'), meta: {login: true}},
       {
-        path: '/manager/comment',
-        name: '资金统计',
-        component: () => import('./views/manager/myComment'),
+        path: '/manager/serviceSta',
+        name: '服务统计',
+        component: () => import('./views/manager/serviceSta'),
+        meta: {login: true}
+      },
+      {
+        path: '/manager/moneySta',
+        name: '资金记录',
+        component: () => import('./views/manager/moneySta'),
         meta: {login: true}
       },
     ]
