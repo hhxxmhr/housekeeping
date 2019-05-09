@@ -32,4 +32,6 @@ public interface CommentMapper {
     List<CommentVO> listCommentWithCommentEmployee(CommentVO commentVO);
 
     List<CommentVO> listCommentWithCommentEmployer(CommentVO commentVO);
+
+    List<CommentVO> listCommentWithComment(CommentVO commentVO);
 }

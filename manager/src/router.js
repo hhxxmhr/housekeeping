@@ -118,7 +118,15 @@ const routes = [
       {
         path: '/manager/myComment',
         name: '我的评论',
+        roles: [200,300],
         component: () => import('./views/manager/myComment'),
+        meta: {login: true}
+      },
+      {
+        path: '/manager/allComment',
+        name: '所有评论',
+        roles: [100],
+        component: () => import('./views/manager/allComment'),
         meta: {login: true}
       },
     ]

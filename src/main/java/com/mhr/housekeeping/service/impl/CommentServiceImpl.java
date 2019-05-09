@@ -71,6 +71,8 @@ public class CommentServiceImpl implements CommentService {
             comments = commentMapper.listCommentWithCommentEmployee(commentVO);
         } else if (commentVO.getRole() == 300) {
             comments = commentMapper.listCommentWithCommentEmployer(commentVO);
+        } else if (commentVO.getRole() == 100) {
+            comments = commentMapper.listCommentWithComment(commentVO);
         }
         if (comments != null && comments.size() > 0) {
             comments.forEach(comment -> {
@@ -114,6 +116,20 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Result deleteComment(CommentVO commentVO) throws Exception {
         return null;
+    }
+
+    @Override
+    public Result deleteCommentByIds(List<Integer> ids) {
+        int tmp = 0;
+        if (ids != null && ids.size() > 0) {
+            for (int i = 0; i < ids.size(); i++) {
+                Integer count = commentMapper.deleteComment(new CommentVO(ids.get(i)));
+                if (count > 0) tmp++;
+            }
+            if (tmp == ids.size()) return Result.getSuccess("删除成功");
+            else return Result.getFailure("删除失败 ");
+        }
+        return Result.getFailure("请选择要删除的评论 ");
     }
 
 }

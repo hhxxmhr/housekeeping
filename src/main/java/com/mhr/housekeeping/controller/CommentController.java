@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.List;
+
 
 @RestController
 public class CommentController {
@@ -17,6 +20,19 @@ public class CommentController {
     @RequestMapping("/Comment/add")
     public Result add(@RequestBody CommentVO commentVO) throws Exception {
         return commentService.addComment(commentVO);
+    }
+
+    /**
+     * 传过来的是一个id数组
+     *
+     * @param hashMap
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/Comment/delete")
+    public Result delete(@RequestBody HashMap hashMap) {
+        List<Integer> ids = (List<Integer>) hashMap.get("ids");
+        return commentService.deleteCommentByIds(ids);
     }
 
     /**

@@ -71,7 +71,7 @@
             <at-button confirmText="确定删除此账号?" size="mini" type="warning"
                        @click="deleteEmployee(scope.row)">删除
             </at-button>
-            <el-dropdown size="mini" split-button type="info" @command="handleCommand($event, scope.row.id)"
+            <el-dropdown size="mini" split-button type="info" @command="handleCommand($event, scope.row.id,scope.row.role)"
                          style="margin-left: 5px">
               更多操作
               <el-dropdown-menu slot="dropdown">
@@ -202,11 +202,11 @@
           query: this.searchForm
         });
       },
-      handleCommand(command, id) {
+      handleCommand(command, id,role) {
         if (command === 'showOrders') {
           this.showOrders(id);
         } else if (command === 'showComment') {
-          this.showComment(id);
+          this.showComment(id,role);
         } else if (command === 'moreInfo') {
           this.showMoreInfo(id);
         }
@@ -218,11 +218,11 @@
           query: {eid: id}
         });
       },
-      showComment(id) {
+      showComment(id,role) {
         //跳转到评论页面
         this.$router.push({
-          path: "/manager/comment",
-          query: {id: id}
+          path: "/manager/myComment",
+          query: {eid: id,role: role}
         });
       },
       showMoreInfo(id) {

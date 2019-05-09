@@ -146,6 +146,11 @@
 	    <include refid="_order"/>
     </select>
 
+    <select id="listCommentWithComment" resultMap="commentMapperVo" parameterType="CommentVO">
+        SELECT * FROM `comment` WHERE `comment`.`comment` IS NOT NULL
+
+    </select>
+
     <select id="listCommentWithCommentEmployer" resultMap="commentMapperVo" parameterType="CommentVO">
                 SELECT
         `comment`.id,

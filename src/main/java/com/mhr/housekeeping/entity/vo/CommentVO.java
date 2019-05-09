@@ -161,4 +161,11 @@ public class CommentVO extends Query implements Serializable {
                 ", createTime=" + createTime +
                 '}';
     }
+
+    public CommentVO() {
+    }
+
+    public CommentVO(Integer id) {
+        this.id = id;
+    }
 }

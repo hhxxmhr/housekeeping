@@ -25,7 +25,7 @@
       <div v-for="item in info" :key="item.id" class="meal-card">
         <el-card :body-style="{ padding: '0px' }">
           <img :src="'http://localhost:8888/'+item.photo" class="image" v-if="item.photo">
-          <img src="../../../src/assets/xiao.jpg" class="image" v-else>
+          <img src="../../../src/assets/default.jpg" class="image" v-else>
           <div class="time" style="padding: 14px;">
             <p style="text-align: center;margin-top: -5px;color: black">{{item.name|ellipsis}}
               <el-button type="text" class="button" style="margin-left: 10px" @click="showDialogInfo(item)">详细资料

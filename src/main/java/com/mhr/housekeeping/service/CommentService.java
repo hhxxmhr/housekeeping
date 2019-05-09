@@ -4,6 +4,8 @@ package com.mhr.housekeeping.service;
 import com.mhr.housekeeping.entity.vo.CommentVO;
 import com.mhr.housekeeping.utils.Result;
 
+import java.util.List;
+
 /**
  * <br/>
  * Created by min on 2019/05/07
@@ -23,4 +25,6 @@ public interface CommentService {
 	Result countComment(CommentVO commentVO) throws Exception;
 	
 	Result deleteComment(CommentVO commentVO) throws Exception;
+
+	Result deleteCommentByIds(List<Integer> ids);
 }
