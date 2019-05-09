@@ -27,7 +27,11 @@
         <el-table-column prop="username" align="center" label="账号"></el-table-column>
         <el-table-column prop="password" align="center" label="密码"></el-table-column>
         <el-table-column prop="orderCount" align="center" label="有效订单"></el-table-column>
-        <el-table-column prop="praise" align="center" label="好评率"></el-table-column>
+        <el-table-column prop="praise" align="center" label="好评率">
+          <template slot-scope="scope">
+            {{scope.row.totalComment?(scope.row.goodComment/(scope.row.totalComment)*100).toFixed(2):0}}%
+          </template>
+        </el-table-column>
         <el-table-column prop="createTime" align="center" label="创建时间" width="180px">
           <template slot-scope="scope">
             {{$formatTime(scope.row.createTime)}}

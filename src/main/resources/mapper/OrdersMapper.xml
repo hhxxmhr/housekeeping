@@ -418,8 +418,19 @@
         WHERE state=#{state} and employee_id= #{employeeId} and rate &gt; 2
     </select>
 
+    <select id="countGoodOrders2" resultType="java.lang.Integer" parameterType="OrdersVO">
+                SELECT count(*)
+        FROM
+        orders
+        WHERE state=#{state} and employer_id= #{employerId} and rate &gt; 2
+    </select>
+
     <select id="countOrdersByEmployeeId" resultType="java.lang.Integer" parameterType="UserVO">
         SELECT COUNT(*) FROM orders WHERE employee_id = #{id} and state in (3,4)
+    </select>
+
+    <select id="countOrdersByEmployerId" resultType="java.lang.Integer" parameterType="UserVO">
+        SELECT COUNT(*) FROM orders WHERE employer_id = #{id} and state in (3,4)
     </select>
 
     <delete id="deleteOrders" parameterType="OrdersVO">

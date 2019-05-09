@@ -204,18 +204,32 @@ public class UserServiceImpl implements UserService {
                 List<ServiceDO> serviceByUserId = serviceMapper.findServiceByUserId(it.getId());
                 it.setServices(serviceByUserId);
                 //根据员工id查询完成的订单数
-                Integer orderCount = ordersMapper.countOrdersByEmployeeId(it);
-                it.setOrderCount(orderCount);
-                //计算此员工的好评率
-                // 1、这个员工一共有几条带评论的订单数 2、 这总数里面有几条是好评的  3、计算
-                OrdersVO orderVO = new OrdersVO();
-                orderVO.setState(4);
-                orderVO.setEmployeeId(it.getId());
-                Integer totalComment = ordersMapper.countOrders(orderVO);
-                Integer goodComment = ordersMapper.countGoodOrders(orderVO);
-                it.setTotalComment(totalComment);
-                it.setGoodComment(goodComment);
-                System.out.println(goodComment);
+                if (it.getRole()==200){
+                    Integer orderCount = ordersMapper.countOrdersByEmployeeId(it);
+                    it.setOrderCount(orderCount);
+                    //计算此员工的好评率
+                    // 1、这个员工一共有几条带评论的订单数 2、 这总数里面有几条是好评的  3、计算
+                    OrdersVO orderVO = new OrdersVO();
+                    orderVO.setState(4);
+                    orderVO.setEmployeeId(it.getId());
+                    Integer totalComment = ordersMapper.countOrders(orderVO);
+                    Integer goodComment = ordersMapper.countGoodOrders(orderVO);
+                    it.setTotalComment(totalComment);
+                    it.setGoodComment(goodComment);
+                }else if (it.getRole()==300){
+                    Integer orderCount = ordersMapper.countOrdersByEmployerId(it);
+                    it.setOrderCount(orderCount);//有效的订单数  状态3/4
+                    //计算此员工的好评率
+                    // 1、这个员工一共有几条带评论的订单数 2、 这总数里面有几条是好评的  3、计算
+                    OrdersVO orderVO = new OrdersVO();
+                    orderVO.setState(4);
+                    orderVO.setEmployerId(it.getId());
+                    Integer totalComment = ordersMapper.countOrders(orderVO);//评论过的订单数 状态4
+                    Integer goodComment = ordersMapper.countGoodOrders2(orderVO);
+                    it.setTotalComment(totalComment);
+                    it.setGoodComment(goodComment);
+                }
+
             });
         }
     }
