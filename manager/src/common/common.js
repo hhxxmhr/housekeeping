@@ -114,6 +114,16 @@ Vue.prototype.$formatTime = function (inputTime) {
   return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
 };
 
+Vue.prototype.$formatTimeDay = function (inputTime) {
+  let date = new Date(inputTime * 1000);
+  let y = date.getFullYear();
+  let m = date.getMonth() + 1;
+  m = m < 10 ? ('0' + m) : m;
+  let d = date.getDate();
+  d = d < 10 ? ('0' + d) : d;
+  return y + '-' + m + '-' + d  ;
+};
+
 Vue.prototype.$formatTimeXs = function (inputTime) {
   let date = new Date(inputTime * 1000);
   let m = date.getMonth() + 1;

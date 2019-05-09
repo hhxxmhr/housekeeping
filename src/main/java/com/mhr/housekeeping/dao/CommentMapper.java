@@ -19,7 +19,7 @@ public interface CommentMapper {
 
     CommentDO findDetailComment(CommentVO commentVO);
 
-    List<CommentDO> listComment(CommentVO commentVO);
+    List<CommentVO> listComment(CommentVO commentVO);
 
     List<CommentDO> listCommentPage(CommentVO commentVO);
 
@@ -28,4 +28,8 @@ public interface CommentMapper {
     Integer deleteComment(CommentVO commentVO);
 
     CommentDO findCommentByOrder(Integer id);
+
+    List<CommentVO> listCommentWithCommentEmployee(CommentVO commentVO);
+
+    List<CommentVO> listCommentWithCommentEmployer(CommentVO commentVO);
 }

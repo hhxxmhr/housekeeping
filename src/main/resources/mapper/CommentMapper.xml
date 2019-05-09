@@ -12,6 +12,15 @@
         <result property="createTime" column="create_time"/>
 	</resultMap>
 
+    <resultMap id="commentMapperVo" type="CommentVO">
+        <result property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="comment" column="comment"/>
+        <result property="rate" column="rate"/>
+        <result property="photo" column="photo"/>
+        <result property="createTime" column="create_time"/>
+	</resultMap>
+
     <sql id="_table">
         comment
 	</sql>
@@ -129,12 +138,41 @@
         <include refid="_primaryKey_condition"/>
     </select>
 
-    <select id="listComment" resultMap="commentMapper" parameterType="CommentVO">
+    <select id="listComment" resultMap="commentMapperVo" parameterType="CommentVO">
         SELECT
         <include refid="_fields"/>
         FROM <include refid="_table"/>
         <include refid="_condition"/>
 	    <include refid="_order"/>
+    </select>
+
+    <select id="listCommentWithCommentEmployer" resultMap="commentMapperVo" parameterType="CommentVO">
+                SELECT
+        `comment`.id,
+        `comment`.order_id,
+        `comment`.`comment`,
+        `comment`.rate,
+        `comment`.photo,
+        `comment`.create_time
+        FROM
+        `comment`
+        INNER JOIN orders ON `comment`.order_id = orders.id
+        WHERE `comment`.`comment` IS NOT NULL AND orders.employer_id = #{eid}
+
+    </select>
+    <select id="listCommentWithCommentEmployee" resultMap="commentMapperVo" parameterType="CommentVO">
+                SELECT
+        `comment`.id,
+        `comment`.order_id,
+        `comment`.`comment`,
+        `comment`.rate,
+        `comment`.photo,
+        `comment`.create_time
+        FROM
+        `comment`
+        INNER JOIN orders ON `comment`.order_id = orders.id
+        WHERE `comment`.`comment` IS NOT NULL AND orders.employee_id = #{eid}
+
     </select>
 
     <select id="findCommentByOrder" resultMap="commentMapper" parameterType="java.lang.Integer">

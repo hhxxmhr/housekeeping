@@ -15,7 +15,21 @@ public class CommentController {
     CommentService commentService;
 
     @RequestMapping("/Comment/add")
-    public Result editInfo(@RequestBody CommentVO commentVO ) throws Exception {
+    public Result add(@RequestBody CommentVO commentVO) throws Exception {
         return commentService.addComment(commentVO);
     }
+
+    /**
+     * 根据登陆者的id,查询其做出的所有评论的详细信息
+     *
+     * @param commentVO
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/Comment/getAllDetail")
+    public Result getAllDetail(@RequestBody CommentVO commentVO) throws Exception {
+        return commentService.listComment(commentVO);
+    }
+
+
 }
