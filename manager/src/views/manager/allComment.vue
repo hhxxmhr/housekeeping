@@ -34,7 +34,6 @@
                   <img v-if="comment.photo" v-for="(photo,index) in getPhoto(comment.photo)" :key="index"
                        :src="'http://localhost:8888/'+photo" alt="" class="commentPhoto">
                   <el-checkbox :label="comment.id" style="position: absolute;right: 0px;bottom: 0px"></el-checkbox>
-
                 </el-card>
               </el-timeline-item>
             </el-timeline>
@@ -53,10 +52,7 @@
     name: "allComment",
     data() {
       return {
-        isIndeterminate: true,
-        checkAll: false,
         checkedComments: [],
-
         comments: [],
         commentsWithPhoto: [],//带图片的数据
         activeName: 'first',
@@ -83,16 +79,6 @@
       //将数据库里面的图片字符串以逗号分隔
       getPhoto(photo) {
         return (photo || "").split(",");
-      },
-      //全选
-      handleCheckAllChange(val) {
-        this.checkedComments = val ? this.comments : [];
-        this.isIndeterminate = false;
-      },
-      handleCheckedCommentsChange(value) {
-        let checkedCount = value.length;
-        this.checkAll = checkedCount === this.comments.length;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < this.comments.length;
       },
       //删除评论
       async deleteComment() {
