@@ -46,7 +46,11 @@
 
         </el-table-column>
         <el-table-column prop="orderCount" align="center" label="有效订单"></el-table-column>
-        <el-table-column prop="praise" align="center" label="好评率"></el-table-column>
+        <el-table-column prop="praise" align="center" label="好评率">
+          <template slot-scope="scope">
+            {{scope.row.totalComment?(scope.row.goodComment/scope.row.totalComment)*100:0}}%
+          </template>
+        </el-table-column>
         <el-table-column prop="createTime" align="center" label="创建时间" width="180px">
           <template slot-scope="scope">
             {{$formatTime(scope.row.createTime)}}
@@ -194,6 +198,7 @@
       async init() {
         let res = await this.$api('getAll', this.searchForm);
         this.employeeList = res.list;
+        console.log(this.employeeList)
       },
       async search() {
         //携带查询的参数再次查询一下列表
