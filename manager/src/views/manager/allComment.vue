@@ -15,9 +15,9 @@
             </el-tabs>
             <div>
               <el-button type="text" style="float: right;margin-top: -50px">共{{comments.length}}条评论</el-button>
-              <el-button type="text" @click="deleteComment()" style="float: right;margin-right:100px;margin-top: -50px">
+              <at-button type="text" confirmText="确定要删除选中评论？" @click="deleteComment()" style="float: right;margin-right:100px;margin-top: -50px">
                 删除评论
-              </el-button>
+              </at-button>
             </div>
           </div>
         </div>

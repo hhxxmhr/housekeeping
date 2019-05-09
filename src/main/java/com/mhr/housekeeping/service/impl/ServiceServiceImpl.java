@@ -49,16 +49,11 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public Result updateService(ServiceVO serviceVO) throws Exception {
-        ServiceVO vo = serviceMapper.findServiceByName(serviceVO);
-        if (vo != null) {
-            return Result.getFailure("该服务名称已存在,请勿重复编辑");
-        } else {
-            Integer count = serviceMapper.updateService(serviceVO);
-            if (count > 0) {
-                return Result.getSuccess("操作成功");
-            }
-            return Result.getFailure("操作失败");
+        Integer count = serviceMapper.updateService(serviceVO);
+        if (count > 0) {
+            return Result.getSuccess("操作成功");
         }
+        return Result.getFailure("操作失败");
     }
 
     @Override
