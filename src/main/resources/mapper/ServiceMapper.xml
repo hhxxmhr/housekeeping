@@ -10,6 +10,17 @@
         <result property="parent" column="parent"/>
     </resultMap>
 
+    <resultMap id="serviceMapperMore" type="ServiceVO">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="price" column="price"/>
+        <result property="parent" column="parent"/>
+        <result property="employeeId" column="employee_id"/>
+        <result property="employerId" column="employer_id"/>
+        <result property="orderPrice" column="order_price"/>
+        <result property="rate" column="rate"/>
+    </resultMap>
+
     <sql id="_table">
         service
 	</sql>
@@ -186,5 +197,24 @@
         DELETE FROM service where id = #{id} or parent = #{id}
     </delete>
 
+    <select id="serviceStatic" parameterType="java.lang.Integer" resultMap="serviceMapperMore">
+        SELECT
+        service.id,
+        service.`name`,
+        service.price,
+        service.parent,
+        orders.employee_id,
+        orders.employer_id,
+        orders.order_price,
+        orders.rate
+        FROM
+        service
+        INNER JOIN orders ON orders.service_id = service.id
+        WHERE
+        orders.end_time BETWEEN #{startTime} AND #{endTime}
+        <if test="serviceId!=null">
+            AND orders.service_id = #{serviceId}
+        </if>
+    </select>
 
 </mapper>

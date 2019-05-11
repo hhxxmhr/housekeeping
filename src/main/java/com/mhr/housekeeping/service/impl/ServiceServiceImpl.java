@@ -1,10 +1,13 @@
 package com.mhr.housekeeping.service.impl;
 
 import com.mhr.housekeeping.dao.ServiceMapper;
+import com.mhr.housekeeping.dao.UserMapper;
 import com.mhr.housekeeping.entity.ServiceDO;
+import com.mhr.housekeeping.entity.UserDO;
 import com.mhr.housekeeping.entity.UserServiceDO;
 import com.mhr.housekeeping.entity.vo.ServiceVO;
 import com.mhr.housekeeping.entity.vo.UserServiceVO;
+import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.service.ServiceService;
 import com.mhr.housekeeping.service.UserServiceService;
 import com.mhr.housekeeping.utils.DataUtils;
@@ -32,6 +35,9 @@ public class ServiceServiceImpl implements ServiceService {
     private ServiceMapper serviceMapper;
     @Resource
     private UserServiceService userServiceService;
+    @Resource
+    private UserMapper userMapper;
+    ;
 
     @Override
     public Result addService(ServiceVO serviceVO) throws Exception {
@@ -100,7 +106,6 @@ public class ServiceServiceImpl implements ServiceService {
         for (int i = 0; i < vos.size(); i++) {
             ids.add(vos.get(i).getId());
         }
-        System.out.println(ids);
         for (int i = 0; i < ids.size(); i++) {
             UserServiceVO userServiceVO = new UserServiceVO();
             userServiceVO.setServiceId(ids.get(i));
@@ -149,6 +154,32 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public ServiceDO findServiceByOrder(Integer orderId) {
         return serviceMapper.findServiceByOrder(orderId);
+    }
+
+    /**
+     * 查询订单与服务，并且统计服务
+     *
+     * @param serviceId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @Override
+    public List<ServiceVO> serviceStatic(Integer serviceId, Integer startTime, Integer endTime) {
+        List<ServiceVO> vos = serviceMapper.serviceStatic(serviceId, startTime, endTime);
+        if (vos != null && vos.size() > 0) {
+            vos.forEach(serviceVO -> {
+                //根据人员id查询账号
+                UserDO employee = userMapper.findDetailUser(new UserVO(serviceVO.getEmployeeId()));
+                UserDO employer = userMapper.findDetailUser(new UserVO(serviceVO.getEmployerId()));
+                serviceVO.setEmployeeName(employee.getUsername());
+                serviceVO.setEmployerName(employer.getUsername());
+            });
+            return vos;
+        }
+
+
+        return null;
     }
 
 

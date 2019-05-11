@@ -121,6 +121,7 @@ public class OrdersServiceImpl implements OrdersService {
                     voList.forEach(vo -> {
                         UserDO detailUser = userMapper.findDetailUser(new UserVO(vo.getEmployerId()));
                         vo.setEmployerName(detailUser.getName());
+                        vo.setEmployerPhone(detailUser.getPhone());
                         //根据订单id获取评论信息
                         CommentDO commentDO = commentMapper.findCommentByOrder(vo.getId());
                         if (commentDO != null) {
@@ -137,6 +138,7 @@ public class OrdersServiceImpl implements OrdersService {
                         //获取雇员信息
                         UserDO detailUser = userMapper.findDetailUser(new UserVO(vo.getEmployeeId()));
                         vo.setEmployeeName(detailUser.getName());
+                        vo.setEmployeePhone(detailUser.getPhone());
                         //获取等级信息
                         RankDO rankDO = rankMapper.findRankByOrder(vo.getEmployeeId(), vo.getServiceId());
                         vo.setRankName(rankDO.getName());
@@ -170,6 +172,22 @@ public class OrdersServiceImpl implements OrdersService {
             return Result.getSuccess("删除成功");
         }
         return Result.getFailure("删除失败");
+    }
+
+    @Override
+    public Integer countOrdersByTime(Long timeItem, Long time2,Integer serviceId) {
+        return ordersMapper.countOrdersByTime(timeItem, time2,serviceId);
+    }
+
+    /**
+     * 累计每天的销售额
+     *
+     * @param l
+     * @return
+     */
+    @Override
+    public Integer countMoneyByTime(long l,long time,Integer serviceId) {
+        return ordersMapper.countMoneyByTime(l,time,serviceId);
     }
 
 

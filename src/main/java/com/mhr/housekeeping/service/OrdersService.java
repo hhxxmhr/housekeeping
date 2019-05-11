@@ -11,18 +11,21 @@ import com.mhr.housekeeping.utils.Result;
  */
 public interface OrdersService {
 
-	Result addOrders(OrdersVO ordersVO) throws Exception;
+    Result addOrders(OrdersVO ordersVO) throws Exception;
 
-	Result updateOrders(OrdersVO ordersVO) throws Exception;
-	
-	Result findDetailOrders(OrdersVO ordersVO) throws Exception;
+    Result updateOrders(OrdersVO ordersVO) throws Exception;
 
-	PageInfo<OrdersVO> listOrders(OrdersVO ordersVO) throws Exception;
+    Result findDetailOrders(OrdersVO ordersVO) throws Exception;
+
+    PageInfo<OrdersVO> listOrders(OrdersVO ordersVO) throws Exception;
 
     Result listOrdersPage(OrdersVO ordersVO) throws Exception;
-	
-	Result countOrders(OrdersVO ordersVO) throws Exception;
-	
-	Result deleteOrders(OrdersVO ordersVO) throws Exception;
 
+    Result countOrders(OrdersVO ordersVO) throws Exception;
+
+    Result deleteOrders(OrdersVO ordersVO) throws Exception;
+
+    Integer countOrdersByTime(Long timeItem, Long time2, Integer serviceId);
+
+    Integer countMoneyByTime(long l, long time, Integer serviceId);
 }

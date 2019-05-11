@@ -41,8 +41,10 @@ public class OrdersVO extends Query implements Serializable {
     private Integer role;
     private Integer userId;
     private String employerName;
+    private String employerPhone;
     private String employerUsername;
     private String employeeName;
+    private String employeePhone;
     private String employeeUsername;
     private String serviceName;
     private Integer servicePrice;
@@ -57,6 +59,22 @@ public class OrdersVO extends Query implements Serializable {
     private Integer rankId;
     private String rankName;
     private Integer rankMoney;
+
+    public String getEmployerPhone() {
+        return employerPhone;
+    }
+
+    public void setEmployerPhone(String employerPhone) {
+        this.employerPhone = employerPhone;
+    }
+
+    public String getEmployeePhone() {
+        return employeePhone;
+    }
+
+    public void setEmployeePhone(String employeePhone) {
+        this.employeePhone = employeePhone;
+    }
 
     public String getEmployerUsername() {
         return employerUsername;

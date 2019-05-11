@@ -2,31 +2,27 @@
   <div>
     <el-row class="margin-bottom">
       <el-form :inline="true" :model="searchParam">
-        <el-form-item label="rosId">
-          <el-input v-model="searchParam.rosId" placeholder="请输入rosId" style="width: 120px"></el-input>
+        <el-form-item label="服务ID">
+          <el-input v-model="searchParam.serviceId" placeholder="请输入服务ID" style="width: 120px"></el-input>
         </el-form-item>
+
         <el-form-item label="开始时间">
           <el-date-picker
-            style="width: 195px"
+            style="width: 200px"
             v-model="searchParam.startTime"
-            type="datetime"
+            type="date"
             value-format="timestamp"
             placeholder="选择时间">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="结束时间">
           <el-date-picker
-            style="width: 195px"
+            style="width: 200px"
             v-model="searchParam.endTime"
             value-format="timestamp"
-            type="datetime"
+            type="date"
             placeholder="选择时间">
           </el-date-picker>
-        </el-form-item>
-        <el-form-item label="时间间隔">
-          <el-input v-model="searchParam.intervals" style="width: 120px">
-            <i slot="suffix">秒</i>
-          </el-input>
         </el-form-item>
         <el-button @click="search"
                    icon="el-icon-search"
@@ -42,24 +38,22 @@
       <span class="barTitle">服务详情</span>
     </div>
     <div style="margin-top: 6%">
-      <el-table :data="datas"
+      <el-table :data="services"
                 border
                 v-loading="loading">
-        <el-table-column prop="rosId" label="ID" align="center" width="80px"></el-table-column>
-        <el-table-column label="地区" align="center">
+        <el-table-column prop="id" label="服务ID" align="center" width="80px"></el-table-column>
+        <el-table-column prop="name" label="服务" align="center"></el-table-column>
+        <el-table-column prop="price" label="价格/次" align="center"></el-table-column>
+        <el-table-column prop="orderPrice" label="订单价" align="center"></el-table-column>
+        <el-table-column prop="employeeName" label="雇员" align="center"></el-table-column>
+        <el-table-column prop="employerName" label="雇主" align="center"></el-table-column>
+        <el-table-column prop="rate" label="评价/星" align="center">
           <template slot-scope="scope">
-            {{scope.row.prov+"-"+scope.row.city}}
+            {{scope.row.rate!=null?scope.row.rate:'待评'}}
           </template>
         </el-table-column>
-        <el-table-column prop="domain" label="服务" align="center"></el-table-column>
-        <el-table-column prop="ipTotal" label="IP总量" align="center" sortable></el-table-column>
-        <el-table-column prop="ipIndependent" label="独立IP总量" align="center" sortable></el-table-column>
-        <el-table-column prop="ipRepeatRate" label="IP重复率" align="center" sortable></el-table-column>
-        <el-table-column prop="AdslRepeatRate" label="拨号重复率" align="center" sortable></el-table-column>
-        <el-table-column prop="AdslFailRate" label="拨号失败率" align="center" sortable></el-table-column>
       </el-table>
     </div>
-
     <div style="width:100%;height: 100px;float: left">
     </div>
   </div>
@@ -73,10 +67,9 @@
       return {
         loading: true,
         searchParam: {
-          rosId: null,
-          startTime: this.timestamp() * 1000 - (1000 * 60 * 60 * 24),
-          endTime: null,
-          intervals: 3600,
+          serviceId: null,
+          startTime: this.timestamp() * 1000 - (1000 * 60 * 60 * 24) * 6,
+          endTime: this.timestamp() * 1000,
         },
         IPNotRepeatCount: 0,
         IPtotal: 0,
@@ -87,8 +80,10 @@
         dateListChange: [],
         ipRepeatRateList: [],
         failRateList: [],
-        dateList: [],
-        datas: [],
+        timeList: [],
+        serviceList: [],
+        moneyList: [],
+        services: [],
       }
     },
     methods: {
@@ -98,43 +93,20 @@
           query: this.searchParam
         });
       },
-      async getIpStatics() {
+      async getServiceSta() {
         this.loading = true;
-        let res = await this.$api("Statistic.IPChart", {
-          rosId: this.searchParam.rosId,
-          interval: this.searchParam.intervals,
-          start: this.searchParam.startTime / 1000,
-          end: this.searchParam.endTime ? this.searchParam.endTime / 1000 : this.timestamp()
+        this.searchParam.startTime = new Date(this.searchParam.startTime).setHours(0, 0, 0, 0);// 当天0点
+        this.searchParam.endTime = new Date(this.searchParam.endTime).setHours(23, 59, 59, 0);//当天23；59
+        let res = await this.$api("Static/serviceChart", {
+          serviceId: this.searchParam.serviceId,
+          startTime: this.searchParam.startTime,
+          endTime: this.searchParam.endTime,
         });
         this.loading = false;
-        this.IPtotal = res.IPtotal;//ip总量
-        this.IPNotRepeatCount = res.IPNotRepeatCount;//独立ip总量
-        this.RepeatRate = Math.round(res.RepeatRate * Math.pow(10, 2)) / Math.pow(10, 2);//拨号重复率
-        this.dateList = res.dateList;
-        if (this.dateList.length == 0) {
-          this.$message({
-            type: 'warning',
-            message: '请检查搜索条件'
-          });
-          return
-        }
-        this.dateListChange = [];
-        //将时间戳转成日期时间
-        this.dateList.forEach(i => {
-          let date = new Date(i * 1000);
-          let Y = date.getFullYear() + '-';
-          let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-          let D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
-          let h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
-          let m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
-          let s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
-          this.dateListChange.push(Y + M + D + h + m + s);
-        });
-        this.independentList = res.independentList;
-        this.repeatRateList = res.repeatRateList;
-        this.totalList = res.totalList;
-        this.ipRepeatRateList = res.ipRepeatRateList;//ip重复率
-        this.failRateList = res.failRateList;//拨号失败率
+        console.log(res);
+        this.timeList = res.timeList;
+        this.serviceList = res.serviceList;
+        this.moneyList = res.moneyList;
         Highcharts.chart('serviceContainer', {
           credits: {//去除生成图上面的网址logo
             enabled: false
@@ -143,42 +115,42 @@
             zoomType: 'xy'
           },
           title: {
-            text: 'IP统计'
+            text: '服务统计'
           },
-          subtitle: {
-            text: 'IP总量：' + this.IPtotal + "   独立IP总量：" + this.IPNotRepeatCount + "   拨号重复率: " + this.RepeatRate + "%",
-            align: 'center'
+          subtitle: {//小标题
           },
           xAxis: [{
-            categories: this.dateListChange,
+            categories: this.timeList,
+            crosshair: true
           }],
           yAxis: [{ // Primary yAxis
             labels: {
-              format: '{value}个',
+              format: '{value}单',
               style: {
                 color: Highcharts.getOptions().colors[1]
               }
             },
             title: {
-              text: null,
+              text: "成单数量",
               style: {
                 color: Highcharts.getOptions().colors[1]
               }
             },
-            tickAmount: 5,
+            allowDecimals: false
+            // tickAmount: 5,
           }, { // Secondary yAxis
             title: {
-              text: null,
+              text: "营业额",
               style: {
-                color: '#43CD80'
+                color: Highcharts.getOptions().colors[0]
               }
             },
-            tickAmount: 5,
-            max: 100,
+            allowDecimals: false,
+            // tickAmount: 5,
             labels: {
-              format: '{value} %',
+              format: '{value} 元',
               style: {
-                color: '#43CD80'
+                color: Highcharts.getOptions().colors[0]
               }
             },
             opposite: true
@@ -191,74 +163,52 @@
             backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || 'rgba(255,255,255,0.25)'
           },
           series: [{
-            name: '总量',
+            name: '服务成单量',
             type: 'column',
-            data: this.totalList,
+            data: this.serviceList,
             tooltip: {
-              valueSuffix: ''
+              valueSuffix: '单'
             },
           }, {
-            name: '独立总量',
-            type: 'column',
-            data: this.independentList,
+            name: '每日营业额',
+            type: 'spline',
+            yAxis: 1,
+            data: this.moneyList,
             tooltip: {
-              valueSuffix: ''
+              valueSuffix: '元'
             },
-          }, {
-            name: '重复率',
-            yAxis: 1,
-            type: 'spline',
-            data: this.repeatRateList,
-            tooltip: {
-              valueSuffix: '%'
-            }
-          }, {
-            name: 'ip重复率',
-            yAxis: 1,
-            type: 'spline',
-            data: this.ipRepeatRateList,
-            tooltip: {
-              valueSuffix: '%'
-            }
-          }, {
-            name: '拨号失败率',
-            yAxis: 1,
-            type: 'spline',
-            data: this.failRateList,
-            tooltip: {
-              valueSuffix: '%'
-            }
           }]
         });
       },
       initQuery() {
         Object.assign(this.searchParam, this.$route.query);
-        this.searchParam.username = this.searchParam.username ? this.searchParam.username : null;
-        this.searchParam.rosId = this.searchParam.rosId ? parseInt(this.searchParam.rosId) : null;
-        this.searchParam.intervals = this.searchParam.intervals != null ? parseInt(this.searchParam.intervals) : null;
+        this.searchParam.serviceId = this.searchParam.serviceId ? parseInt(this.searchParam.serviceId) : null;
+        this.searchParam.startTime = this.searchParam.startTime ? parseInt(this.searchParam.startTime) : null;
+        this.searchParam.endTime = this.searchParam.endTime ? parseInt(this.searchParam.endTime) : null;
       },
-      async getIpDetail() {
-        this.datas = await this.$api('Statistic.IPDetail', {
-          rosId: this.searchParam.rosId,
-          start: this.searchParam.startTime / 1000,
-          end: this.searchParam.endTime === null ? this.timestamp() : this.searchParam.endTime / 1000
+      async getServiceDetail() {
+        this.services = await this.$api('Static/serviceDetail', {
+          serviceId: this.searchParam.serviceId,
+          startTime: this.searchParam.startTime / 1000,
+          endTime: this.searchParam.endTime / 1000
         });
+        console.log(this.services)
       },
     },
     async created() {
       //初始化查询条件
       this.initQuery();
       //获取当前拨号统计
-      await this.getIpStatics();
-      await this.getIpDetail();
+      await this.getServiceSta();
+      await this.getServiceDetail();
     },
     watch: {
       async '$route'() {
         //初始化查询条件
         this.initQuery();
         //获取当前拨号统计
-        this.getIpStatics();
-        await this.getIpDetail();
+        this.getServiceSta();
+        await this.getServiceDetail();
       }
     },
   }

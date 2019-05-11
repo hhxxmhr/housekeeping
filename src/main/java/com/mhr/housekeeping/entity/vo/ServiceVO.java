@@ -1,5 +1,6 @@
 package com.mhr.housekeeping.entity.vo;
 
+
 import java.io.Serializable;
 
 /**
@@ -10,6 +11,51 @@ public class ServiceVO extends Query implements Serializable {
     private static final long serialVersionUID = -8722208901994957538L;
 
     private Integer employeeId;
+    private Integer employerId;
+    private Integer orderPrice;
+    private Integer rate;
+    private String employerName;
+    private String employeeName;
+
+    public Integer getOrderPrice() {
+        return orderPrice;
+    }
+
+    public void setOrderPrice(Integer orderPrice) {
+        this.orderPrice = orderPrice;
+    }
+
+    public Integer getRate() {
+        return rate;
+    }
+
+    public void setRate(Integer rate) {
+        this.rate = rate;
+    }
+
+    public Integer getEmployerId() {
+        return employerId;
+    }
+
+    public void setEmployerId(Integer employerId) {
+        this.employerId = employerId;
+    }
+
+    public String getEmployerName() {
+        return employerName;
+    }
+
+    public void setEmployerName(String employerName) {
+        this.employerName = employerName;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
 
     public Integer getEmployeeId() {
         return employeeId;

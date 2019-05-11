@@ -411,6 +411,7 @@
         <include refid="_table"/>
         <include refid="_condition"/>
     </select>
+
     <select id="countGoodOrders" resultType="java.lang.Integer" parameterType="OrdersVO">
                 SELECT count(*)
         FROM
@@ -423,6 +424,20 @@
         FROM
         orders
         WHERE state=#{state} and employer_id= #{employerId} and rate &gt; 2
+    </select>
+
+    <select id="countOrdersByTime" resultType="java.lang.Integer" parameterType="java.lang.Long">
+        SELECT count(*) from orders WHERE orders.state in (3,4) and orders.end_time BETWEEN #{timeItem} and #{time2}
+        <if test="serviceId!=null">
+            AND orders.service_id = #{serviceId}
+        </if>
+    </select>
+
+    <select id="countMoneyByTime" resultType="java.lang.Integer" parameterType="java.lang.Long">
+        SELECT sum(order_price) from orders  WHERE orders.state in (3,4) and orders.end_time BETWEEN #{l} and #{time}
+        <if test="serviceId!=null">
+            AND orders.service_id = #{serviceId}
+        </if>
     </select>
 
     <select id="countOrdersByEmployeeId" resultType="java.lang.Integer" parameterType="UserVO">

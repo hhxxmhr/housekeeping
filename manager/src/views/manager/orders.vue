@@ -23,7 +23,9 @@
         <el-table-column prop="employeeUsername" align="center" label="雇员账号"
                          v-if="searchForm.role===100"></el-table-column>
         <el-table-column prop="employeeName" align="center" label="服务人员" v-if="searchForm.role===300"></el-table-column>
+        <el-table-column prop="employeePhone" align="center" label="联系电话" v-if="searchForm.role===300"></el-table-column>
         <el-table-column prop="employerName" align="center" label="雇主名字" v-if="searchForm.role===200"></el-table-column>
+        <el-table-column prop="employerPhone" align="center" label="联系电话" v-if="searchForm.role===200"></el-table-column>
         <el-table-column prop="serviceName" align="center" label="服务类型"></el-table-column>
         <el-table-column prop="rankName" align="center" label="服务等级"></el-table-column>
         <el-table-column prop="tip" align="center" label="服务备注" v-if="searchForm.role!==100">
@@ -32,7 +34,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="address" align="center" label="服务地址" width="165px"></el-table-column>
-        <el-table-column prop="orderPrice" align="center" label="订单价格" width="110px" sortable></el-table-column>
+        <el-table-column prop="orderPrice" align="center" label="订单价格" width="90px"></el-table-column>
         <el-table-column prop="createTime" align="center" label="创建时间" width="160px" sortable>
           <template slot-scope="scope">
             {{$formatTime(scope.row.createTime)}}
@@ -57,7 +59,7 @@
             <div v-if="scope.row.state === 4" style="color:#67C23A;">{{'已评论'}}</div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="120px" align="center">
+        <el-table-column label="操作" width="100px" align="center">
           <template slot-scope="scope">
             <at-button confirmText="确认此订单?" size="mini" type="success"
                        v-if="scope.row.state===0&&searchForm.role===200"
