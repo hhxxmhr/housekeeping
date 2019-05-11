@@ -13,7 +13,7 @@
             <el-tab-pane label="有图评价" name="second" style="margin-left: 45%;"></el-tab-pane>
           </el-tabs>
           <el-button type="primary" plain round size="small" style="float: right;margin-top: -50px"
-                     icon="el-icon-edit" v-if="loginRole!==100"
+                     icon="el-icon-edit" v-if="loginRole===300"
                      @click="writeComment">写评价
           </el-button>
         </div>

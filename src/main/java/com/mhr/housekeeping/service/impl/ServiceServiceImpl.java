@@ -172,13 +172,47 @@ public class ServiceServiceImpl implements ServiceService {
                 //根据人员id查询账号
                 UserDO employee = userMapper.findDetailUser(new UserVO(serviceVO.getEmployeeId()));
                 UserDO employer = userMapper.findDetailUser(new UserVO(serviceVO.getEmployerId()));
-                serviceVO.setEmployeeName(employee.getUsername());
-                serviceVO.setEmployerName(employer.getUsername());
+                serviceVO.setEmployeeUsername(employee.getUsername());
+                serviceVO.setEmployerUsername(employer.getUsername());
+                serviceVO.setEmployerName(employer.getName());
+                serviceVO.setEmployeeName(employee.getName());
             });
             return vos;
         }
+        return null;
+    }
 
+    /**
+     * 查询雇主所有下单的服务
+     *
+     * @param employerId
+     * @return
+     */
+    @Override
+    public List<ServiceDO> getServiceByUserOrder(Integer employerId) {
+        return serviceMapper.getServiceByUserOrder(employerId);
+    }
 
+    @Override
+    public List<ServiceVO> serviceStaticByEid(Integer serviceId, Integer startTime, Integer endTime, Integer eid, Integer role) {
+        List<ServiceVO> vos = new ArrayList<>();
+        if (role == 200) {
+            vos = serviceMapper.serviceStaticByEid(serviceId, startTime, endTime, eid);
+        }else if (role==300){
+            vos = serviceMapper.serviceStaticByEid2(serviceId, startTime, endTime, eid);
+        }
+        if (vos != null && vos.size() > 0) {
+            vos.forEach(serviceVO -> {
+                //根据人员id查询账号
+                UserDO employee = userMapper.findDetailUser(new UserVO(serviceVO.getEmployeeId()));
+                UserDO employer = userMapper.findDetailUser(new UserVO(serviceVO.getEmployerId()));
+                serviceVO.setEmployeeUsername(employee.getUsername());
+                serviceVO.setEmployerUsername(employer.getUsername());
+                serviceVO.setEmployerName(employer.getName());
+                serviceVO.setEmployeeName(employee.getName());
+            });
+            return vos;
+        }
         return null;
     }
 

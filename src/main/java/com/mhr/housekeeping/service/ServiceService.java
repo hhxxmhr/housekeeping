@@ -34,4 +34,8 @@ public interface ServiceService {
     ServiceDO findServiceByOrder(Integer orderId);
 
 	List<ServiceVO> serviceStatic(Integer serviceId, Integer startTime, Integer endTime);
+
+	List<ServiceDO> getServiceByUserOrder(Integer employerId);
+
+	List<ServiceVO> serviceStaticByEid(Integer serviceId, Integer startTime, Integer endTime, Integer eid, Integer role);
 }

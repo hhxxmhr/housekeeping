@@ -42,5 +42,13 @@ public interface OrdersMapper {
 
     Integer countOrdersByTime(Long timeItem, Long time2, Integer serviceId);
 
+    Integer countOrdersByTime2(Long timeItem, Long time2, Integer serviceId, Integer eid);
+
     Integer countMoneyByTime(long l, long time, Integer serviceId);
+
+    Integer countMoneyByTime2(long l, long time, Integer serviceId, Integer eid);
+
+    Integer countOrdersByTime3(Long timeItem, Long time2, Integer serviceId, Integer eid);
+
+    Integer countMoneyByTime3(long l, long time, Integer serviceId, Integer eid);
 }

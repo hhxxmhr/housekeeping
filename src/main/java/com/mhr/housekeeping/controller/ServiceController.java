@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 public class ServiceController {
@@ -26,7 +27,7 @@ public class ServiceController {
     }
 
     @RequestMapping("/Service/getServiceByUserId")
-    public Result getServiceByUserId(@RequestBody HashMap hashMap ) throws Exception {
+    public Result getServiceByUserId(@RequestBody HashMap hashMap) throws Exception {
         Integer employeeId = (Integer) hashMap.get("id");
         Result res = serviceService.findServiceByUserId(employeeId);
         return res;
@@ -56,6 +57,13 @@ public class ServiceController {
     public ServiceDO findServiceByOrder(@RequestBody HashMap hashMap) throws Exception {
         Integer orderId = (Integer) hashMap.get("orderId");
         return serviceService.findServiceByOrder(orderId);
+    }
+
+    @RequestMapping("/Service/getServiceByUserOrder")
+    public List<ServiceDO> getServiceByUserOrder(@RequestBody HashMap hashMap) throws Exception {
+        Integer employerId = (Integer) hashMap.get("employerId");
+        //根据雇主id查询订单--》服务信息
+        return serviceService.getServiceByUserOrder(employerId);
     }
 
 

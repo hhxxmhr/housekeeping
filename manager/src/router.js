@@ -133,12 +133,30 @@ const routes = [
   },
 
   {
-    path: '/', name: '数据统计', component: layout, meta: {icon: 'el-icon-sort', login: true},
+    path: '/', name: '数据统计', roles: [100],component: layout, meta: {icon: 'el-icon-sort', login: true},
     children: [
       {
         path: '/manager/serviceSta',
         name: '服务统计',
         component: () => import('./views/manager/serviceSta'),
+        meta: {login: true}
+      },
+      {
+        path: '/manager/moneySta',
+        name: '资金记录',
+        component: () => import('./views/manager/moneySta'),
+        meta: {login: true}
+      },
+    ]
+  },
+
+  {
+    path: '/', name: '我的统计', roles: [200,300], component: layout, meta: {icon: 'el-icon-sort', login: true},
+    children: [
+      {
+        path: '/employee/myServiceSta',
+        name: '服务统计',
+        component: () => import('./views/employee/myServiceSta'),
         meta: {login: true}
       },
       {

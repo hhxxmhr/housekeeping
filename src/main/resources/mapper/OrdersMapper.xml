@@ -434,9 +434,49 @@
     </select>
 
     <select id="countMoneyByTime" resultType="java.lang.Integer" parameterType="java.lang.Long">
-        SELECT sum(order_price) from orders  WHERE orders.state in (3,4) and orders.end_time BETWEEN #{l} and #{time}
+        SELECT sum(order_price) from orders WHERE orders.state in (3,4) and orders.end_time BETWEEN #{l} and #{time}
         <if test="serviceId!=null">
             AND orders.service_id = #{serviceId}
+        </if>
+    </select>
+
+    <select id="countOrdersByTime2" resultType="java.lang.Integer" parameterType="java.lang.Long">
+        SELECT count(*) from orders WHERE orders.state in (3,4) and orders.end_time BETWEEN #{timeItem} and #{time2}
+        <if test="serviceId!=null">
+            AND orders.service_id = #{serviceId}
+        </if>
+        <if test="eid!=null">
+            AND orders.employee_id = #{eid}
+        </if>
+    </select>
+
+    <select id="countMoneyByTime2" resultType="java.lang.Integer" parameterType="java.lang.Long">
+        SELECT sum(order_price) from orders WHERE orders.state in (3,4) and orders.end_time BETWEEN #{l} and #{time}
+        <if test="serviceId!=null">
+            AND orders.service_id = #{serviceId}
+        </if>
+        <if test="eid!=null">
+            AND orders.employee_id = #{eid}
+        </if>
+    </select>
+
+    <select id="countOrdersByTime3" resultType="java.lang.Integer" parameterType="java.lang.Long">
+        SELECT count(*) from orders WHERE orders.state in (3,4) and orders.end_time BETWEEN #{timeItem} and #{time2}
+        <if test="serviceId!=null">
+            AND orders.service_id = #{serviceId}
+        </if>
+        <if test="eid!=null">
+            AND orders.employer_id = #{eid}
+        </if>
+    </select>
+
+    <select id="countMoneyByTime3" resultType="java.lang.Integer" parameterType="java.lang.Long">
+        SELECT sum(order_price) from orders WHERE orders.state in (3,4) and orders.end_time BETWEEN #{l} and #{time}
+        <if test="serviceId!=null">
+            AND orders.service_id = #{serviceId}
+        </if>
+        <if test="eid!=null">
+            AND orders.employer_id = #{eid}
         </if>
     </select>
 

@@ -1,16 +1,16 @@
 <template>
-  <div class="wrapper">
+  <div style="margin-left: 32%;margin-top: 5%">
     <el-form label-position="right"
              label-width="80px"
              :model="user"
              :rules="rules"
              ref="user">
-      <el-form-item label="原密码"
+      <el-form-item label="原始密码"
                     prop="old_pwd">
         <el-input type="password"
                   v-model="user.old_pwd"></el-input>
       </el-form-item>
-      <el-form-item label="新密码"
+      <el-form-item label="新的密码"
                     prop="new_pwd">
         <el-input type="password"
                   v-model="user.new_pwd"></el-input>
@@ -21,7 +21,7 @@
                   v-model="user.again_pwd"></el-input>
       </el-form-item>
       <el-form-item>
-        <at-button @click="edit_submit" auto-disable-as-loading>确认</at-button>
+        <at-button @click="edit_submit" type="primary" auto-disable-as-loading style="margin-left: 66px">确认</at-button>
       </el-form-item>
     </el-form>
   </div>

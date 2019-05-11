@@ -15,7 +15,34 @@ public class ServiceVO extends Query implements Serializable {
     private Integer orderPrice;
     private Integer rate;
     private String employerName;
+    private String employerUsername;
     private String employeeName;
+    private String employeeUsername;
+    private Long createTime;//订单的创建时间
+
+    public String getEmployerUsername() {
+        return employerUsername;
+    }
+
+    public void setEmployerUsername(String employerUsername) {
+        this.employerUsername = employerUsername;
+    }
+
+    public String getEmployeeUsername() {
+        return employeeUsername;
+    }
+
+    public void setEmployeeUsername(String employeeUsername) {
+        this.employeeUsername = employeeUsername;
+    }
+
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
 
     public Integer getOrderPrice() {
         return orderPrice;

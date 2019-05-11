@@ -2,8 +2,16 @@
   <div>
     <el-row class="margin-bottom">
       <el-form :inline="true" :model="searchParam">
-        <el-form-item label="服务ID">
-          <el-input v-model="searchParam.serviceId" placeholder="请输入服务ID" style="width: 120px"></el-input>
+        <el-form-item label="我的服务">
+          <el-select v-model="searchParam.serviceId" placeholder="请选择">
+            <el-option label="全部" :value=null></el-option>
+            <el-option
+              v-for="item in myServices"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item label="开始时间">
@@ -41,12 +49,13 @@
       <el-table :data="services"
                 border
                 v-loading="loading">
-        <el-table-column prop="id" label="服务ID" align="center" width="80px"></el-table-column>
+        <el-table-column prop="id" label="服务ID" align="center" width="80px"
+                         v-if="role===100"></el-table-column>
         <el-table-column prop="name" label="服务" align="center"></el-table-column>
         <el-table-column prop="price" label="价格/次" align="center"></el-table-column>
         <el-table-column prop="orderPrice" label="订单价" align="center"></el-table-column>
-        <el-table-column prop="employeeUsername" label="雇员" align="center"></el-table-column>
-        <el-table-column prop="employerUsername" label="雇主" align="center"></el-table-column>
+        <el-table-column prop="employeeName" label="雇员" align="center"></el-table-column>
+        <el-table-column prop="employerName" label="雇主" align="center"></el-table-column>
         <el-table-column prop="createTime" label="订单创建时间" align="center">
           <template slot-scope="scope">
             {{$formatTime(scope.row.createTime)}}
@@ -68,6 +77,7 @@
   import Highcharts from 'highcharts/highstock';
 
   export default {
+    name: "myServiceSta",
     data() {
       return {
         loading: true,
@@ -80,6 +90,8 @@
         serviceList: [],
         moneyList: [],
         services: [],
+        myServices: [],//下拉框所选服务
+        role: null,
       }
     },
     methods: {
@@ -89,14 +101,22 @@
           query: this.searchParam
         });
       },
+      initQuery() {
+        Object.assign(this.searchParam, this.$route.query);
+        this.searchParam.serviceId = this.searchParam.serviceId ? parseInt(this.searchParam.serviceId) : null;
+        this.searchParam.startTime = this.searchParam.startTime ? parseInt(this.searchParam.startTime) : null;
+        this.searchParam.endTime = this.searchParam.endTime ? parseInt(this.searchParam.endTime) : null;
+      },
       async getServiceSta() {
         this.loading = true;
         this.searchParam.startTime = new Date(this.searchParam.startTime).setHours(0, 0, 0, 0);// 当天0点
         this.searchParam.endTime = new Date(this.searchParam.endTime).setHours(23, 59, 59, 0);//当天23；59
-        let res = await this.$api("Static/serviceChart", {
+        let res = await this.$api("Static/serviceChartByEid", {
           serviceId: this.searchParam.serviceId,
           startTime: this.searchParam.startTime,
           endTime: this.searchParam.endTime,
+          eid: window.$mine.id,
+          role: window.$mine.role,
         });
         this.loading = false;
         console.log(res);
@@ -167,7 +187,7 @@
             },
           }, {
             name: '每日营业额',
-            type: 'spline',
+            type: 'line',
             yAxis: 1,
             data: this.moneyList,
             tooltip: {
@@ -176,47 +196,54 @@
           }]
         });
       },
-      initQuery() {
-        Object.assign(this.searchParam, this.$route.query);
-        this.searchParam.serviceId = this.searchParam.serviceId ? parseInt(this.searchParam.serviceId) : null;
-        this.searchParam.startTime = this.searchParam.startTime ? parseInt(this.searchParam.startTime) : null;
-        this.searchParam.endTime = this.searchParam.endTime ? parseInt(this.searchParam.endTime) : null;
-      },
-      async getServiceDetail() {
-        this.services = await this.$api('Static/serviceDetail', {
+      async getServiceDetailByEid() {
+        this.services = await this.$api('Static/getServiceDetailByEid', {
           serviceId: this.searchParam.serviceId,
           startTime: this.searchParam.startTime / 1000,
-          endTime: this.searchParam.endTime / 1000
+          endTime: this.searchParam.endTime / 1000,
+          eid: window.$mine.id,
+          role: window.$mine.role,
         });
-        console.log(this.services)
+      },
+      async getMyService() {
+        this.role = window.$mine.role;
+        if (this.role === 200) {
+          //当前登陆的是雇员，查询其擅长的服务集合
+          let res = await this.$api('Service/getServiceByUserId', {id: window.$mine.id});
+          this.myServices = res.data;
+        } else if (this.role === 300) {
+          //当前登陆的是雇主，查询订单包含的服务
+          this.myServices = await this.$api('Service/getServiceByUserOrder', {employerId: window.$mine.id});
+        }
       },
     },
     async created() {
       //初始化查询条件
       this.initQuery();
+      //获取当前登陆者拥有的服务
+      await this.getMyService();
       await this.getServiceSta();
-      await this.getServiceDetail();
+      await this.getServiceDetailByEid();
     },
     watch: {
       async '$route'() {
         //初始化查询条件
         this.initQuery();
         this.getServiceSta();
-        await this.getServiceDetail();
+        await this.getServiceDetailByEid();
       }
     },
   }
-
 </script>
 
-<style>
+<style scoped>
   .statistics_title {
     width: 100%;
     height: 30px;
     font-size: medium;
     margin-top: 30px;
     float: left;
-    background-color: #E6E6FA;
+    background-color: #F2F6FC;
   }
 
   .barTitle {

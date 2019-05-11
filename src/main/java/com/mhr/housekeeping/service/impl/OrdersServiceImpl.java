@@ -175,8 +175,18 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public Integer countOrdersByTime(Long timeItem, Long time2,Integer serviceId) {
-        return ordersMapper.countOrdersByTime(timeItem, time2,serviceId);
+    public Integer countOrdersByTime(Long timeItem, Long time2, Integer serviceId) {
+        return ordersMapper.countOrdersByTime(timeItem, time2, serviceId);
+    }
+
+    @Override
+    public Integer countOrdersByTime2(Long timeItem, Long time2, Integer serviceId, Integer eid) {
+        return ordersMapper.countOrdersByTime2(timeItem, time2, serviceId, eid);
+    }
+
+    @Override
+    public Integer countOrdersByTime3(Long timeItem, Long time2, Integer serviceId, Integer eid) {
+        return ordersMapper.countOrdersByTime3(timeItem, time2, serviceId, eid);
     }
 
     /**
@@ -186,8 +196,18 @@ public class OrdersServiceImpl implements OrdersService {
      * @return
      */
     @Override
-    public Integer countMoneyByTime(long l,long time,Integer serviceId) {
-        return ordersMapper.countMoneyByTime(l,time,serviceId);
+    public Integer countMoneyByTime(long l, long time, Integer serviceId) {
+        return ordersMapper.countMoneyByTime(l, time, serviceId);
+    }
+
+    @Override
+    public Integer countMoneyByTime2(long l, long time, Integer serviceId, Integer eid) {
+        return ordersMapper.countMoneyByTime2(l, time, serviceId, eid);
+    }
+
+    @Override
+    public Integer countMoneyByTime3(long l, long time, Integer serviceId, Integer eid) {
+        return ordersMapper.countMoneyByTime3(l, time, serviceId, eid);
     }
 
 

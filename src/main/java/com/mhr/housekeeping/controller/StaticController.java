@@ -40,6 +40,24 @@ public class StaticController {
     }
 
     /**
+     * 雇员和雇主的统计页面
+     *
+     * @param hashMap
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/Static/getServiceDetailByEid")
+    public List<ServiceVO> getServiceDetailByEid(@RequestBody HashMap hashMap) throws Exception {
+        Integer serviceId = (Integer) hashMap.get("serviceId");
+        Integer eid = (Integer) hashMap.get("eid");
+        Integer role = (Integer) hashMap.get("role");
+        Integer startTime = (Integer) hashMap.get("startTime");
+        Integer endTime = (Integer) hashMap.get("endTime");
+        //根据服务的id、订单的完结时间区间 查询订单表，进行统计
+        return serviceService.serviceStaticByEid(serviceId, startTime, endTime, eid, role);
+    }
+
+    /**
      * startTime : 当天的零点
      * endTime: 当天的23：59
      *
@@ -60,20 +78,64 @@ public class StaticController {
         List<Integer> serviceList = new ArrayList<>();
         //每天所有服务总营业额
         List<Integer> moneyList = new ArrayList<>();
-
         Long timeItem = startTime;
         while (timeItem <= endTime) {
             timeList.add(sdf.format(new Date(timeItem)));
             //查询每天的销量
-            Integer count = ordersService.countOrdersByTime(timeItem / 1000, (timeItem / 1000 + 3600 * 24 - 1),serviceId);
+            Integer count = ordersService.countOrdersByTime(timeItem / 1000, (timeItem / 1000 + 3600 * 24 - 1), serviceId);
             serviceList.add(count);
             //查询每天的营业额
-            Integer money = ordersService.countMoneyByTime(timeItem / 1000, (timeItem / 1000 + 3600 * 24 - 1),serviceId);
+            Integer money = ordersService.countMoneyByTime(timeItem / 1000, (timeItem / 1000 + 3600 * 24 - 1), serviceId);
             if (money == null) {
                 money = 0;
             }
             moneyList.add(money);
             timeItem += 60 * 60 * 24 * 1000;
+        }
+        JSONObject object = new JSONObject();
+        object.put("timeList", timeList);
+        object.put("serviceList", serviceList);
+        object.put("moneyList", moneyList);
+        return object;
+    }
+
+    @RequestMapping("/Static/serviceChartByEid")
+    public JSONObject serviceChartByEid(@RequestBody HashMap hashMap) throws Exception {
+        //如果接收到了serviceId，则查询这一项服务的销量、营业额
+        Integer serviceId = (Integer) hashMap.get("serviceId");
+        Integer role = (Integer) hashMap.get("role");
+        Long startTime = (Long) hashMap.get("startTime");
+        Integer eid = (Integer) hashMap.get("eid");
+        Long endTime = (Long) hashMap.get("endTime");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        List<String> timeList = new ArrayList<>();
+        List<Integer> serviceList = new ArrayList<>();
+        List<Integer> moneyList = new ArrayList<>();
+        Long timeItem = startTime;
+        while (timeItem <= endTime) {
+            timeList.add(sdf.format(new Date(timeItem)));
+            //查询每天的销量
+            if (role == 200) {
+                Integer count = ordersService.countOrdersByTime2(timeItem / 1000, (timeItem / 1000 + 3600 * 24 - 1), serviceId, eid);
+                serviceList.add(count);
+                //查询每天的营业额
+                Integer money = ordersService.countMoneyByTime2(timeItem / 1000, (timeItem / 1000 + 3600 * 24 - 1), serviceId, eid);
+                if (money == null) {
+                    money = 0;
+                }
+                moneyList.add(money);
+                timeItem += 60 * 60 * 24 * 1000;
+            } else if (role == 300) {
+                Integer count = ordersService.countOrdersByTime3(timeItem / 1000, (timeItem / 1000 + 3600 * 24 - 1), serviceId, eid);
+                serviceList.add(count);
+                //查询每天的营业额
+                Integer money = ordersService.countMoneyByTime3(timeItem / 1000, (timeItem / 1000 + 3600 * 24 - 1), serviceId, eid);
+                if (money == null) {
+                    money = 0;
+                }
+                moneyList.add(money);
+                timeItem += 60 * 60 * 24 * 1000;
+            }
         }
         JSONObject object = new JSONObject();
         object.put("timeList", timeList);
