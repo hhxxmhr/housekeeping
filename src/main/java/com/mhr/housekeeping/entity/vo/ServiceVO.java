@@ -132,6 +132,13 @@ public class ServiceVO extends Query implements Serializable {
         this.parent = parent;
     }
 
+    public ServiceVO(Integer id) {
+        this.id = id;
+    }
+
+    public ServiceVO() {
+    }
+
     @Override
     public String toString() {
         return "ServiceVO{" +

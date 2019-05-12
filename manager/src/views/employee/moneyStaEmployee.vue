@@ -36,8 +36,8 @@
         </el-form>
       </el-row>
       <el-table :data="fundList" border style="width: 100%" v-loading="loading" id="out-table">
-        <el-table-column prop="id" align="center" label="ID" width="100px"></el-table-column>
-        <el-table-column prop="userDO.username" align="center" label="用户账号"></el-table-column>
+        <el-table-column prop="id" align="center" label="ID" width="100px" type="index"></el-table-column>
+        <el-table-column prop="userDO.username" align="center" label="我的账号"></el-table-column>
 
         <el-table-column prop="changeMoney" align="center" label="操作金额(元)"></el-table-column>
         <el-table-column prop="balance" align="center" label="操作后余额(元)"></el-table-column>
@@ -53,7 +53,7 @@
         </el-table-column>
         <el-table-column prop="ordersVO" align="center" label="订单详情" width="350px">
           <template slot-scope="scope">
-            {{scope.row.employeeName?scope.row.employeeUsername+'为'+scope.row.employerUsername+'提供'+scope.row.rankName+'-'+scope.row.serviceName+'服务':'用户充值'}}
+            {{scope.row.employeeName?scope.row.employeeName+'为'+scope.row.employerName+'提供'+scope.row.rankName+'-'+scope.row.serviceName+'服务':'用户充值'}}
           </template>
         </el-table-column>
 
@@ -79,7 +79,7 @@
   import XLSX from 'xlsx'
 
   export default {
-    name: "moneySta",
+    name: "moneyStaEmployee",
     data() {
       return {
         searchForm: {
@@ -88,7 +88,7 @@
           endTime: this.timestamp() * 1000,
           page: 1,
           size: 15,
-          eid: null,//人员列表更多操作进行页面跳转传递的参数
+          eid: window.$mine.id,//当前登陆的id
 
         },
         loading: true,
@@ -121,7 +121,6 @@
       },
       initQuery() {
         Object.assign(this.searchForm, this.$route.query);
-        this.searchForm.eid = this.searchForm.eid != null ? parseInt(this.searchForm.eid) : null;
         this.searchForm.type = this.searchForm.type != null ? parseInt(this.searchForm.type) : null;
         this.searchForm.page = this.searchForm.page ? parseInt(this.searchForm.page) : 1;
         this.searchForm.size = this.searchForm.size ? parseInt(this.searchForm.size) : 15;
@@ -149,7 +148,7 @@
         this.searchForm.size = 15;
         //携带查询的参数再次查询一下列表
         this.$router.push({
-          path: "/manager/moneySta",
+          path: "/employee/moneyStaEmployee",
           query: this.searchForm
         });
       },

@@ -10,6 +10,71 @@ import java.io.Serializable;
  */
 public class FundVO extends Query implements Serializable {
     private static final long serialVersionUID = -6758147211168128691L;
+
+    private String serviceName;
+    private String employeeName;
+    private String employerName;
+    private String employeeUsername;
+    private String employerUsername;
+    private String rankName;
+    private Integer rankMoney;
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+
+    public String getEmployerName() {
+        return employerName;
+    }
+
+    public void setEmployerName(String employerName) {
+        this.employerName = employerName;
+    }
+
+    public String getEmployeeUsername() {
+        return employeeUsername;
+    }
+
+    public void setEmployeeUsername(String employeeUsername) {
+        this.employeeUsername = employeeUsername;
+    }
+
+    public String getEmployerUsername() {
+        return employerUsername;
+    }
+
+    public void setEmployerUsername(String employerUsername) {
+        this.employerUsername = employerUsername;
+    }
+
+    public String getRankName() {
+        return rankName;
+    }
+
+    public void setRankName(String rankName) {
+        this.rankName = rankName;
+    }
+
+    public Integer getRankMoney() {
+        return rankMoney;
+    }
+
+    public void setRankMoney(Integer rankMoney) {
+        this.rankMoney = rankMoney;
+    }
+
     private UserDO userDO;
 
     public UserDO getUserDO() {
@@ -20,10 +85,19 @@ public class FundVO extends Query implements Serializable {
         this.userDO = userDO;
     }
 
+    private Integer eid;//更多操作  跳转携带的用户id
     private Integer startTime;
     private Integer endTime;
     private Integer page;
     private Integer size;
+
+    public Integer getEid() {
+        return eid;
+    }
+
+    public void setEid(Integer eid) {
+        this.eid = eid;
+    }
 
     public Integer getStartTime() {
         return startTime;

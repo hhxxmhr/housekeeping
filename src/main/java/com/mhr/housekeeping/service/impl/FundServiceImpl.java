@@ -2,18 +2,24 @@ package com.mhr.housekeeping.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.mhr.housekeeping.dao.FundMapper;
-import com.mhr.housekeeping.dao.UserMapper;
+import com.mhr.housekeeping.dao.*;
+import com.mhr.housekeeping.entity.OrdersDO;
+import com.mhr.housekeeping.entity.RankDO;
+import com.mhr.housekeeping.entity.ServiceDO;
 import com.mhr.housekeeping.entity.UserDO;
 import com.mhr.housekeeping.entity.vo.FundVO;
+import com.mhr.housekeeping.entity.vo.OrdersVO;
+import com.mhr.housekeeping.entity.vo.ServiceVO;
 import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.service.FundService;
 import com.mhr.housekeeping.utils.Result;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +34,13 @@ public class FundServiceImpl implements FundService {
     @Resource
     private FundMapper fundMapper;
     @Resource
-    private UserMapper userMapper;
+    UserMapper userMapper;
+    @Resource
+    ServiceMapper serviceMapper;
+    @Resource
+    RankMapper rankMapper;
+    @Resource
+    private OrdersMapper ordersMapper;
 
     @Override
     public Result addFund(FundVO fundVO) throws Exception {
@@ -54,6 +66,21 @@ public class FundServiceImpl implements FundService {
                 //根据userId查询关于用户的信息
                 UserDO detailUser = userMapper.findDetailUser(new UserVO(it.getUserId()));
                 it.setUserDO(detailUser);
+                if (it.getOrderId() != null) {
+                    //说明他是与订单相关的记录--根据订单id查询订单的信息
+                    OrdersVO vo = ordersMapper.findDetailOrdersVo(new OrdersVO(it.getOrderId()));
+                    UserDO employee = userMapper.findDetailUser(new UserVO(vo.getEmployeeId()));
+                    UserDO employer = userMapper.findDetailUser(new UserVO(vo.getEmployerId()));
+                    ServiceDO service = serviceMapper.findDetailService(new ServiceVO(vo.getServiceId()));
+                    it.setServiceName(service.getName());
+                    it.setEmployeeUsername(employee.getUsername());
+                    it.setEmployerUsername(employer.getUsername());
+                    it.setEmployeeName(employee.getName());
+                    it.setEmployerName(employer.getName());
+                    RankDO rankDO = rankMapper.findRankByOrder(vo.getEmployeeId(), vo.getServiceId());
+                    it.setRankName(rankDO.getName());
+                    it.setRankMoney(rankDO.getMoney());
+                }
             });
         }
         return new PageInfo<>(list);

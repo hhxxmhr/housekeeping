@@ -160,9 +160,9 @@ const routes = [
         meta: {login: true}
       },
       {
-        path: '/manager/moneySta',
+        path: '/employee/moneyStaEmployee',
         name: '资金记录',
-        component: () => import('./views/manager/moneySta'),
+        component: () => import('./views/employee/moneyStaEmployee'),
         meta: {login: true}
       },
     ]

@@ -20,6 +20,8 @@ public interface OrdersMapper {
 
     OrdersDO findDetailOrders(OrdersVO ordersVO);
 
+    OrdersVO findDetailOrdersVo(OrdersVO ordersVO);
+
     List<OrdersVO> listOrders(OrdersVO ordersVO);
 
     List<OrdersVO> listOrdersPage(OrdersVO ordersVO);

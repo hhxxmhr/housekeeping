@@ -22,6 +22,25 @@
         <result property="pay" column="pay"/>
         <result property="reason" column="reason"/>
     </resultMap>
+    <resultMap id="ordersMapperVo" type="OrdersVO">
+        <result property="id" column="id"/>
+        <result property="serviceId" column="service_id"/>
+        <result property="employeeId" column="employee_id"/>
+        <result property="reverseTime" column="reverse_time"/>
+        <result property="address" column="address"/>
+        <result property="phone" column="phone"/>
+        <result property="tip" column="tip"/>
+        <result property="state" column="state"/>
+        <result property="orderPrice" column="order_price"/>
+        <result property="employerId" column="employer_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="rate" column="rate"/>
+        <result property="prov" column="prov"/>
+        <result property="city" column="city"/>
+        <result property="pay" column="pay"/>
+        <result property="reason" column="reason"/>
+    </resultMap>
     <resultMap id="ordersMoreMapper" type="OrdersVO">
         <result property="id" column="id"/>
         <result property="serviceId" column="service_id"/>
@@ -301,6 +320,13 @@
     </update>
 
     <select id="findDetailOrders" resultMap="ordersMapper" parameterType="OrdersVO">
+        SELECT
+        <include refid="_fields"/>
+        FROM
+        <include refid="_table"/>
+        <include refid="_primaryKey_condition"/>
+    </select>
+    <select id="findDetailOrdersVo" resultMap="ordersMapperVo" parameterType="OrdersVO">
         SELECT
         <include refid="_fields"/>
         FROM

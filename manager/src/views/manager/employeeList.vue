@@ -75,12 +75,14 @@
             <at-button confirmText="确定删除此账号?" size="mini" type="warning"
                        @click="deleteEmployee(scope.row)">删除
             </at-button>
-            <el-dropdown size="mini" split-button type="info" @command="handleCommand($event, scope.row.id,scope.row.role)"
+            <el-dropdown size="mini" split-button type="info"
+                         @command="handleCommand($event, scope.row.id,scope.row.role)"
                          style="margin-left: 5px">
               更多操作
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="showOrders">他的订单</el-dropdown-item>
                 <el-dropdown-item command="showComment">他的评论</el-dropdown-item>
+                <el-dropdown-item command="showFund">他的资金</el-dropdown-item>
                 <el-dropdown-item command="moreInfo">他的资料</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -206,13 +208,15 @@
           query: this.searchForm
         });
       },
-      handleCommand(command, id,role) {
+      handleCommand(command, id, role) {
         if (command === 'showOrders') {
           this.showOrders(id);
         } else if (command === 'showComment') {
-          this.showComment(id,role);
+          this.showComment(id, role);
         } else if (command === 'moreInfo') {
           this.showMoreInfo(id);
+        } else if (command === 'showFund') {
+          this.showFund(id);
         }
       },
       showOrders(id) {
@@ -222,11 +226,18 @@
           query: {eid: id}
         });
       },
-      showComment(id,role) {
+      showComment(id, role) {
         //跳转到评论页面
         this.$router.push({
           path: "/manager/myComment",
-          query: {eid: id,role: role}
+          query: {eid: id, role: role}
+        });
+      },
+      showFund(id) {
+        //跳转到资金记录页面
+        this.$router.push({
+          path: "/manager/moneySta",
+          query: {eid: id}
         });
       },
       showMoreInfo(id) {
@@ -255,7 +266,7 @@
       async getRank(userId, serviceId) {
         //根据员工id和服务id查询等级
         let res = await this.$api('Rank/findRankByUidAndSid', {userId: userId, serviceId: serviceId});
-        alert("该人员在此服务中的等级为："+res.data.name)
+        alert("该人员在此服务中的等级为：" + res.data.name)
       },
       async changeState(row, state) {
         let res = await this.$api('User/changeEmployeeState', {id: row.id, state: state});

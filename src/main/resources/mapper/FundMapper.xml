@@ -169,6 +169,9 @@
         <if test="type!=null">
             AND `type` = #{type}
         </if>
+        <if test="eid!=null">
+            AND `user_id` = #{eid}
+        </if>
         <include refid="_order"/>
     </select>
 

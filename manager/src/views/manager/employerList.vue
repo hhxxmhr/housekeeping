@@ -62,6 +62,7 @@
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="showOrders">他的订单</el-dropdown-item>
                 <el-dropdown-item command="showComment">他的评论</el-dropdown-item>
+                <el-dropdown-item command="showFund">他的资金</el-dropdown-item>
                 <el-dropdown-item command="moreInfo">他的资料</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -174,12 +175,21 @@
           this.showComment(id, role);
         } else if (command === 'moreInfo') {
           this.showMoreInfo(id);
+        }else if (command === 'showFund') {
+          this.showFund(id);
         }
       },
       showOrders(id) {
         //跳转到订单列表页面
         this.$router.push({
           path: "/manager/orders",
+          query: {eid: id}
+        });
+      },
+      showFund(id) {
+        //跳转到资金记录页面
+        this.$router.push({
+          path: "/manager/moneySta",
           query: {eid: id}
         });
       },
