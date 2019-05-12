@@ -1,6 +1,7 @@
 package com.mhr.housekeeping.service;
 
 
+import com.github.pagehelper.PageInfo;
 import com.mhr.housekeeping.entity.vo.FundVO;
 import com.mhr.housekeeping.utils.Result;
 
@@ -15,8 +16,8 @@ public interface FundService {
 	Result updateFund(FundVO fundVO) throws Exception;
 	
 	Result findDetailFund(FundVO fundVO) throws Exception;
-	
-	Result listFund(FundVO fundVO) throws Exception;
+
+	PageInfo<FundVO> listFund(FundVO fundVO) throws Exception;
 
     Result listFundPage(FundVO fundVO) throws Exception;
 	

@@ -1,5 +1,7 @@
 package com.mhr.housekeeping.entity.vo;
 
+import com.mhr.housekeeping.entity.UserDO;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +10,52 @@ import java.io.Serializable;
  */
 public class FundVO extends Query implements Serializable {
     private static final long serialVersionUID = -6758147211168128691L;
+    private UserDO userDO;
+
+    public UserDO getUserDO() {
+        return userDO;
+    }
+
+    public void setUserDO(UserDO userDO) {
+        this.userDO = userDO;
+    }
+
+    private Integer startTime;
+    private Integer endTime;
+    private Integer page;
+    private Integer size;
+
+    public Integer getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Integer startTime) {
+        this.startTime = startTime;
+    }
+
+    public Integer getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Integer endTime) {
+        this.endTime = endTime;
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
 
     private Integer id;
 
@@ -32,7 +80,7 @@ public class FundVO extends Query implements Serializable {
      */
     private Integer type;
 
-    public FundVO( Integer userId, Integer orderId, Integer balance, Integer changeMoney, Long createTime, Integer type) {
+    public FundVO(Integer userId, Integer orderId, Integer balance, Integer changeMoney, Long createTime, Integer type) {
         this.userId = userId;
         this.orderId = orderId;
         this.balance = balance;

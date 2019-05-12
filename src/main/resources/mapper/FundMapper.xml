@@ -3,7 +3,7 @@
 
 <mapper namespace="com.mhr.housekeeping.dao.FundMapper">
 
-	<resultMap id="fundMapper" type="FundDO">
+    <resultMap id="fundMapper" type="FundDO">
         <result property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="orderId" column="order_id"/>
@@ -11,126 +11,138 @@
         <result property="changeMoney" column="change_money"/>
         <result property="createTime" column="create_time"/>
         <result property="type" column="type"/>
-	</resultMap>
+    </resultMap>
+
+    <resultMap id="fundMapperVo" type="FundVO">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="balance" column="balance"/>
+        <result property="changeMoney" column="change_money"/>
+        <result property="createTime" column="create_time"/>
+        <result property="type" column="type"/>
+    </resultMap>
 
     <sql id="_table">
         fund
 	</sql>
 
-	<sql id="_fields">
+    <sql id="_fields">
 		id,user_id,order_id,balance,change_money,create_time,`type`
 	</sql>
 
-	<sql id="_condition">
-		<trim prefix="WHERE" prefixOverrides="AND|OR">
+    <sql id="_condition">
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="id!=null">
-				AND id = #{id}
-			</if>
+                AND id = #{id}
+            </if>
             <if test="userId!=null">
-				AND user_id = #{userId}
-			</if>
+                AND user_id = #{userId}
+            </if>
             <if test="orderId!=null">
-				AND order_id = #{orderId}
-			</if>
+                AND order_id = #{orderId}
+            </if>
             <if test="balance!=null">
-				AND balance = #{balance}
-			</if>
+                AND balance = #{balance}
+            </if>
             <if test="changeMoney!=null">
-				AND change_money = #{changeMoney}
-			</if>
+                AND change_money = #{changeMoney}
+            </if>
             <if test="createTime!=null">
-				AND create_time = #{createTime}
-			</if>
+                AND create_time = #{createTime}
+            </if>
             <if test="type!=null">
-				AND `type` = #{type}
-			</if>
-		</trim>
-	</sql>
+                AND `type` = #{type}
+            </if>
+        </trim>
+    </sql>
 
-	<sql id="_primaryKey_condition">
+    <sql id="_primaryKey_condition">
 		WHERE id = #{id}
 	</sql>
 
-	<sql id="_order">
-        <if test="sortByParams!= null and sortByParams.size()>0" >
+    <sql id="_order">
+        <if test="sortByParams!= null and sortByParams.size()>0">
             ORDER BY
             <foreach collection="sortByParams.keys" index="index" item="sortByParamKey" separator=",">
                 <![CDATA[${sortByParamKey} ${sortByParams[sortByParamKey]}]]>
             </foreach>
         </if>
-	</sql>
+    </sql>
 
     <insert id="addFund" parameterType="FundVO" keyProperty="id">
-        INSERT INTO <include refid="_table"/>
+        INSERT INTO
+        <include refid="_table"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id!=null">
-				id,
-			</if>
+                id,
+            </if>
             <if test="userId!=null">
-				user_id,
-			</if>
+                user_id,
+            </if>
             <if test="orderId!=null">
-				order_id,
-			</if>
+                order_id,
+            </if>
             <if test="balance!=null">
-				balance,
-			</if>
+                balance,
+            </if>
             <if test="changeMoney!=null">
-				change_money,
-			</if>
+                change_money,
+            </if>
             <if test="createTime!=null">
-				create_time,
-			</if>
+                create_time,
+            </if>
             <if test="type!=null">
-				`type`,
-			</if>
+                `type`,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
-				#{id},
-			</if>
+                #{id},
+            </if>
             <if test="userId!=null">
-				#{userId},
-			</if>
+                #{userId},
+            </if>
             <if test="orderId!=null">
-				#{orderId},
-			</if>
+                #{orderId},
+            </if>
             <if test="balance!=null">
-				#{balance},
-			</if>
+                #{balance},
+            </if>
             <if test="changeMoney!=null">
-				#{changeMoney},
-			</if>
+                #{changeMoney},
+            </if>
             <if test="createTime!=null">
-				#{createTime},
-			</if>
+                #{createTime},
+            </if>
             <if test="type!=null">
-				#{type},
-			</if>
+                #{type},
+            </if>
         </trim>
     </insert>
 
     <update id="updateFund" parameterType="FundVO">
-        UPDATE <include refid="_table"/>
+        UPDATE
+        <include refid="_table"/>
         <set>
             <if test="userId!=null">
-				user_id = #{userId},
-			</if>
+                user_id = #{userId},
+            </if>
             <if test="orderId!=null">
-				order_id = #{orderId},
-			</if>
+                order_id = #{orderId},
+            </if>
             <if test="balance!=null">
-				balance = #{balance},
-			</if>
+                balance = #{balance},
+            </if>
             <if test="changeMoney!=null">
-				change_money = #{changeMoney},
-			</if>
+                change_money = #{changeMoney},
+            </if>
             <if test="createTime!=null">
-				create_time = #{createTime},
-			</if>
+                create_time = #{createTime},
+            </if>
             <if test="type!=null">
-				`type` = #{type},
-			</if>
+                `type` = #{type},
+            </if>
         </set>
         <include refid="_primaryKey_condition"/>
     </update>
@@ -138,41 +150,54 @@
     <select id="findDetailFund" resultMap="fundMapper" parameterType="FundVO">
         SELECT
         <include refid="_fields"/>
-        FROM <include refid="_table"/>
+        FROM
+        <include refid="_table"/>
         <include refid="_primaryKey_condition"/>
     </select>
 
     <select id="listFund" resultMap="fundMapper" parameterType="FundVO">
         SELECT
         <include refid="_fields"/>
-        FROM <include refid="_table"/>
+        FROM
+        <include refid="_table"/>
         <include refid="_condition"/>
-	    <include refid="_order"/>
+        <include refid="_order"/>
+    </select>
+
+    <select id="listFundByManager" resultMap="fundMapperVo" parameterType="FundVO">
+        SELECT * from fund where create_time between #{startTime} and #{endTime}
+        <if test="type!=null">
+            AND `type` = #{type}
+        </if>
+        <include refid="_order"/>
     </select>
 
     <select id="listFundPage" resultMap="fundMapper" parameterType="FundVO">
         SELECT
         <include refid="_fields"/>
-        FROM <include refid="_table"/>
+        FROM
+        <include refid="_table"/>
         <include refid="_condition"/>
         <include refid="_order"/>
         <if test="startRecord != null and pageSize != null and pageSize >0">
             limit #{startRecord},#{pageSize}
         </if>
-	    <if test="!(startRecord != null and pageSize != null and pageSize >0)">
-		    limit 0,15
-	    </if>
+        <if test="!(startRecord != null and pageSize != null and pageSize >0)">
+            limit 0,15
+        </if>
     </select>
 
     <select id="countFund" resultType="java.lang.Integer" parameterType="FundVO">
         SELECT
         COUNT(*)
-        FROM <include refid="_table"/>
+        FROM
+        <include refid="_table"/>
         <include refid="_condition"/>
     </select>
 
     <delete id="deleteFund" parameterType="FundVO">
-        DELETE FROM <include refid="_table"/>
+        DELETE FROM
+        <include refid="_table"/>
         <include refid="_primaryKey_condition"/>
     </delete>
 

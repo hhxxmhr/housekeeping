@@ -60,12 +60,38 @@ Vue.prototype.UserExperience = {
 
 Vue.prototype.OrderState = {
   0: "待确认",//等待雇员确认
-  1: "已取消",//在两个小时之内可以免费取消，超出时间取消则收取服务费的5%
+  1: "已取消",//在两个小时之内可以免费取消，超出时间取消则收取服务费的50%
   2: "已确认",
   3: "待评论",
   4: "已评论",
   5: "退款中",
   6: "已退款",
+};
+
+
+Vue.prototype.FundType = {
+  0: "账号充值",
+  1: "服务支出",
+  2: "超时取消",
+  3: "获得退款",
+  4: "额外取消费",
+  5: "服务收入",
+  6: "给予退款",
+};
+
+//雇主
+Vue.prototype.FundTypeByEmployer = {
+  0: "账号充值",
+  1: "服务支出",
+  2: "超时取消",
+  3: "获得退款",
+};
+
+//雇员
+Vue.prototype.FundTypeByEmployee = {
+  4: "额外取消费",
+  5: "服务收入",
+  6: "给予退款",
 };
 
 Vue.prototype.timestamp = function () {

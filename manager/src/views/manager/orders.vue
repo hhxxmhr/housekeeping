@@ -202,7 +202,6 @@
         this.loading = false;
         this.orderList = res.list;
         this.total = res.total;
-        this.loading = false;
       },
       search() {
         this.searchForm.page = 1;
@@ -318,8 +317,8 @@
       },
       async handleSizeChange(val) {
         this.searchForm.size = val;
-        await this.init();
-        // await this.currentChange(1);
+        // await this.init();
+        await this.currentChange(1);
       },
       async deleteOrder(id) {
         let res = await this.$api("Order/delete", {id: id});
