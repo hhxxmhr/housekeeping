@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
     public Result deleteUser(UserVO userVO) throws Exception {
         UserServiceVO userServiceVO = new UserServiceVO();
         userServiceVO.setUserId(userVO.getId());
-        List<UserServiceDO> list = userServiceMapper.listUserService(userServiceVO);
+        List<UserServiceVO> list = userServiceMapper.listUserService(userServiceVO);
         if (list.size() > 0) {
             Integer r = userServiceMapper.deleteUserServiceByUserId(userVO.getId());
             if (r > 0) {

@@ -19,7 +19,7 @@ public interface UserServiceMapper {
 
     UserServiceDO findDetailUserService(UserServiceVO userServiceVO);
 
-    List<UserServiceDO> listUserService(UserServiceVO userServiceVO);
+    List<UserServiceVO> listUserService(UserServiceVO userServiceVO);
 
     List<UserServiceDO> listUserServicePage(UserServiceVO userServiceVO);
 

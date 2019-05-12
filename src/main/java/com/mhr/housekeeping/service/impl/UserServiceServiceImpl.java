@@ -37,7 +37,11 @@ public class UserServiceServiceImpl implements UserServiceService {
 
     @Override
     public Result updateUserService(UserServiceVO userServiceVO) throws Exception {
-        return null;
+        Integer count = userServiceMapper.updateUserService(userServiceVO);
+        if (count > 0) {
+            return Result.getSuccess("更新成功");
+        }
+        return Result.getFailure("更新失败");
     }
 
     @Override
@@ -46,8 +50,8 @@ public class UserServiceServiceImpl implements UserServiceService {
     }
 
     @Override
-    public List<UserServiceDO> listUserService(UserServiceVO userServiceVO) throws Exception {
-        List<UserServiceDO> list = userServiceMapper.listUserService(userServiceVO);
+    public List<UserServiceVO> listUserService(UserServiceVO userServiceVO) throws Exception {
+        List<UserServiceVO> list = userServiceMapper.listUserService(userServiceVO);
         return list;
     }
 

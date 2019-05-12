@@ -521,6 +521,36 @@
             AND orders.employer_id = #{eid}
         </if>
     </select>
+    <select id="countOrdersOver" resultType="java.lang.Integer" parameterType="OrdersVO">
+        SELECT count(*) from orders WHERE orders.rate is not null
+        <if test="serviceId!=null">
+            AND orders.service_id = #{serviceId}
+        </if>
+        <if test="employeeId!=null">
+            AND orders.employee_id = #{employeeId}
+        </if>
+    </select>
+
+    <select id="countOrdersWithGoodComment" resultType="java.lang.Integer" parameterType="OrdersVO">
+        SELECT count(*) from orders WHERE orders.rate &gt; 2
+        <if test="serviceId!=null">
+            AND orders.service_id = #{serviceId}
+        </if>
+        <if test="employeeId!=null">
+            AND orders.employee_id = #{employeeId}
+        </if>
+    </select>
+
+    <select id="countOrdersWithComment" resultType="java.lang.Integer" parameterType="OrdersVO">
+        SELECT count(*) from orders WHERE orders.state in (3,4)
+        <if test="serviceId!=null">
+            AND orders.service_id = #{serviceId}
+        </if>
+        <if test="employeeId!=null">
+            AND orders.employee_id = #{employeeId}
+        </if>
+    </select>
+
 
     <select id="countOrdersByEmployeeId" resultType="java.lang.Integer" parameterType="UserVO">
         SELECT COUNT(*) FROM orders WHERE employee_id = #{id} and state in (3,4)

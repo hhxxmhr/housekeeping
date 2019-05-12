@@ -19,7 +19,7 @@ public interface UserServiceService {
 	
 	Result findDetailUserService(UserServiceVO userServiceVO) throws Exception;
 	
-	List<UserServiceDO> listUserService(UserServiceVO userServiceVO) throws Exception;
+	List<UserServiceVO> listUserService(UserServiceVO userServiceVO) throws Exception;
 
     Result listUserServicePage(UserServiceVO userServiceVO) throws Exception;
 	

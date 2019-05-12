@@ -288,5 +288,22 @@ public class OrdersServiceImpl implements OrdersService {
         return ordersMapper.countMoneyByTime3(l, time, serviceId, eid);
     }
 
+    @Override
+    public Integer countOrdersOver(OrdersVO ordersVO) {
+
+        return ordersMapper.countOrdersOver(ordersVO);
+    }
+
+    @Override
+    public Integer countOrdersWithComment(OrdersVO ordersVO) {
+
+        return ordersMapper.countOrdersWithComment(ordersVO);
+    }
+
+    @Override
+    public Integer countOrdersWithGoodComment(OrdersVO ordersVO) {
+        return ordersMapper.countOrdersWithGoodComment(ordersVO);
+    }
+
 
 }

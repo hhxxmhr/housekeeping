@@ -3,7 +3,7 @@
 
 <mapper namespace="com.mhr.housekeeping.dao.UserServiceMapper">
 
-    <resultMap id="userServiceMapper" type="UserServiceDO">
+    <resultMap id="userServiceMapper" type="UserServiceVO">
         <result property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="serviceId" column="service_id"/>

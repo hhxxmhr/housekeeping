@@ -36,4 +36,10 @@ public interface OrdersService {
     Integer countMoneyByTime2(long l, long time, Integer serviceId, Integer eid);
 
     Integer countMoneyByTime3(long l, long time, Integer serviceId, Integer eid);
+
+    Integer countOrdersOver(OrdersVO ordersVO);
+
+    Integer countOrdersWithComment(OrdersVO ordersVO);
+
+    Integer countOrdersWithGoodComment(OrdersVO ordersVO);
 }
