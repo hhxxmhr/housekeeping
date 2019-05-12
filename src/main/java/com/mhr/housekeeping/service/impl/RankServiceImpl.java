@@ -82,7 +82,7 @@ public class RankServiceImpl implements RankService {
         //先查询关联表里是否有相关数据
         UserServiceVO userServiceVO = new UserServiceVO();
         userServiceVO.setRankId(rankVO.getId());
-        List<UserServiceDO> list = userServiceService.listUserService(userServiceVO);
+        List<UserServiceVO> list = userServiceService.listUserService(userServiceVO);
         if (list.size() > 0) {
             //删除关联表user_service里的信息
             Integer integer = userServiceService.deleteUserServiceByRanId(rankVO.getId());

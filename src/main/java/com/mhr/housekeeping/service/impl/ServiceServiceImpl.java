@@ -109,7 +109,7 @@ public class ServiceServiceImpl implements ServiceService {
         for (int i = 0; i < ids.size(); i++) {
             UserServiceVO userServiceVO = new UserServiceVO();
             userServiceVO.setServiceId(ids.get(i));
-            List<UserServiceDO> list = userServiceService.listUserService(userServiceVO);
+            List<UserServiceVO> list = userServiceService.listUserService(userServiceVO);
             if (list.size() > 0) {
                 userServiceService.deleteUserServiceByServiceId(ids.get(i));
             }
@@ -126,7 +126,7 @@ public class ServiceServiceImpl implements ServiceService {
         //根据id查询关联表中是否有数据，有的话就删除
         UserServiceVO userServiceVO = new UserServiceVO();
         userServiceVO.setServiceId(serviceVO.getId());
-        List<UserServiceDO> list = userServiceService.listUserService(userServiceVO);
+        List<UserServiceVO> list = userServiceService.listUserService(userServiceVO);
         if (list.size() > 0) {
             Integer r = userServiceService.deleteUserServiceByServiceId(serviceVO.getId());
             if (r > 0) {
