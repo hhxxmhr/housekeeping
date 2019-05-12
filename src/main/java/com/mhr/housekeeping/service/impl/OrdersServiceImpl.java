@@ -3,10 +3,8 @@ package com.mhr.housekeeping.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mhr.housekeeping.dao.*;
-import com.mhr.housekeeping.entity.CommentDO;
-import com.mhr.housekeeping.entity.RankDO;
-import com.mhr.housekeeping.entity.ServiceDO;
-import com.mhr.housekeeping.entity.UserDO;
+import com.mhr.housekeeping.entity.*;
+import com.mhr.housekeeping.entity.vo.FundVO;
 import com.mhr.housekeeping.entity.vo.OrdersVO;
 import com.mhr.housekeeping.entity.vo.ServiceVO;
 import com.mhr.housekeeping.entity.vo.UserVO;
@@ -19,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,20 +41,99 @@ public class OrdersServiceImpl implements OrdersService {
     RankMapper rankMapper;
     @Autowired
     CommentMapper commentMapper;
+    @Autowired
+    FundMapper fundMapper;
+    @Autowired
+    HttpServletRequest request;
 
     @Override
     public Result addOrders(OrdersVO ordersVO) throws Exception {
         Integer count = ordersMapper.addOrders(ordersVO);
         if (count > 0) {
-            return Result.getSuccess("添加成功");
+            //更新用户余额、
+            UserDO user = (UserDO) request.getSession().getAttribute("user");
+            user.setBalance(user.getBalance() - ordersVO.getOrderPrice());
+            Integer r1 = userMapper.updateUser2(user);
+            //更新资金记录---雇主支出服务费
+            FundVO vo = new FundVO();
+            vo.setBalance(user.getBalance());//雇主的余额
+            vo.setChangeMoney(ordersVO.getOrderPrice());
+            vo.setCreateTime(System.currentTimeMillis() / 1000);
+            vo.setType(1);
+            vo.setUserId(ordersVO.getEmployerId());
+            vo.setOrderId(ordersVO.getId());//自增id
+            Integer r2 = fundMapper.addFund(vo);
+            if (r1 > 0 && r2 > 0) return Result.getSuccess("预定成功");
+            else return Result.getFailure("预定失败");
         }
-        return Result.getFailure("添加失败");
+        return Result.getFailure("预定失败");
     }
 
+    /**
+     * 更新操作  改变状态  雇员确认订单  雇员完成订单 雇主取消订单和超时取消订单
+     * 1、雇主超时取消订单的时候余额更新、资金记录更新
+     * 2、雇员完成订单的时候，工资更新、资金记录更新
+     *
+     * @param ordersVO
+     * @return
+     * @throws Exception
+     */
     @Override
     public Result updateOrders(OrdersVO ordersVO) throws Exception {
         Integer count = ordersMapper.updateOrders(ordersVO);
+        //根据id获取到此订单的详细信息
+        OrdersDO detailOrders = ordersMapper.findDetailOrders(new OrdersVO(ordersVO.getId()));
         if (count > 0) {
+            //此操作是---超时取消的费用
+            if (ordersVO.getPay() != null) {
+                //更新当前登陆用户余额---减去超时费用
+                UserDO user = (UserDO) request.getSession().getAttribute("user");
+                user.setBalance(user.getBalance() - ordersVO.getPay());
+                Integer r1 = userMapper.updateUser2(user);
+                //更新资金记录--减去超时费用
+                Integer r2 = fundMapper.addFund(new FundVO(user.getId(), ordersVO.getId(), user.getBalance(), ordersVO.getPay(), System.currentTimeMillis() / 1000, 2));
+                //更新雇员工资
+                UserDO employee = userMapper.findDetailUser(new UserVO(detailOrders.getEmployeeId()));
+                employee.setBalance(employee.getBalance() + ordersVO.getPay());
+                Integer r3 = userMapper.updateUser2(employee);
+                //更新资金记录---雇员加上超时费用
+                Integer r4 = fundMapper.addFund(new FundVO(employee.getId(), ordersVO.getId(), employee.getBalance(), ordersVO.getPay(), System.currentTimeMillis() / 1000, 4));
+                if (r1 > 0 && r2 > 0 && r3 > 0 && r4 > 0) {
+                    return Result.getSuccess("操作成功");
+                } else return Result.getFailure("更新金额失败");
+            }
+
+            //此操作是雇员完成订单，更新工资、更新资金记录
+            if (ordersVO.getEndTime() != null) {
+                //更新当前登陆用户工资---加上订单的费用
+                UserDO user = (UserDO) request.getSession().getAttribute("user");
+                user.setBalance(user.getBalance() + detailOrders.getOrderPrice());
+                Integer res1 = userMapper.updateUser2(user);
+                //更新记录
+                Integer res2 = fundMapper.addFund(new FundVO(user.getId(), ordersVO.getId(), user.getBalance(), detailOrders.getOrderPrice(), System.currentTimeMillis() / 1000, 5));
+                if (res1 > 0 && res2 > 0) {
+                    return Result.getSuccess("操作成功");
+                } else return Result.getFailure("更新金额失败");
+            }
+            //此操作是管理员同意 退款申请 ，更新员工的工资、雇主的余额 以及 更新资金记录
+            if (ordersVO.getState() == 6) {
+                //根据订单更新雇员
+                UserDO employee = userMapper.findDetailUser(new UserVO(detailOrders.getEmployeeId()));
+                employee.setBalance(employee.getBalance() - detailOrders.getOrderPrice());
+                Integer count1 = userMapper.updateUser2(employee);
+                //更新资金
+                Integer count2 = fundMapper.addFund(new FundVO(employee.getId(), ordersVO.getId(), employee.getBalance(), detailOrders.getOrderPrice(), System.currentTimeMillis() / 1000, 6));
+                //根据订单更新雇主
+                UserDO employer = userMapper.findDetailUser(new UserVO(detailOrders.getEmployerId()));
+                employer.setBalance(employer.getBalance() + detailOrders.getOrderPrice());
+                Integer count3 = userMapper.updateUser2(employer);
+                //更新资金
+                Integer count4 = fundMapper.addFund(new FundVO(employer.getId(), ordersVO.getId(), employer.getBalance(), detailOrders.getOrderPrice(), System.currentTimeMillis() / 1000, 3));
+                if (count3 > 0 && count4 > 0 && count1 > 0 && count2 > 0) {
+                    return Result.getSuccess("操作成功");
+                } else return Result.getFailure("更新金额失败");
+
+            }
             return Result.getSuccess("操作成功");
         }
         return Result.getFailure("操作失败");

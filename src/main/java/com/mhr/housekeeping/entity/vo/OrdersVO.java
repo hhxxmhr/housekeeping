@@ -272,6 +272,19 @@ public class OrdersVO extends Query implements Serializable {
      */
     private Integer pay;
 
+    /**
+     * 退款的原因
+     */
+    private String reason;
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -398,6 +411,13 @@ public class OrdersVO extends Query implements Serializable {
 
     public void setPay(Integer pay) {
         this.pay = pay;
+    }
+
+    public OrdersVO(Integer id) {
+        this.id = id;
+    }
+
+    public OrdersVO() {
     }
 
     @Override

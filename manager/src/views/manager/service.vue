@@ -128,7 +128,8 @@
             {max: 4, message: "长度在4个字符", trigger: "blur"}
           ],
           price: [
-            {required: true, message: "请输入基础工资", trigger: "blur"},
+            {required: true, message: "请输入基础工资并且为偶数", trigger: "blur"},
+            { type: 'number', message: '年龄必须为数字值'}
           ],
         },
       };

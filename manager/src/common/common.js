@@ -64,6 +64,8 @@ Vue.prototype.OrderState = {
   2: "已确认",
   3: "待评论",
   4: "已评论",
+  5: "退款中",
+  6: "已退款",
 };
 
 Vue.prototype.timestamp = function () {
@@ -121,7 +123,7 @@ Vue.prototype.$formatTimeDay = function (inputTime) {
   m = m < 10 ? ('0' + m) : m;
   let d = date.getDate();
   d = d < 10 ? ('0' + d) : d;
-  return y + '-' + m + '-' + d  ;
+  return y + '-' + m + '-' + d;
 };
 
 Vue.prototype.$formatTimeXs = function (inputTime) {

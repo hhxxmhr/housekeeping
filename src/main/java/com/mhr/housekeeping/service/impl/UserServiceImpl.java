@@ -1,14 +1,11 @@
 package com.mhr.housekeeping.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.mhr.housekeeping.dao.OrdersMapper;
-import com.mhr.housekeeping.dao.ServiceMapper;
-import com.mhr.housekeeping.dao.UserMapper;
-import com.mhr.housekeeping.dao.UserServiceMapper;
+import com.mhr.housekeeping.dao.*;
 import com.mhr.housekeeping.entity.ServiceDO;
 import com.mhr.housekeeping.entity.UserDO;
 import com.mhr.housekeeping.entity.UserServiceDO;
+import com.mhr.housekeeping.entity.vo.FundVO;
 import com.mhr.housekeeping.entity.vo.OrdersVO;
 import com.mhr.housekeeping.entity.vo.UserServiceVO;
 import com.mhr.housekeeping.entity.vo.UserVO;
@@ -38,6 +35,8 @@ public class UserServiceImpl implements UserService {
     HttpServletRequest request;
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private FundMapper fundMapper;
     @Resource
     private OrdersMapper ordersMapper;
     @Resource
@@ -69,8 +68,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result updateUser(UserVO userVO, Integer service) throws Exception {
-        List<UserDO> getUserForUpdate = userMapper.getUserForUpdate(userVO);
-
         Integer count = userMapper.updateUser(userVO);
         if (count > 0) {
             //更新user_service
@@ -197,6 +194,29 @@ public class UserServiceImpl implements UserService {
         return userMapper.findUserByOrder(orderId);
     }
 
+    /**
+     * 充值
+     *
+     * @param money   充值金额
+     * @return
+     */
+    @Override
+    public Result updateUserBalance(UserDO userDO ,Integer money) {
+        Integer count = userMapper.updateUser2(userDO);
+        if (count > 0) {
+            //更新资金记录表
+            FundVO vo = new FundVO();
+            vo.setBalance(userDO.getBalance());
+            vo.setChangeMoney(money);
+            vo.setCreateTime(System.currentTimeMillis() / 1000);
+            vo.setType(0);
+            vo.setUserId(userDO.getId());
+            Integer res = fundMapper.addFund(vo);
+            if (res > 0) return Result.getSuccess("充值成功");
+            else return Result.getFailure("充值失败");
+        } else return Result.getFailure("充值失败");
+    }
+
     public void moreInfo(List<UserVO> userVOS) {
         if (userVOS != null && userVOS.size() > 0) {
             userVOS.forEach(it -> {
@@ -204,7 +224,7 @@ public class UserServiceImpl implements UserService {
                 List<ServiceDO> serviceByUserId = serviceMapper.findServiceByUserId(it.getId());
                 it.setServices(serviceByUserId);
                 //根据员工id查询完成的订单数
-                if (it.getRole()==200){
+                if (it.getRole() == 200) {
                     Integer orderCount = ordersMapper.countOrdersByEmployeeId(it);
                     it.setOrderCount(orderCount);
                     //计算此员工的好评率
@@ -216,7 +236,7 @@ public class UserServiceImpl implements UserService {
                     Integer goodComment = ordersMapper.countGoodOrders(orderVO);
                     it.setTotalComment(totalComment);
                     it.setGoodComment(goodComment);
-                }else if (it.getRole()==300){
+                } else if (it.getRole() == 300) {
                     Integer orderCount = ordersMapper.countOrdersByEmployerId(it);
                     it.setOrderCount(orderCount);//有效的订单数  状态3/4
                     //计算此员工的好评率

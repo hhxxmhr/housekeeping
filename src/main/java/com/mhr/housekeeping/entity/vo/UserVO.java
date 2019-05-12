@@ -179,6 +179,8 @@ public class UserVO extends Query implements Serializable {
 
     private String prov;
 
+    private Integer balance;
+
     public UserVO(Integer id) {
         this.id = id;
     }
@@ -344,6 +346,14 @@ public class UserVO extends Query implements Serializable {
 
     public void setProv(String prov) {
         this.prov = prov;
+    }
+
+    public Integer getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Integer balance) {
+        this.balance = balance;
     }
 
     @Override

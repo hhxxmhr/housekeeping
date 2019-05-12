@@ -52,6 +52,8 @@ public class UserDO implements Serializable {
 
     private String prov;
 
+    private Integer balance;
+
     public Integer getId() {
         return id;
     }
@@ -210,6 +212,14 @@ public class UserDO implements Serializable {
 
     public void setProv(String prov) {
         this.prov = prov;
+    }
+
+    public Integer getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Integer balance) {
+        this.balance = balance;
     }
 
     @Override

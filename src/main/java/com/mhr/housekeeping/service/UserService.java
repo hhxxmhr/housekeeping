@@ -14,37 +14,39 @@ import java.util.List;
  */
 public interface UserService {
 
-	Result addUser(UserVO userVO, List<Integer> serviceList) throws Exception;
+    Result addUser(UserVO userVO, List<Integer> serviceList) throws Exception;
 
-	Result updateUser(UserVO userVO,Integer service) throws Exception;
-	
-	Result findDetailUser(UserVO userVO) throws Exception;
+    Result updateUser(UserVO userVO, Integer service) throws Exception;
 
-	List<UserVO> listUser(UserVO userVO) throws Exception;
+    Result findDetailUser(UserVO userVO) throws Exception;
+
+    List<UserVO> listUser(UserVO userVO) throws Exception;
 
     Result listUserPage(UserVO userVO) throws Exception;
-	
-	Result countUser(UserVO userVO) throws Exception;
-	
-	Result deleteUser(UserVO userVO) throws Exception;
 
-	UserDO getUserByUsername(UserVO username) throws Exception;
+    Result countUser(UserVO userVO) throws Exception;
 
-	Result updateUserState(UserVO userVO);
+    Result deleteUser(UserVO userVO) throws Exception;
 
-	Result editPassword(String new_pwd, String old_pwd);
+    UserDO getUserByUsername(UserVO username) throws Exception;
 
-	UserDO getUserByPhone(UserVO userVO);
+    Result updateUserState(UserVO userVO);
 
-	UserDO getUserByIdCard(UserVO userVO);
+    Result editPassword(String new_pwd, String old_pwd);
 
-	UserDO getUserByBankCard(UserVO userVO);
+    UserDO getUserByPhone(UserVO userVO);
+
+    UserDO getUserByIdCard(UserVO userVO);
+
+    UserDO getUserByBankCard(UserVO userVO);
 
     Result updateUserByUsername(UserVO userVO);
 
-	JSONObject findUserInfos(UserVO userVO);
+    JSONObject findUserInfos(UserVO userVO);
 
-	Result listUserByServiceId(UserVO userVO);
+    Result listUserByServiceId(UserVO userVO);
 
-	UserDO findUserByOrder(Integer orderId);
+    UserDO findUserByOrder(Integer orderId);
+
+    Result updateUserBalance(UserDO userDO , Integer money);
 }

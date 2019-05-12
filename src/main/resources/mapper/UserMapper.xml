@@ -24,6 +24,7 @@
         <result property="introduction" column="introduction"/>
         <result property="city" column="city"/>
         <result property="prov" column="prov"/>
+        <result property="balance" column="balance"/>
     </resultMap>
     <resultMap id="userMapperVo" type="UserVO">
         <result property="id" column="id"/>
@@ -46,6 +47,7 @@
         <result property="introduction" column="introduction"/>
         <result property="city" column="city"/>
         <result property="prov" column="prov"/>
+        <result property="balance" column="balance"/>
     </resultMap>
 
     <resultMap id="userMapperMore" type="UserVO">
@@ -69,6 +71,7 @@
         <result property="introduction" column="introduction"/>
         <result property="city" column="city"/>
         <result property="prov" column="prov"/>
+        <result property="balance" column="balance"/>
         <result property="rankName" column="rank_name"/>
         <result property="money" column="money"/>
         <result property="serviceName" column="service_name"/>
@@ -83,7 +86,7 @@
 	</sql>
 
     <sql id="_fields">
-		id,`name`,username,`password`,role,state,sex,age,phone,id_card,bank_card,create_time,photo,address,married,education,experience,introduction,city,prov
+		id,`name`,username,`password`,role,state,sex,age,phone,id_card,bank_card,create_time,photo,address,married,education,experience,introduction,city,prov,balance
 	</sql>
 
     <sql id="_condition">
@@ -147,6 +150,9 @@
             </if>
             <if test="prov!=null and ''!=prov">
                 AND prov = #{prov}
+            </if>
+            <if test="balance!=null">
+                AND balance = #{balance}
             </if>
         </trim>
     </sql>
@@ -228,6 +234,9 @@
             <if test="prov!=null and ''!=prov">
                 prov,
             </if>
+            <if test="balance!=null">
+                balance
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
@@ -289,6 +298,9 @@
             </if>
             <if test="prov!=null and ''!=prov">
                 #{prov},
+            </if>
+            <if test="balance!=null">
+               #{balance},
             </if>
         </trim>
     </insert>
@@ -354,6 +366,76 @@
             <if test="prov!=null and ''!=prov">
                 prov = #{prov},
             </if>
+            <if test="balance!=null">
+                balance = #{balance},
+            </if>
+        </set>
+        <include refid="_primaryKey_condition"/>
+    </update>
+    <update id="updateUser2" parameterType="UserDO">
+        UPDATE
+        <include refid="_table"/>
+        <set>
+            <if test="name!=null and ''!=name">
+                `name` = #{name},
+            </if>
+            <if test="username!=null and ''!=username">
+                username = #{username},
+            </if>
+            <if test="password!=null and ''!=password">
+                `password` = #{password},
+            </if>
+            <if test="role!=null">
+                role = #{role},
+            </if>
+            <if test="state!=null">
+                state = #{state},
+            </if>
+            <if test="sex!=null and ''!=sex">
+                sex = #{sex},
+            </if>
+            <if test="age!=null">
+                age = #{age},
+            </if>
+            <if test="phone!=null and ''!=phone">
+                phone = #{phone},
+            </if>
+            <if test="idCard!=null and ''!=idCard">
+                id_card = #{idCard},
+            </if>
+            <if test="bankCard!=null and ''!=bankCard">
+                bank_card = #{bankCard},
+            </if>
+            <if test="createTime!=null">
+                create_time = #{createTime},
+            </if>
+            <if test="photo!=null and ''!=photo">
+                photo = #{photo},
+            </if>
+            <if test="address!=null and ''!=address">
+                address = #{address},
+            </if>
+            <if test="married!=null and ''!=married">
+                married = #{married},
+            </if>
+            <if test="education!=null">
+                education = #{education},
+            </if>
+            <if test="experience!=null">
+                experience = #{experience},
+            </if>
+            <if test="introduction!=null and ''!=introduction">
+                introduction = #{introduction},
+            </if>
+            <if test="city!=null and ''!=city">
+                city = #{city},
+            </if>
+            <if test="prov!=null and ''!=prov">
+                prov = #{prov},
+            </if>
+            <if test="balance!=null">
+                balance = #{balance},
+            </if>
         </set>
         <include refid="_primaryKey_condition"/>
     </update>
@@ -390,6 +472,7 @@
         `user`.introduction,
         `user`.city,
         `user`.prov,
+        `user`.balance,
         rank.`name` AS rank_name,
         rank.money,
         service.`name` AS service_name,
@@ -405,7 +488,7 @@
     </select>
 
     <select id="listUserByServiceId" resultMap="userMapperMore" parameterType="UserVO">
-      SELECT
+        SELECT
         user_service.user_id,
         user_service.service_id,
         user_service.rank_id,
@@ -428,6 +511,7 @@
         `user`.introduction,
         `user`.city,
         `user`.prov,
+        `user`.balance,
         rank.`name` AS rank_name,
         rank.money,
         service.`name` AS service_name,
@@ -455,7 +539,6 @@
         <if test="rankId!=null">
             AND rankId = #{rankId}
         </if>
-
 
 
     </select>
@@ -535,6 +618,10 @@
 
     <update id="updateUserByUsername" parameterType="UserVO">
         update user set password = #{password} where username = #{username}
+    </update>
+
+    <update id="updateUserBalance" parameterType="java.lang.Integer">
+        update user set balance = #{balance} where id = #{id}
     </update>
 </mapper>
 

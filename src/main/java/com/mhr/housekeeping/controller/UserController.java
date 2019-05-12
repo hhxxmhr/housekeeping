@@ -124,7 +124,6 @@ public class UserController {
     @RequestMapping("/User/register")
     public Result register(@RequestBody HashMap hashMap) throws Exception {
         List<Integer> serviceList = (List<Integer>) hashMap.get("service");
-        System.out.println(serviceList);
         hashMap.remove("service");
         //hashMap转json字符串
         String jsonString = JSON.toJSONString(hashMap, true);
@@ -151,6 +150,7 @@ public class UserController {
         }*/
         userVO.setCreateTime(System.currentTimeMillis() / 1000);
         userVO.setState(EnumType.check);
+        userVO.setBalance(0);
         return userService.addUser(userVO, serviceList);
     }
 
@@ -251,6 +251,23 @@ public class UserController {
     @RequestMapping("/User/deleteEmployee")
     public Result deleteEmployee(@RequestBody UserVO userVO) throws Exception {
         return userService.deleteUser(userVO);
+    }
+
+
+    @RequestMapping("/User/recharge")
+    public Result recharge(@RequestBody HashMap hashMap, HttpServletRequest request) throws Exception {
+        UserDO user = (UserDO) request.getSession().getAttribute("user");
+        Integer balance = user.getBalance();
+        Integer money = (Integer) hashMap.get("money");
+        user.setBalance(balance + money);
+        return userService.updateUserBalance(user, money);
+    }
+
+    @RequestMapping("/User/getBalance")
+    public UserDO getBalance(@RequestBody UserVO userVO) throws Exception {
+        Result detailUser = userService.findDetailUser(userVO);
+        UserDO data = (UserDO) detailUser.getData();
+        return data;
     }
 
     public Result message(UserVO userVO) throws ClientException, InterruptedException {

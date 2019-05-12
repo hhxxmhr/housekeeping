@@ -44,4 +44,8 @@ public interface UserMapper {
     List<UserVO> listUserByServiceId(UserVO userVO);
 
     UserDO findUserByOrder(Integer orderId);
+
+    Integer updateUserBalance(Integer id, Integer balance);
+
+    Integer updateUser2(UserDO userDO);
 }

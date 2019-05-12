@@ -8,6 +8,10 @@
                    :isActive="sidebar.opened"></hamburger>
         <div style="float: left">{{$route.name}}</div>
         <div style="float: right;padding-right: 10px">
+
+            <el-button type="text" style="margin-right: 20px" v-if="role===300" @click="rechargeVisible = true">
+              余额：{{parseInt(balance)}}元-->充值
+            </el-button>
           <el-dropdown>
             <span class="el-dropdown-link">
               {{username+' '+(rankName!=null?rankName:'')}}
@@ -28,10 +32,34 @@
 
       <section class="app-main">
         <transition name="fade" mode="out-in">
-          <router-view @logout="logout"></router-view>
+          <router-view @logout="logout" @updateBalance="updateBalance"></router-view>
         </transition>
       </section>
     </div>
+    <!--充值对话框-->
+    <el-dialog width="400px"
+               title="充值"
+               :visible.sync="rechargeVisible"
+               :close-on-click-modal="false">
+      <el-form :model="rechargeForm"
+               :rules="rechargeRules"
+               ref="rechargeForm">
+        <el-form-item label="充值金额"
+                      prop="money"
+                      label-width="80px">
+          <el-input v-model="rechargeForm.money" style="width: 220px">
+            <template slot="append">元</template>
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer"
+           class="dialog-footer">
+        <el-button @click="closeRechargeForm()">取消</el-button>
+        <at-button type="primary"
+                   @click="recharge()">确定
+        </at-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -58,7 +86,20 @@
         device: 'desktop',
         sidebar: {opened: true, withoutAnimation: false},
         routeMap: [],
-        rankName: null
+        rankName: null,
+        balance: null,
+        money: null,
+        rechargeVisible: false,
+        rechargeForm: {
+          id: window.$mine.id,
+          money: null,//充值金额
+        },
+        rechargeRules: {
+          money: [
+            {required: true, message: "请输入数值", trigger: "blur"},
+            {pattern: /^[1-9]\d*$/, message: '请输入正整数'},
+          ],
+        }
       }
     },
     computed: {
@@ -72,6 +113,9 @@
       },
       username() {
         return window.$mine.username;
+      },
+      role() {
+        return window.$mine.role;
       },
     },
     methods: {
@@ -94,18 +138,46 @@
       },
       //退出登录
       async logout() {
-        const res = await this.$api('User/logout',{});
+        const res = await this.$api('User/logout', {});
         if (!res) return false;
         location.replace('/login');
-      }
+      },
+
+      closeRechargeForm() {
+        this.rechargeVisible = false;
+        setTimeout(() => {
+          this.$refs["rechargeForm"].resetFields();
+        }, 200);
+      },
+      //充值
+      recharge() {
+        this.$refs["rechargeForm"].validate(async (valid) => {
+          if (valid) {
+            let res = await this.$api('User/recharge', {
+              id: parseInt(this.rechargeForm.id),
+              money: parseInt(this.rechargeForm.money),
+            });
+            if (res.code === 200) {
+              this.rechargeVisible = false;
+              this.$message.success('充值成功');
+              this.updateBalance();
+
+            }
+          }
+        });
+      },
+      async updateBalance() {
+        let res = await this.$api('User/getBalance', {id: window.$mine.id});
+        this.balance = res.balance;
+      },
     },
     async created() {
       if (!window.$mine) {
-        const res = await this.$api('User/getMineInfo',{});
+        const res = await this.$api('User/getMineInfo', {});
         if (!res) return false;
         window.$mine = res.data;
       }
-
+      this.updateBalance();
       // 根据role来渲染菜单
       let role = window.$mine.role;
       let routes = this.$router.options.routes;

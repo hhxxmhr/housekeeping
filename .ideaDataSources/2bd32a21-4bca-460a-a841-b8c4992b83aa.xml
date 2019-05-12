@@ -1312,63 +1312,68 @@
       <ColumnKind>normal</ColumnKind>
       <Collation>utf8_general_ci</Collation>
     </column>
-    <key id="307" parent="236" name="PRIMARY">
+    <column id="307" parent="236" name="balance">
+      <Position>21</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <key id="308" parent="236" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="308" parent="237" name="id">
+    <column id="309" parent="237" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="309" parent="237" name="user_id">
+    <column id="310" parent="237" name="user_id">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="310" parent="237" name="service_id">
+    <column id="311" parent="237" name="service_id">
       <Position>3</Position>
       <DataType>int(11)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="311" parent="237" name="rank_id">
+    <column id="312" parent="237" name="rank_id">
       <Position>4</Position>
       <DataType>int(11)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="312" parent="237" name="user_id">
+    <index id="313" parent="237" name="user_id">
       <ColNames>user_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="313" parent="237" name="user_service_ibfk_1">
+    <index id="314" parent="237" name="user_service_ibfk_1">
       <ColNames>service_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="314" parent="237" name="rank_id">
+    <index id="315" parent="237" name="rank_id">
       <ColNames>rank_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="315" parent="237" name="PRIMARY">
+    <key id="316" parent="237" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="316" parent="237" name="user_id">
+    <foreign-key id="317" parent="237" name="user_id">
       <ColNames>user_id</ColNames>
       <RefSchemaName>housekeeping</RefSchemaName>
       <RefTableName>user</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="317" parent="237" name="user_service_ibfk_1">
+    <foreign-key id="318" parent="237" name="user_service_ibfk_1">
       <ColNames>service_id</ColNames>
       <RefSchemaName>housekeeping</RefSchemaName>
       <RefTableName>service</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="318" parent="237" name="rank_id">
+    <foreign-key id="319" parent="237" name="rank_id">
       <ColNames>rank_id</ColNames>
       <RefSchemaName>housekeeping</RefSchemaName>
       <RefTableName>rank</RefTableName>

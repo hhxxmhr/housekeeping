@@ -21,6 +21,7 @@ public class OrderController {
     public Result add(@RequestBody OrdersVO ordersVO) throws Exception {
         ordersVO.setState(0);
         ordersVO.setCreateTime(System.currentTimeMillis() / 1000);
+        ordersVO.setPay(0);
         return ordersService.addOrders(ordersVO);
     }
 

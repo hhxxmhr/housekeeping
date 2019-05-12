@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!--:class="{'do':index%3===1,'does':index%3===2,'doing':index%4===3}"-->
     <el-form :model="reserveForm" :rules="rules" ref="reserveForm" label-width="120px" class="demo-reserveForm"
              style="width: 100%">
       <el-form-item label="所选服务" prop="serviceId" style="width: 1200px">
@@ -24,9 +23,6 @@
           </el-radio>
         </el-radio-group>
       </el-form-item>
-      <!--<el-form-item label="预约时长" prop="amount" :label-width="formLabelWidth">
-        <el-input-number v-model="addAdsl.amount" style="width: 217px" :min="1"></el-input-number>
-      </el-form-item>-->
       <el-form-item label="上门时间" prop="reverseTime" required>
         <el-date-picker
           v-model="reserveForm.reverseTime"
@@ -85,11 +81,8 @@
         <el-form-item label="服务金额：" :label-width="formLabelWidth">
           {{reserveForm.orderPrice}}元
         </el-form-item>
-        <!--<el-form-item label="注意事项：" :label-width="formLabelWidth">-->
-          <span style="color: #f78989">订单预定后，2小时之内可免费取消。</span>
-          <span style="color: #f78989">若超出2小时取消订单，将收取订单价格的5%,即{{reserveForm.orderPrice*0.05}}元</span>
-
-        <!--</el-form-item>-->
+        <span style="color: #f78989">订单预定后，2小时之内可免费取消。</span>
+        <span style="color: #f78989">若超出2小时取消订单，将收取订单价格的50%,即{{reserveForm.orderPrice*0.5}}元</span>
 
       </el-form>
       <div slot="footer" style="margin-top: -30px">
@@ -158,6 +151,7 @@
       }
     },
     async created() {
+      this.$emit("updateBalance");//刷新余额
       this.initQuery();
       this.init();
       this.getMineInfo();
@@ -230,20 +224,26 @@
         });
       },
       async submit() {
-        this.reserveForm.reverseTime = this.reserveForm.reverseTime / 1000;
-        let res = await this.$api('Order/add', this.reserveForm);
-        this.dialog_visible = false;
-        this.$message({
-          type: res.code === 200 ? 'success' : 'error',
-          message: res.msg
-        });
-        if (res.code === 200) {
-          //跳转到订单列表页面
-          this.$router.push({
-            path: "/manager/orders",
+        //检查余额是否充足
+        if (this.reserveForm.orderPrice > window.$mine.balance) {
+          this.$message.error("余额不足，请先充值");
+          this.dialog_visible = false;
+        } else {
+          this.reserveForm.reverseTime = this.reserveForm.reverseTime / 1000;
+          let res = await this.$api('Order/add', this.reserveForm);
+          this.dialog_visible = false;
+          this.$message({
+            type: res.code === 200 ? 'success' : 'error',
+            message: res.msg
           });
+          this.$emit("updateBalance");//刷新余额
+          if (res.code === 200) {
+            //跳转到订单列表页面
+            this.$router.push({
+              path: "/manager/orders",
+            });
+          }
         }
-
       },
       selectProv(data) {
         this.reserveForm.prov = data.value;

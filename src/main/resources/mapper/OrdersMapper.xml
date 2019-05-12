@@ -20,6 +20,7 @@
         <result property="prov" column="prov"/>
         <result property="city" column="city"/>
         <result property="pay" column="pay"/>
+        <result property="reason" column="reason"/>
     </resultMap>
     <resultMap id="ordersMoreMapper" type="OrdersVO">
         <result property="id" column="id"/>
@@ -38,6 +39,7 @@
         <result property="prov" column="prov"/>
         <result property="city" column="city"/>
         <result property="pay" column="pay"/>
+        <result property="reason" column="reason"/>
         <result property="serviceName" column="service_name"/>
         <result property="servicePrice" column="service_price"/>
         <result property="serviceParent" column="service_parent"/>
@@ -59,7 +61,7 @@
 	</sql>
 
     <sql id="_fields">
-		id,service_id,employee_id,reverse_time,address,phone,tip,state,order_price,employer_id,create_time,end_time,rate,prov,city,pay
+		id,service_id,employee_id,reverse_time,address,phone,tip,state,order_price,employer_id,create_time,end_time,rate,prov,city,pay,reason
 	</sql>
 
     <sql id="_condition">
@@ -112,6 +114,9 @@
             <if test="pay!=null">
                 AND pay = #{pay}
             </if>
+            <if test="reason!=null and ''!=reason">
+                AND reason = #{reason}
+            </if>
         </trim>
     </sql>
 
@@ -128,7 +133,7 @@
         </if>
     </sql>
 
-    <insert id="addOrders" parameterType="OrdersVO" keyProperty="id">
+    <insert id="addOrders" parameterType="OrdersVO" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
         <include refid="_table"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -180,6 +185,9 @@
             <if test="pay!=null">
                 pay,
             </if>
+            <if test="reason!=null and ''!=reason">
+                reason,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
@@ -229,6 +237,9 @@
             </if>
             <if test="pay!=null">
                 #{pay},
+            </if>
+            <if test="reason!=null and ''!=reason">
+                #{reason}
             </if>
         </trim>
     </insert>
@@ -282,6 +293,9 @@
             <if test="pay!=null">
                 pay = #{pay},
             </if>
+            <if test="reason!=null and ''!=reason">
+                reason = #{reason}
+            </if>
         </set>
         <include refid="_primaryKey_condition"/>
     </update>
@@ -321,6 +335,7 @@
         orders.prov,
         orders.city,
         orders.pay,
+        orders.reason,
         service.`name` AS service_name,
         service.price AS service_price,
         service.parent AS service_parent,
@@ -366,6 +381,7 @@
         orders.prov,
         orders.city,
         orders.pay,
+        orders.reason,
         service.`name` AS service_name,
         service.price AS service_price,
         service.parent AS service_parent,
