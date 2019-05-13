@@ -24,4 +24,6 @@ public interface FundService {
 	Result countFund(FundVO fundVO) throws Exception;
 	
 	Result deleteFund(FundVO fundVO) throws Exception;
+
+    Integer getExtra(FundVO vo);
 }

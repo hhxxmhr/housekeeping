@@ -3,6 +3,7 @@ package com.mhr.housekeeping.service;
 
 import com.github.pagehelper.PageInfo;
 import com.mhr.housekeeping.entity.vo.OrdersVO;
+import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.utils.Result;
 
 /**
@@ -21,7 +22,7 @@ public interface OrdersService {
 
     Result listOrdersPage(OrdersVO ordersVO) throws Exception;
 
-    Result countOrders(OrdersVO ordersVO) throws Exception;
+    Integer countOrders(OrdersVO ordersVO) throws Exception;
 
     Result deleteOrders(OrdersVO ordersVO) throws Exception;
 
@@ -42,4 +43,10 @@ public interface OrdersService {
     Integer countOrdersWithComment(OrdersVO ordersVO);
 
     Integer countOrdersWithGoodComment(OrdersVO ordersVO);
+
+    Integer countOrdersByEmployeeId(UserVO userVO );
+
+    Integer countOrdersWithReason(OrdersVO ordersVO);
+
+    Integer getServiceMost(Integer id);
 }

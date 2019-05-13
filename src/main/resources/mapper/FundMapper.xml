@@ -204,4 +204,7 @@
         <include refid="_primaryKey_condition"/>
     </delete>
 
+    <select id="getExtra" parameterType="FundVO" resultType="java.lang.Integer">
+        select sum(fund.change_money) from fund where fund.user_id = #{userId} and fund.type = #{type }
+    </select>
 </mapper>

@@ -16,8 +16,8 @@ public interface ServiceService {
 	Result addService(ServiceVO serviceVO) throws Exception;
 
 	Result updateService(ServiceVO serviceVO) throws Exception;
-	
-	Result findDetailService(ServiceVO serviceVO) throws Exception;
+
+	ServiceDO findDetailService(ServiceVO serviceVO) throws Exception;
 	
 	Result listService(ServiceVO serviceVO) throws Exception;
 

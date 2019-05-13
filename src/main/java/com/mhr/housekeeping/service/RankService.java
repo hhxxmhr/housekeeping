@@ -1,5 +1,6 @@
 package com.mhr.housekeeping.service;
 
+import com.mhr.housekeeping.entity.RankDO;
 import com.mhr.housekeeping.entity.vo.RankVO;
 import com.mhr.housekeeping.utils.Result;
 
@@ -26,4 +27,6 @@ public interface RankService {
     Result findRankByUserId(Integer id);
 
 	Result findRankByUidAndSid(Integer userId, Integer serviceId);
+
+    RankDO getMostRank(Integer id);
 }

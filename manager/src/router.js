@@ -19,7 +19,25 @@ const routes = [
   {path: '/forget', name: '忘记密码', hidden: true, component: () => import('./views/login/forget')},
   {
     path: '/', component: layout, name: '', meta: {icon: 'el-icon-menu'},
-    children: [{path: '/index', name: '首页', component: () => import('./views/manager/index'), meta: {login: true}}]
+    children: [{
+      path: '/manager/index',
+      name: '首页',
+      roles: [100],
+      component: () => import('./views/manager/index'),
+      meta: {login: true}
+    }, {
+      path: '/employee/index',
+      name: '首页',
+      roles: [200],
+      component: () => import('./views/employee/index'),
+      meta: {login: true}
+    }, {
+      path: '/employer/index',
+      name: '首页',
+      roles: [300],
+      component: () => import('./views/employer/index'),
+      meta: {login: true}
+    }]
   },
   {
     path: '/', component: layout, name: '', roles: [1], meta: {icon: 'el-icon-menu'},
@@ -133,7 +151,7 @@ const routes = [
   },
 
   {
-    path: '/', name: '数据统计', roles: [100],component: layout, meta: {icon: 'el-icon-sort', login: true},
+    path: '/', name: '数据统计', roles: [100], component: layout, meta: {icon: 'el-icon-sort', login: true},
     children: [
       {
         path: '/manager/serviceSta',
@@ -151,7 +169,7 @@ const routes = [
   },
 
   {
-    path: '/', name: '我的统计', roles: [200,300], component: layout, meta: {icon: 'el-icon-sort', login: true},
+    path: '/', name: '我的统计', roles: [200, 300], component: layout, meta: {icon: 'el-icon-sort', login: true},
     children: [
       {
         path: '/employee/myServiceSta',

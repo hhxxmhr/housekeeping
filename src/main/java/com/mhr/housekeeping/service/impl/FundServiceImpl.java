@@ -3,7 +3,6 @@ package com.mhr.housekeeping.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mhr.housekeeping.dao.*;
-import com.mhr.housekeeping.entity.OrdersDO;
 import com.mhr.housekeeping.entity.RankDO;
 import com.mhr.housekeeping.entity.ServiceDO;
 import com.mhr.housekeeping.entity.UserDO;
@@ -13,13 +12,11 @@ import com.mhr.housekeeping.entity.vo.ServiceVO;
 import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.service.FundService;
 import com.mhr.housekeeping.utils.Result;
-import com.sun.org.apache.xpath.internal.operations.Or;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -99,6 +96,11 @@ public class FundServiceImpl implements FundService {
     @Override
     public Result deleteFund(FundVO fundVO) throws Exception {
         return null;
+    }
+
+    @Override
+    public Integer getExtra(FundVO vo) {
+        return fundMapper.getExtra(vo);
     }
 
 }

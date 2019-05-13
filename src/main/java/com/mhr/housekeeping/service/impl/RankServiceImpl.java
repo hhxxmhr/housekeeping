@@ -112,4 +112,9 @@ public class RankServiceImpl implements RankService {
         return new Result<>(rankByOrder);
     }
 
+    @Override
+    public RankDO getMostRank(Integer id) {
+        return rankMapper.getMostRank(id);
+    }
+
 }

@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
+import com.mhr.housekeeping.entity.RankDO;
+import com.mhr.housekeeping.entity.ServiceDO;
 import com.mhr.housekeeping.entity.UserDO;
+import com.mhr.housekeeping.entity.vo.FundVO;
+import com.mhr.housekeeping.entity.vo.OrdersVO;
+import com.mhr.housekeeping.entity.vo.ServiceVO;
 import com.mhr.housekeeping.entity.vo.UserVO;
-import com.mhr.housekeeping.service.RankService;
-import com.mhr.housekeeping.service.ServiceService;
-import com.mhr.housekeeping.service.UserService;
-import com.mhr.housekeeping.service.UserServiceService;
+import com.mhr.housekeeping.service.*;
 import com.mhr.housekeeping.utils.EnumType;
 import com.mhr.housekeeping.utils.Result;
 import com.mhr.housekeeping.utils.SmsUtils;
@@ -36,6 +38,10 @@ public class UserController {
     ServiceService serviceService;
     @Autowired
     RankService rankService;
+    @Autowired
+    OrdersService ordersService;
+    @Autowired
+    FundService fundService;
     /*@Autowired
     HttpServletRequest request;*/
     static Integer code;
@@ -268,6 +274,51 @@ public class UserController {
         Result detailUser = userService.findDetailUser(userVO);
         UserDO data = (UserDO) detailUser.getData();
         return data;
+    }
+
+    /**
+     * 为雇员首页 收益、订单数、好评数、好评率、退款率、额外收益、最优服务、最高等级、每月的收益统计
+     *
+     * @param
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/User/statistics")
+    public JSONObject statistics(HttpServletRequest request) throws Exception {
+        JSONObject object = new JSONObject();
+        UserDO user = (UserDO) request.getSession().getAttribute("user");
+        OrdersVO ordersVO = new OrdersVO();
+        ordersVO.setEmployeeId(user.getId());
+        object.put("balance", user.getBalance());
+        //根据userId查询完成的订单数
+        Integer orderCount = ordersService.countOrdersByEmployeeId(new UserVO(user.getId()));
+        object.put("orderCount", orderCount);
+        //好评量
+        Integer goodComment = ordersService.countOrdersWithGoodComment(ordersVO);
+        object.put("goodComment", goodComment);
+        //好评率
+        Integer comment = ordersService.countOrdersWithComment(ordersVO);
+        float goodPercent = (float) goodComment / comment;
+        object.put("goodPercent", goodPercent);
+        //退款率
+        Integer countOrders = ordersService.countOrders(ordersVO);
+        Integer refundCount = ordersService.countOrdersWithReason(ordersVO);
+        float refundPercent = (float) refundCount / countOrders;
+        object.put("refundPercent", refundPercent);
+        //额外收益
+        FundVO vo = new FundVO();
+        vo.setUserId(user.getId());
+        vo.setType(4);
+        Integer extra = fundService.getExtra(vo);
+        object.put("extra", extra);
+        //最优服务--雇员被点最多的服务
+        Integer serviceId = ordersService.getServiceMost(user.getId());
+        ServiceDO detailService = serviceService.findDetailService(new ServiceVO(serviceId));
+        object.put("goodService", detailService.getName());
+        //最高等级
+        RankDO rankDO = rankService.getMostRank(user.getId());
+        object.put("rank", rankDO.getName());
+        return object;
     }
 
     public Result message(UserVO userVO) throws ClientException, InterruptedException {

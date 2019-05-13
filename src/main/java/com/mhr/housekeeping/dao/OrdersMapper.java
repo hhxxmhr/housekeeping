@@ -59,4 +59,8 @@ public interface OrdersMapper {
     Integer countOrdersWithComment(OrdersVO ordersVO);
 
     Integer countOrdersWithGoodComment(OrdersVO ordersVO);
+
+    Integer countOrdersWithReason(OrdersVO ordersVO);
+
+    Integer getServiceMost(Integer id);
 }

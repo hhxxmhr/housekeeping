@@ -34,4 +34,5 @@ public interface RankMapper {
 
     RankDO findRankByOrder(Integer employeeId, Integer serviceId);
 
+    RankDO getMostRank(Integer id);
 }

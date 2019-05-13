@@ -255,6 +255,17 @@
         <root url="jar://$USER_HOME$/.m2/repository/com/alibaba/fastjson/1.2.51/fastjson-1.2.51-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Maven: com.aliyun.oss:aliyun-sdk-oss:2.8.3">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m2/repository/com/aliyun/oss/aliyun-sdk-oss/2.8.3/aliyun-sdk-oss-2.8.3.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m2/repository/com/aliyun/oss/aliyun-sdk-oss/2.8.3/aliyun-sdk-oss-2.8.3-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m2/repository/com/aliyun/oss/aliyun-sdk-oss/2.8.3/aliyun-sdk-oss-2.8.3-sources.jar!/" />
+      </SOURCES>
+    </library>
     <library name="Maven: com.aliyun:aliyun-java-sdk-core:3.7.1">
       <CLASSES>
         <root url="jar://$USER_HOME$/.m2/repository/com/aliyun/aliyun-java-sdk-core/3.7.1/aliyun-java-sdk-core-3.7.1.jar!/" />
@@ -453,6 +464,17 @@
         <root url="jar://$USER_HOME$/.m2/repository/commons-beanutils/commons-beanutils/1.8.0/commons-beanutils-1.8.0-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Maven: commons-codec:commons-codec:1.11">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m2/repository/commons-codec/commons-codec/1.11/commons-codec-1.11.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m2/repository/commons-codec/commons-codec/1.11/commons-codec-1.11-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m2/repository/commons-codec/commons-codec/1.11/commons-codec-1.11-sources.jar!/" />
+      </SOURCES>
+    </library>
     <library name="Maven: commons-collections:commons-collections:3.2.1">
       <CLASSES>
         <root url="jar://$USER_HOME$/.m2/repository/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1.jar!/" />
@@ -618,6 +640,28 @@
         <root url="jar://$USER_HOME$/.m2/repository/org/apache/commons/commons-lang3/3.4/commons-lang3-3.4-sources.jar!/" />
       </SOURCES>
     </library>
+    <library name="Maven: org.apache.httpcomponents:httpclient:4.5.7">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m2/repository/org/apache/httpcomponents/httpclient/4.5.7/httpclient-4.5.7.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m2/repository/org/apache/httpcomponents/httpclient/4.5.7/httpclient-4.5.7-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m2/repository/org/apache/httpcomponents/httpclient/4.5.7/httpclient-4.5.7-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.apache.httpcomponents:httpcore:4.4.11">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m2/repository/org/apache/httpcomponents/httpcore/4.4.11/httpcore-4.4.11.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m2/repository/org/apache/httpcomponents/httpcore/4.4.11/httpcore-4.4.11-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m2/repository/org/apache/httpcomponents/httpcore/4.4.11/httpcore-4.4.11-sources.jar!/" />
+      </SOURCES>
+    </library>
     <library name="Maven: org.apache.logging.log4j:log4j-api:2.11.2">
       <CLASSES>
         <root url="jar://$USER_HOME$/.m2/repository/org/apache/logging/log4j/log4j-api/2.11.2/log4j-api-2.11.2.jar!/" />
@@ -737,6 +781,17 @@
       </JAVADOC>
       <SOURCES>
         <root url="jar://$USER_HOME$/.m2/repository/org/jboss/logging/jboss-logging/3.3.2.Final/jboss-logging-3.3.2.Final-sources.jar!/" />
+      </SOURCES>
+    </library>
+    <library name="Maven: org.jdom:jdom:1.1">
+      <CLASSES>
+        <root url="jar://$USER_HOME$/.m2/repository/org/jdom/jdom/1.1/jdom-1.1.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$USER_HOME$/.m2/repository/org/jdom/jdom/1.1/jdom-1.1-javadoc.jar!/" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$USER_HOME$/.m2/repository/org/jdom/jdom/1.1/jdom-1.1-sources.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: org.json:json:20170516">

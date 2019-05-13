@@ -239,8 +239,8 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public Result countOrders(OrdersVO ordersVO) throws Exception {
-        return null;
+    public Integer countOrders(OrdersVO ordersVO) throws Exception {
+        return ordersMapper.countOrders(ordersVO);
     }
 
     @Override
@@ -303,6 +303,21 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public Integer countOrdersWithGoodComment(OrdersVO ordersVO) {
         return ordersMapper.countOrdersWithGoodComment(ordersVO);
+    }
+
+    @Override
+    public Integer countOrdersByEmployeeId(UserVO userVO ) {
+        return ordersMapper.countOrdersByEmployeeId(userVO);
+    }
+
+    @Override
+    public Integer countOrdersWithReason(OrdersVO ordersVO) {
+        return ordersMapper.countOrdersWithReason(ordersVO);
+    }
+
+    @Override
+    public Integer getServiceMost(Integer id) {
+        return ordersMapper.getServiceMost(id);
     }
 
 

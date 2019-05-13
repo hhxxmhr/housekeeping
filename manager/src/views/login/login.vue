@@ -74,11 +74,11 @@
                 this.$router.push(query.target);
               } else {
                 if (res.data.role === this.$role.Manager) {
-                  this.$router.push('/index');
+                  this.$router.push('/manager/index');
                 } else if (res.data.role === this.$role.Employee) {
-                  this.$router.push('/index');
+                  this.$router.push('/employee/index');
                 } else if (res.data.role === this.$role.Employer) {
-                  this.$router.push('/index');
+                  this.$router.push('/employer/index');
                 } else if (res.data.role === this.$role.Root) {
                   this.$router.push('/index');
                 }

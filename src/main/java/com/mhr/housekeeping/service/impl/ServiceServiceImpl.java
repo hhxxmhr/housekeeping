@@ -63,8 +63,9 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public Result findDetailService(ServiceVO serviceVO) throws Exception {
-        return null;
+    public ServiceDO findDetailService(ServiceVO serviceVO) throws Exception {
+        return serviceMapper.findDetailService(serviceVO);
+
     }
 
     @Override
@@ -198,7 +199,7 @@ public class ServiceServiceImpl implements ServiceService {
         List<ServiceVO> vos = new ArrayList<>();
         if (role == 200) {
             vos = serviceMapper.serviceStaticByEid(serviceId, startTime, endTime, eid);
-        }else if (role==300){
+        } else if (role == 300) {
             vos = serviceMapper.serviceStaticByEid2(serviceId, startTime, endTime, eid);
         }
         if (vos != null && vos.size() > 0) {

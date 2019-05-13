@@ -28,4 +28,6 @@ public interface FundMapper {
     Integer deleteFund(FundVO fundVO);
 
     List<FundVO> listFundByManager(FundVO fundVO);
+
+    Integer getExtra(FundVO vo);
 }

@@ -102,6 +102,22 @@
         user_id = #{employeeId} AND
         service_id = #{serviceId}
     </select>
+    <select id="getMostRank" resultMap="rankMapper" parameterType="java.lang.Integer">
+        SELECT
+        rank.`name`,
+        rank.id,
+        rank.money
+        FROM
+        user_service
+        INNER JOIN rank ON user_service.rank_id = rank.id
+        WHERE
+        user_service.user_id = #{id}
+        ORDER  BY
+        rank.money
+        DESC
+        LIMIT 1
+
+    </select>
 
     <select id="findRankByUidAndSid" resultMap="rankMapper" parameterType="java.lang.Integer">
                        SELECT
