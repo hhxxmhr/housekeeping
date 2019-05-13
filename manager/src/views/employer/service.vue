@@ -16,7 +16,7 @@
           <template slot-scope="scope">
             <el-radio v-model="serviceId" :label="tag.id" :key="tag.id" v-for="tag in scope.row.childrenType"
                       v-if="scope.row.childrenType.length>0">
-              {{tag.name+':'+tag.price+'元/次'}}
+              {{tag.name+':'+tag.price+'元/'+tag.type}}
 
             </el-radio>
             <el-tag :disable-transitions="false" size="medium" slot="reference"
@@ -26,7 +26,7 @@
 
           </template>
         </el-table-column>
-        <el-table-column prop="price" label="基础服务金额(元/次)" align="center" width="150px"></el-table-column>
+        <el-table-column prop="price" label="基础服务金额(元)" align="center" width="150px"></el-table-column>
         <el-table-column prop="enable" label="操作" header-align="center" align="center">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" @click="choose(scope.row.id)">选择雇员</el-button>
@@ -88,6 +88,7 @@
               row.id = item.id;
               row.name = item.name;
               row.price = item.price;
+              row.type = item.type;
               childrenType.push(row)
             }
           });
