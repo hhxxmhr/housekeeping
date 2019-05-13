@@ -8,6 +8,7 @@
         <result property="name" column="name"/>
         <result property="price" column="price"/>
         <result property="parent" column="parent"/>
+        <result property="type" column="type"/>
     </resultMap>
 
     <resultMap id="serviceMapperMore" type="ServiceVO">
@@ -15,6 +16,7 @@
         <result property="name" column="name"/>
         <result property="price" column="price"/>
         <result property="parent" column="parent"/>
+        <result property="type" column="type"/>
         <result property="employeeId" column="employee_id"/>
         <result property="employerId" column="employer_id"/>
         <result property="orderPrice" column="order_price"/>
@@ -27,7 +29,7 @@
 	</sql>
 
     <sql id="_fields">
-		id,`name`,price,parent
+		id,`name`,price,parent,`type`
 	</sql>
     <sql id="_condition">
         <trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -35,7 +37,10 @@
                 AND id = #{id}
             </if>
             <if test="name!=null and ''!=name">
-                name like concat(concat('%',#{name}),'%')
+                and name like concat(concat('%',#{name}),'%')
+            </if>
+            <if test="type!=null and ''!=type">
+                and `type` = #{type}
             </if>
             <if test="price!=null">
                 AND price = #{price}
@@ -70,6 +75,9 @@
             <if test="name!=null and ''!=name">
                 `name`,
             </if>
+            <if test="type!=null and ''!=type">
+                `type`,
+            </if>
             <if test="price!=null">
                 price,
             </if>
@@ -83,6 +91,9 @@
             </if>
             <if test="name!=null and ''!=name">
                 #{name},
+            </if>
+            <if test="type!=null and ''!=type">
+                #{type},
             </if>
             <if test="price!=null">
                 #{price},
@@ -99,6 +110,9 @@
         <set>
             <if test="name!=null and ''!=name">
                 `name` = #{name},
+            </if>
+            <if test="type!=null and ''!=type">
+                `type` = #{type},
             </if>
             <if test="price!=null">
                 price = #{price},
@@ -167,6 +181,7 @@
             SELECT
     service.id,
     service.`name`,
+    service.`type`,
     service.price,
     service.parent
     FROM
@@ -179,6 +194,7 @@
              SELECT
         service.id,
         service.`name`,
+        service.`type`,
         service.price,
         service.parent
         FROM
@@ -202,6 +218,7 @@
         SELECT
         service.id,
         service.`name`,
+        service.`type`,
         service.price,
         service.parent,
         orders.employee_id,
@@ -223,6 +240,7 @@
         SELECT
         service.id,
         service.`name`,
+        service.`type`,
         service.price,
         service.parent,
         orders.employee_id,
@@ -247,6 +265,7 @@
         SELECT
         service.id,
         service.`name`,
+        service.`type`,
         service.price,
         service.parent,
         orders.employee_id,
@@ -271,6 +290,7 @@
         SELECT DISTINCT
         service.id,
         service.`name`,
+        service.`type`,
         service.price,
         service.parent
         FROM

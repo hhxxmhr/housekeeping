@@ -100,6 +100,19 @@ public class ServiceVO extends Query implements Serializable {
 
     private Integer parent;
 
+    /**
+     * 月结还是次结
+     */
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public Integer getId() {
         return id;
     }

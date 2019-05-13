@@ -129,7 +129,7 @@
           ],
           price: [
             {required: true, message: "请输入基础工资并且为偶数", trigger: "blur"},
-            { type: 'number', message: '年龄必须为数字值'}
+            { type: 'number', message: '必须为数字值'}
           ],
         },
       };
