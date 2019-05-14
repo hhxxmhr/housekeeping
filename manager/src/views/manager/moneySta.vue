@@ -64,7 +64,7 @@
                      background
                      :current-page="searchForm.page"
                      :page-size="searchForm.size"
-                     :page-sizes="[15,30,45]"
+                     :page-sizes="[25,50,75]"
                      layout="sizes, prev, pager, next, jumper"
                      :total="total"
                      @current-change="currentChange"
@@ -87,7 +87,7 @@
           startTime: this.timestamp() * 1000 - (1000 * 60 * 60 * 24) * 6,
           endTime: this.timestamp() * 1000,
           page: 1,
-          size: 15,
+          size: 25,
           eid: null,//人员列表更多操作进行页面跳转传递的参数
 
         },
@@ -124,7 +124,7 @@
         this.searchForm.eid = this.searchForm.eid != null ? parseInt(this.searchForm.eid) : null;
         this.searchForm.type = this.searchForm.type != null ? parseInt(this.searchForm.type) : null;
         this.searchForm.page = this.searchForm.page ? parseInt(this.searchForm.page) : 1;
-        this.searchForm.size = this.searchForm.size ? parseInt(this.searchForm.size) : 15;
+        this.searchForm.size = this.searchForm.size ? parseInt(this.searchForm.size) : 25;
         this.searchForm.startTime = parseInt(this.searchForm.startTime);
         this.searchForm.endTime = parseInt(this.searchForm.endTime);
       },
@@ -146,7 +146,7 @@
       },
       search() {
         this.searchForm.page = 1;
-        this.searchForm.size = 15;
+        this.searchForm.size = 25;
         //携带查询的参数再次查询一下列表
         this.$router.push({
           path: "/manager/moneySta",

@@ -245,11 +245,15 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     public Result deleteOrders(OrdersVO ordersVO) throws Exception {
-        Integer count = ordersMapper.deleteOrders(ordersVO);
-        if (count > 0) {
-            return Result.getSuccess("删除成功");
-        }
-        return Result.getFailure("删除失败");
+        //删除订单之前，先删除与订单有关的记录
+        Integer co = fundMapper.deleteFundByOrder(ordersVO);
+        if (co > 0) {
+            Integer count = ordersMapper.deleteOrders(ordersVO);
+            if (count > 0) {
+                return Result.getSuccess("删除成功");
+            }
+            return Result.getFailure("删除失败");
+        } else return Result.getFailure("根据订单先删除与之相关的资金记录失败");
     }
 
     @Override
@@ -306,7 +310,7 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public Integer countOrdersByEmployeeId(UserVO userVO ) {
+    public Integer countOrdersByEmployeeId(UserVO userVO) {
         return ordersMapper.countOrdersByEmployeeId(userVO);
     }
 

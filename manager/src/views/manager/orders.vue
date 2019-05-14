@@ -17,8 +17,10 @@
       </el-row>
       <!--订单列表-->
       <el-table :data="orderList" border style="width: 100%" v-loading="loading">
-        <el-table-column prop="id" align="center" label="ID" width="60px" type="index"></el-table-column>
-        <el-table-column prop="id" align="center" label="ID" width="60px" v-if="searchForm.role===100"></el-table-column>
+        <el-table-column prop="id" align="center" label="ID" width="60px" type="index"
+                         v-if="searchForm.role!==100"></el-table-column>
+        <el-table-column prop="id" align="center" label="ID" width="60px"
+                         v-if="searchForm.role===100"></el-table-column>
         <el-table-column prop="employerUsername" align="center" label="雇主账号"
                          v-if="searchForm.role===100"></el-table-column>
         <el-table-column prop="employeeUsername" align="center" label="雇员账号"
@@ -302,8 +304,8 @@
             });
           }
           this.init();
-        } else {//role==100,管理员的同意退款操作
-          let res = await this.$api("Order/edit", {id: row.id, state: state});
+        } else {//role==100,管理员的同意退款操作  更新订单完成时间
+          let res = await this.$api("Order/edit", {id: row.id, state: state, endTime: this.timestamp()});
           this.$message({
             type: res.code === 200 ? 'success' : 'error',
             message: res.msg

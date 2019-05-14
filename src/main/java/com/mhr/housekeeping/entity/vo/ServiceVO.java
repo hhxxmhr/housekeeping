@@ -19,6 +19,15 @@ public class ServiceVO extends Query implements Serializable {
     private String employeeName;
     private String employeeUsername;
     private Long createTime;//订单的创建时间
+    private Long endTime;//订单的结束时间
+
+    public Long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Long endTime) {
+        this.endTime = endTime;
+    }
 
     public String getEmployerUsername() {
         return employerUsername;

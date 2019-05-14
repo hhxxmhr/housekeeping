@@ -120,7 +120,7 @@ public class ServiceServiceImpl implements ServiceService {
                 tmp++;
             }
         }
-        System.out.println("tmp的值是应该是2" + tmp);
+        System.out.println("tmp的值是" + tmp);
         if (tmp == 0) {//这一项服务没有被下过单
             for (int i = 0; i < ids.size(); i++) {
                 UserServiceVO userServiceVO = new UserServiceVO();

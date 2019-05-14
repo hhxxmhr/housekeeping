@@ -22,6 +22,7 @@
         <result property="orderPrice" column="order_price"/>
         <result property="rate" column="rate"/>
         <result property="createTime" column="create_time"/>
+        <result property="endTime" column="end_time"/>
     </resultMap>
 
     <sql id="_table">
@@ -216,21 +217,22 @@
 
     <select id="serviceStatic" parameterType="java.lang.Integer" resultMap="serviceMapperMore">
         SELECT
-        service.id,
-        service.`name`,
-        service.`type`,
-        service.price,
-        service.parent,
         orders.employee_id,
         orders.employer_id,
         orders.order_price,
-        orders.create_time,
-        orders.rate
+        orders.end_time,
+        orders.rate,
+        service.id,
+        service.`name`,
+        service.price,
+        service.parent,
+        service.type
         FROM
-        service
-        INNER JOIN orders ON orders.service_id = service.id
+        orders
+        INNER JOIN service ON orders.service_id = service.id
         WHERE
-        orders.end_time BETWEEN #{startTime} AND #{endTime}
+        orders.end_time BETWEEN #{startTime} AND #{endTime} AND
+        orders.state IN (3,4)
         <if test="serviceId!=null">
             AND orders.service_id = #{serviceId}
         </if>
@@ -238,21 +240,22 @@
 
     <select id="serviceStaticByEid" parameterType="java.lang.Integer" resultMap="serviceMapperMore">
         SELECT
-        service.id,
-        service.`name`,
-        service.`type`,
-        service.price,
-        service.parent,
         orders.employee_id,
         orders.employer_id,
         orders.order_price,
-        orders.create_time,
-        orders.rate
+        orders.end_time,
+        orders.rate,
+        service.id,
+        service.`name`,
+        service.price,
+        service.parent,
+        service.type
         FROM
-        service
-        INNER JOIN orders ON orders.service_id = service.id
+        orders
+        INNER JOIN service ON orders.service_id = service.id
         WHERE
-        orders.end_time BETWEEN #{startTime} AND #{endTime}
+        orders.end_time BETWEEN #{startTime} AND #{endTime} AND
+        orders.state IN (3,4)
         <if test="serviceId!=null">
             AND orders.service_id = #{serviceId}
         </if>
@@ -263,21 +266,22 @@
 
     <select id="serviceStaticByEid2" parameterType="java.lang.Integer" resultMap="serviceMapperMore">
         SELECT
-        service.id,
-        service.`name`,
-        service.`type`,
-        service.price,
-        service.parent,
         orders.employee_id,
         orders.employer_id,
         orders.order_price,
-        orders.create_time,
-        orders.rate
+        orders.end_time,
+        orders.rate,
+        service.id,
+        service.`name`,
+        service.price,
+        service.parent,
+        service.type
         FROM
-        service
-        INNER JOIN orders ON orders.service_id = service.id
+        orders
+        INNER JOIN service ON orders.service_id = service.id
         WHERE
-        orders.end_time BETWEEN #{startTime} AND #{endTime}
+        orders.end_time BETWEEN #{startTime} AND #{endTime} AND
+        orders.state IN (3,4)
         <if test="serviceId!=null">
             AND orders.service_id = #{serviceId}
         </if>

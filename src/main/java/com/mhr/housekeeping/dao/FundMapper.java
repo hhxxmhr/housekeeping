@@ -2,6 +2,7 @@ package com.mhr.housekeeping.dao;
 
 import com.mhr.housekeeping.entity.FundDO;
 import com.mhr.housekeeping.entity.vo.FundVO;
+import com.mhr.housekeeping.entity.vo.OrdersVO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -30,4 +31,6 @@ public interface FundMapper {
     List<FundVO> listFundByManager(FundVO fundVO);
 
     Integer getExtra(FundVO vo);
+
+    Integer deleteFundByOrder(OrdersVO ordersVO);
 }

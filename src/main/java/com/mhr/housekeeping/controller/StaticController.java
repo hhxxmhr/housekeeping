@@ -74,14 +74,16 @@ public class StaticController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         //时间数组
         List<String> timeList = new ArrayList<>();
-        //每天所有服务总销量
+        //每天所有服务总单量
         List<Integer> serviceList = new ArrayList<>();
         //每天所有服务总营业额
         List<Integer> moneyList = new ArrayList<>();
         Long timeItem = startTime;
         while (timeItem <= endTime) {
+            System.out.println(sdf.format(new Date(timeItem)));
             timeList.add(sdf.format(new Date(timeItem)));
             //查询每天的销量
+            System.out.println("一天的endTime是" + (timeItem / 1000 + 3600 * 24 - 1));
             Integer count = ordersService.countOrdersByTime(timeItem / 1000, (timeItem / 1000 + 3600 * 24 - 1), serviceId);
             serviceList.add(count);
             //查询每天的营业额

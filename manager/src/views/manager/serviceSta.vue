@@ -47,9 +47,9 @@
         <el-table-column prop="orderPrice" label="订单价" align="center"></el-table-column>
         <el-table-column prop="employeeUsername" label="雇员" align="center"></el-table-column>
         <el-table-column prop="employerUsername" label="雇主" align="center"></el-table-column>
-        <el-table-column prop="createTime" label="订单创建时间" align="center">
+        <el-table-column prop="endTime" label="订单完成时间" align="center">
           <template slot-scope="scope">
-            {{$formatTime(scope.row.createTime)}}
+            {{$formatTime(scope.row.endTime)}}
           </template>
         </el-table-column>
         <el-table-column prop="rate" label="评价/星" align="center">
@@ -99,7 +99,6 @@
           endTime: this.searchParam.endTime,
         });
         this.loading = false;
-        console.log(res);
         this.timeList = res.timeList;
         this.serviceList = res.serviceList;
         this.moneyList = res.moneyList;
