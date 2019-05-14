@@ -67,7 +67,7 @@ public class OrdersServiceImpl implements OrdersService {
             Integer r2 = fundMapper.addFund(vo);
             if (r1 > 0 && r2 > 0) {
                 //发送短信给雇员，提示在三个小时之内进行信息的确认
-                //首先需要获得雇员的手机号码，根据订单里面
+                //首先需要获得雇员的手机号码，根据订单
                 UserDO employee = userMapper.findDetailUser(new UserVO(ordersVO.getEmployeeId()));
                 SendSmsResponse sendMessage = SmsUtils.sendmessage(employee.getPhone(), 3);
                 if (sendMessage.getBizId() != null) {
@@ -79,9 +79,10 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     /**
-     * 更新操作  改变状态  雇员确认订单  雇员完成订单 雇主取消订单和超时取消订单
+     * 更新操作  改变状态  雇员确认订单  雇员完成订单 雇员取消订单  雇员超时未确认订单  ；雇主取消订单和超时取消订单
      * 1、雇主超时取消订单的时候余额更新、资金记录更新
      * 2、雇员完成订单的时候，工资更新、资金记录更新
+     * 3、雇员拒绝和超时确认订单时，都变成无效订单，然后雇主的余额更新、记录更新
      *
      * @param ordersVO
      * @return
@@ -141,7 +142,23 @@ public class OrdersServiceImpl implements OrdersService {
                 if (count3 > 0 && count4 > 0 && count1 > 0 && count2 > 0) {
                     return Result.getSuccess("操作成功");
                 } else return Result.getFailure("更新金额失败");
-
+            }
+            //此操作时拒接订单，更新  雇主的余额(加上订单费用) ，以及更新资金记录
+            if (ordersVO.getState() == 7) {
+                //根据订单更新雇主
+                UserDO employer = userMapper.findDetailUser(new UserVO(detailOrders.getEmployerId()));
+                employer.setBalance(employer.getBalance() + detailOrders.getOrderPrice());
+                Integer c = userMapper.updateUser2(employer);
+                //更新资金
+                Integer c2 = fundMapper.addFund(new FundVO(employer.getId(), ordersVO.getId(), employer.getBalance(), detailOrders.getOrderPrice(), System.currentTimeMillis() / 1000, 7));
+                //给雇主发短信，重新预定
+                SendSmsResponse sendMessage = SmsUtils.sendmessage(employer.getPhone(), 7);
+                if (sendMessage.getBizId() != null) {
+                    return new Result<>(200, "给雇主发短信，重新预定", 7);//返回验证码
+                }
+                if (c > 0 && c2 > 0) {
+                    return Result.getSuccess("拒接订单，更新  雇主的余额(加上订单费用) ，以及更新资金记录操作成功");
+                } else return Result.getFailure("拒接订单，更新  雇主的余额(加上订单费用) ，以及更新资金记录操作失败");
             }
             return Result.getSuccess("操作成功");
         }

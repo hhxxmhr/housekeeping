@@ -50,11 +50,6 @@
             {{$formatTime(scope.row.reverseTime)}}
           </template>
         </el-table-column>
-        <!--<el-table-column prop="endTime" align="center" label="完成时间" width="160px">
-          <template slot-scope="scope">
-            {{scope.row.endTime?$formatTime(scope.row.endTime):'尚未完成'}}
-          </template>
-        </el-table-column>-->
         <el-table-column prop="praise" align="center" label="好评" width="60px">
           <template slot-scope="scope">
             {{scope.row.rate?checkRate(scope.row.rate):'待评'}}
@@ -77,6 +72,10 @@
             <at-button confirmText="确认此订单?" size="mini" type="success"
                        v-if="scope.row.state===0&&searchForm.role===200"
                        @click="changeState(scope.row,2)" :disabled="checkSureTime(scope.row.createTime)">确认
+            </at-button>
+            <at-button confirmText="拒接此订单?" size="mini" type="primary"
+                       v-if="scope.row.state===0&&searchForm.role===200"
+                       @click="changeState(scope.row,7)">拒接
             </at-button>
             <at-button confirmText="已经完成此订单?" size="mini" type="primary"
                        style="border-color:lightsalmon ;background-color: lightsalmon"
@@ -107,10 +106,6 @@
                        v-if="scope.row.state===1&&searchForm.role===300"
                        @click="deleteOrder(scope.row.id)">删除
             </at-button>
-            <!--<at-button confirmText="确定通知两个账号?" size="mini" type="info"
-                       v-if="scope.row.state===1&&searchForm.role===100"
-                       @click="deleteEmployee(scope.row)">一键通知
-            </at-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -293,6 +288,12 @@
           if (row.state === 2) {
             //员工完成的时间是订单完成的时间
             let res = await this.$api("Order/edit", {id: row.id, state: state, endTime: this.timestamp()});
+            this.$message({
+              type: res.code === 200 ? 'success' : 'error',
+              message: res.msg
+            });
+          } else if (row.state === 7) {//拒接预定
+            let res = await this.$api("Order/edit", {id: row.id, state: state});
             this.$message({
               type: res.code === 200 ? 'success' : 'error',
               message: res.msg
