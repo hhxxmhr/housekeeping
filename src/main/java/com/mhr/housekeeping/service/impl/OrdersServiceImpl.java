@@ -1,5 +1,6 @@
 package com.mhr.housekeeping.service.impl;
 
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mhr.housekeeping.dao.*;
@@ -10,6 +11,7 @@ import com.mhr.housekeeping.entity.vo.ServiceVO;
 import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.service.OrdersService;
 import com.mhr.housekeeping.utils.Result;
+import com.mhr.housekeeping.utils.SmsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +65,15 @@ public class OrdersServiceImpl implements OrdersService {
             vo.setUserId(ordersVO.getEmployerId());
             vo.setOrderId(ordersVO.getId());//自增id
             Integer r2 = fundMapper.addFund(vo);
-            if (r1 > 0 && r2 > 0) return Result.getSuccess("预定成功");
-            else return Result.getFailure("预定失败");
+            if (r1 > 0 && r2 > 0) {
+                //发送短信给雇员，提示在三个小时之内进行信息的确认
+                //首先需要获得雇员的手机号码，根据订单里面
+                UserDO employee = userMapper.findDetailUser(new UserVO(ordersVO.getEmployeeId()));
+                SendSmsResponse sendMessage = SmsUtils.sendmessage(employee.getPhone(), 3);
+                if (sendMessage.getBizId() != null) {
+                    return Result.getSuccess("预定成功");
+                }
+            } else return Result.getFailure("预定失败");
         }
         return Result.getFailure("预定失败");
     }

@@ -69,13 +69,14 @@
             <div v-if="scope.row.state === 4" style="color:#67C23A;">{{'已评论'}}</div>
             <div v-if="scope.row.state === 5" style="color:#8461B3;">{{'退款中'}}</div>
             <div v-if="scope.row.state === 6" style="color:#1B2023;">{{'已退款'}}</div>
+            <div v-if="scope.row.state === 7" style="color:#fab6b6;">{{'已失效'}}</div>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="150px" align="center">
           <template slot-scope="scope">
             <at-button confirmText="确认此订单?" size="mini" type="success"
                        v-if="scope.row.state===0&&searchForm.role===200"
-                       @click="changeState(scope.row,2)">确认
+                       @click="changeState(scope.row,2)" :disabled="checkSureTime(scope.row.createTime)">确认
             </at-button>
             <at-button confirmText="已经完成此订单?" size="mini" type="primary"
                        style="border-color:lightsalmon ;background-color: lightsalmon"
@@ -290,14 +291,21 @@
           }
         } else if (this.searchForm.role === 200) {
           if (row.state === 2) {
-            //state员工完成的时间是订单完成的时间
+            //员工完成的时间是订单完成的时间
             let res = await this.$api("Order/edit", {id: row.id, state: state, endTime: this.timestamp()});
             this.$message({
               type: res.code === 200 ? 'success' : 'error',
               message: res.msg
             });
           } else {
-            let res = await this.$api("Order/edit", {id: row.id, state: state});
+            //确认订单的时候，校验是否超时成为无效订单
+            let res;
+            let sureTime = this.checkSureTime(row.createTime);
+            if (sureTime) {//超时了
+              res = await this.$api("Order/edit", {id: row.id, state: 7});
+            } else {
+              res = await this.$api("Order/edit", {id: row.id, state: state});
+            }
             this.$message({
               type: res.code === 200 ? 'success' : 'error',
               message: res.msg
@@ -316,6 +324,11 @@
       checkTime(createTime) {
         //校验时间---在下完单之后的两个小时之内是可以取消订单的
         return this.timestamp() - createTime > 2 * 60 * 60;
+      },
+      checkSureTime(createTime) {
+        //校验时间---在下完单之后的3个小时之内是需要确认订单，若没有及时确认，则本单视为失效订单
+        //退还费用，并提示雇主重新进行预定，
+        return this.timestamp() - createTime > 3 * 60 * 60;
       },
       async currentChange(current) {
         this.searchForm.page = current;
