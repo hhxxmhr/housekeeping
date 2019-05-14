@@ -63,4 +63,6 @@ public interface OrdersMapper {
     Integer countOrdersWithReason(OrdersVO ordersVO);
 
     Integer getServiceMost(Integer id);
+
+    Integer deleteOrdersByServiceId(Integer serviceId);
 }

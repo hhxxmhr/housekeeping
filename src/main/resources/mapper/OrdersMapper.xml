@@ -580,6 +580,9 @@
         <include refid="_table"/>
         <include refid="_primaryKey_condition"/>
     </delete>
+    <delete id="deleteOrdersByServiceId" parameterType="java.lang.Integer">
+        delete from orders where service_id = #{serviceId}
+    </delete>
 
     <select id="getAllOrderByPage" resultMap="ordersMapper" parameterType="java.lang.Integer">
       select * from orders limit #{page}, #{size}

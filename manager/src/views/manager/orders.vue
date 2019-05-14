@@ -17,9 +17,8 @@
       </el-row>
       <!--订单列表-->
       <el-table :data="orderList" border style="width: 100%" v-loading="loading">
-        <!--<el-table-column prop="id" align="center" label="ID" width="60px" type="index"></el-table-column>-->
-        <el-table-column prop="id" align="center" label="ID" width="60px"
-                         v-if="searchForm.role===100"></el-table-column>
+        <el-table-column prop="id" align="center" label="ID" width="60px" type="index"></el-table-column>
+        <el-table-column prop="id" align="center" label="ID" width="60px" v-if="searchForm.role===100"></el-table-column>
         <el-table-column prop="employerUsername" align="center" label="雇主账号"
                          v-if="searchForm.role===100"></el-table-column>
         <el-table-column prop="employeeUsername" align="center" label="雇员账号"
@@ -42,6 +41,11 @@
         <el-table-column prop="createTime" align="center" label="创建时间" width="160px" sortable>
           <template slot-scope="scope">
             {{$formatTime(scope.row.createTime)}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="reverseTime" align="center" label="上门时间" width="160px">
+          <template slot-scope="scope">
+            {{$formatTime(scope.row.reverseTime)}}
           </template>
         </el-table-column>
         <!--<el-table-column prop="endTime" align="center" label="完成时间" width="160px">

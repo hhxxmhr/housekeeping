@@ -1,10 +1,12 @@
 package com.mhr.housekeeping.service.impl;
 
+import com.mhr.housekeeping.dao.OrdersMapper;
 import com.mhr.housekeeping.dao.ServiceMapper;
 import com.mhr.housekeeping.dao.UserMapper;
 import com.mhr.housekeeping.entity.ServiceDO;
 import com.mhr.housekeeping.entity.UserDO;
 import com.mhr.housekeeping.entity.UserServiceDO;
+import com.mhr.housekeeping.entity.vo.OrdersVO;
 import com.mhr.housekeeping.entity.vo.ServiceVO;
 import com.mhr.housekeeping.entity.vo.UserServiceVO;
 import com.mhr.housekeeping.entity.vo.UserVO;
@@ -36,6 +38,8 @@ public class ServiceServiceImpl implements ServiceService {
     @Resource
     private UserServiceService userServiceService;
     @Resource
+    private OrdersMapper ordersMapper;
+    @Resource
     private UserMapper userMapper;
     ;
 
@@ -48,8 +52,7 @@ public class ServiceServiceImpl implements ServiceService {
             Integer count = serviceMapper.addService(serviceVO);
             if (count > 0) {
                 return Result.getSuccess("操作成功");
-            }
-            return Result.getFailure("操作失败");
+            } else return Result.getFailure("操作失败");
         }
     }
 
@@ -92,7 +95,8 @@ public class ServiceServiceImpl implements ServiceService {
 
     /**
      * 删除服务的父类   删除的同时还需要删除数据库中parent是此父类的记录
-     * 还需要删除关联表里面有关的数据
+     * 查询此服务或者此服务的子类是否已经生成了订单，如果有的话，则不可删除
+     * 如果没有生成订单的话 -  删除serviceUser关联表里面有关的数据---删除service表里的数据
      *
      * @param serviceVO
      * @return
@@ -100,6 +104,7 @@ public class ServiceServiceImpl implements ServiceService {
      */
     @Override
     public Result deleteParService(ServiceVO serviceVO) throws Exception {
+        Integer tmp = 0;
 //        select id from service where id=30 or parent=30
         //得到父类id以及父类下面子类的id
         List<ServiceVO> vos = serviceMapper.getIds(serviceVO.getId());
@@ -108,18 +113,28 @@ public class ServiceServiceImpl implements ServiceService {
             ids.add(vos.get(i).getId());
         }
         for (int i = 0; i < ids.size(); i++) {
-            UserServiceVO userServiceVO = new UserServiceVO();
-            userServiceVO.setServiceId(ids.get(i));
-            List<UserServiceVO> list = userServiceService.listUserService(userServiceVO);
-            if (list.size() > 0) {
-                userServiceService.deleteUserServiceByServiceId(ids.get(i));
+            OrdersVO ordersVO = new OrdersVO();
+            ordersVO.setServiceId(ids.get(i));
+            List<OrdersVO> voList = ordersMapper.listOrders(ordersVO);
+            if (voList.size() > 0) {
+                tmp++;
             }
         }
-        Integer count = serviceMapper.deleteParService(serviceVO);
-        if (count > 0) {
-            return Result.getSuccess("删除成功");
-        }
-        return Result.getFailure("删除失败");
+        System.out.println("tmp的值是应该是2" + tmp);
+        if (tmp == 0) {//这一项服务没有被下过单
+            for (int i = 0; i < ids.size(); i++) {
+                UserServiceVO userServiceVO = new UserServiceVO();
+                userServiceVO.setServiceId(ids.get(i));
+                List<UserServiceVO> list = userServiceService.listUserService(userServiceVO);
+                if (list.size() > 0) {//人员服务等级表里有这项服务  删除
+                    userServiceService.deleteUserServiceByServiceId(ids.get(i));
+                }
+            }
+            Integer count = serviceMapper.deleteParService(serviceVO);
+            if (count > 0) {
+                return Result.getSuccess("删除成功");
+            } else return Result.getFailure("删除失败");
+        } else return Result.getFailure("此服务的子类别已经被下订单，不可删除");
     }
 
     @Override
@@ -128,22 +143,22 @@ public class ServiceServiceImpl implements ServiceService {
         UserServiceVO userServiceVO = new UserServiceVO();
         userServiceVO.setServiceId(serviceVO.getId());
         List<UserServiceVO> list = userServiceService.listUserService(userServiceVO);
-        if (list.size() > 0) {
-            Integer r = userServiceService.deleteUserServiceByServiceId(serviceVO.getId());
-            if (r > 0) {
-                Integer count = serviceMapper.deleteService(serviceVO);
-                if (count > 0) {
-                    return Result.getSuccess("删除成功");
-                }
-                return Result.getFailure("删除失败");
+        OrdersVO ordersVO = new OrdersVO();
+        ordersVO.setServiceId(serviceVO.getId());
+        List<OrdersVO> voList = ordersMapper.listOrders(ordersVO);
+        //如果订单中出现了此项服务，则提示不可删除
+        if (voList.size() > 0) {
+            return Result.getFailure("此服务已经被下订单，不可删除");
+        } else {
+            if (list.size() > 0) {
+                userServiceService.deleteUserServiceByServiceId(serviceVO.getId());
+            }
+            Integer count = serviceMapper.deleteService(serviceVO);
+            if (count > 0) {
+                return Result.getSuccess("删除成功");
             }
             return Result.getFailure("删除失败");
         }
-        Integer count = serviceMapper.deleteService(serviceVO);
-        if (count > 0) {
-            return Result.getSuccess("删除成功");
-        }
-        return Result.getFailure("删除失败");
     }
 
     @Override
