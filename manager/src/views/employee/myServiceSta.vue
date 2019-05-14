@@ -46,19 +46,21 @@
       <span class="barTitle">服务详情★×**×★☆×**×★☆×**×★☆×**×★☆×**×★☆×**×★★×**×★☆×**×★☆×**×★☆×**×★☆×**×★☆×**×★★×**×★☆×**×★☆×**×★☆×**×★☆×**×★☆×**×★</span>
     </div>
     <div style="margin-top: 6%">
-      <el-table :data="services"
-                border
-                v-loading="loading">
-        <el-table-column prop="id" label="服务ID" align="center" width="80px"
-                         v-if="role===100"></el-table-column>
+      <el-table :data="services" border v-loading="loading">
+        <el-table-column prop="id" label="序号" align="center" type="index" width="120px"></el-table-column>
         <el-table-column prop="name" label="服务" align="center"></el-table-column>
-        <el-table-column prop="price" label="价格/次" align="center"></el-table-column>
-        <el-table-column prop="orderPrice" label="订单价" align="center"></el-table-column>
-        <el-table-column prop="employeeName" label="雇员" align="center"></el-table-column>
-        <el-table-column prop="employerName" label="雇主" align="center"></el-table-column>
-        <el-table-column prop="createTime" label="订单创建时间" align="center">
+        <el-table-column prop="price" label="价格" align="center">
           <template slot-scope="scope">
-            {{$formatTime(scope.row.createTime)}}
+            {{scope.row.price+'元/'+scope.row.type}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="orderPrice" label="订单价" align="center"></el-table-column>
+        <el-table-column prop="employeeName" label="服务人员" align="center" v-if="role===300"></el-table-column>
+        <el-table-column prop="employerName" label="下单人员" align="center" v-if="role===200"></el-table-column>
+
+        <el-table-column prop="endTime" label="订单完成时间" align="center">
+          <template slot-scope="scope">
+            {{$formatTime(scope.row.endTime)}}
           </template>
         </el-table-column>
         <el-table-column prop="rate" label="评价/星" align="center">
@@ -204,6 +206,7 @@
           eid: window.$mine.id,
           role: window.$mine.role,
         });
+        console.log(this.services)
       },
       async getMyService() {
         this.role = window.$mine.role;

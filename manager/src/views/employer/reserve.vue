@@ -29,7 +29,8 @@
           format="yyyy-MM-dd HH:mm "
           value-format="timestamp"
           type="datetime"
-          placeholder="选择日期时间">
+          placeholder="选择日期时间"
+          :picker-options="pickerOptions0">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="联系电话" prop="phone" style="margin-left: 310px;margin-top: -62px">
@@ -109,6 +110,11 @@
       };
 
       return {
+        pickerOptions0: {
+          disabledDate(time) {
+            return time.getTime() < Date.now();
+          }
+        },
         allService: [],
         originService: [],//页面跳转携带的employeeId查询到的拥有的可选服务
         mineInfo: {},
@@ -127,7 +133,7 @@
           address: '',
           phone: '',
           orderPrice: null,
-          reverseTime: this.timestamp() * 1000 - (1000 * 60 * 60 * 24),
+          reverseTime: this.timestamp() * 1000 + (1000 * 60 * 60 * 24),
           endTime: null,
           serviceId: null,//页面跳转传过来的id或者选中的ids
           employeeId: null,//页面跳转传过来的id
