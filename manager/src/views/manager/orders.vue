@@ -67,6 +67,12 @@
             <div v-if="scope.row.state === 7" style="color:#fab6b6;">{{'已失效'}}</div>
           </template>
         </el-table-column>
+        <el-table-column prop="reason" align="center" label="退款"
+                         v-if="searchForm.role===100">
+          <template slot-scope="scope">
+            {{scope.row.reason?scope.row.reason:'无'}}
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="150px" align="center">
           <template slot-scope="scope">
             <at-button confirmText="确认此订单?" size="mini" type="success"
@@ -89,7 +95,7 @@
             </at-button>
             <at-button confirmText="确定拒绝此退款申请?" size="mini" type="warning"
                        v-if="scope.row.state===5&&searchForm.role===100"
-                       @click="changeState(scope.row,3)">拒绝
+                       @click="changeState(scope.row,8)">拒绝
             </at-button>
             <at-button size="mini" type="danger"
                        v-if="(scope.row.state===0||scope.row.state===2)&&searchForm.role===300"
@@ -101,7 +107,7 @@
             </at-button>
             <at-button size="mini" type="primary" style="background-color: #f78989;border-color: #f78989"
                        v-if="scope.row.state===3&&searchForm.role===300"
-                       @click="refundDialog(scope.row)">退款
+                       @click="refundDialog(scope.row)">投诉退款
             </at-button>
             <at-button confirmText="确定删除此订单?" size="mini" type="warning"
                        v-if="scope.row.state===1&&searchForm.role===300"
@@ -237,19 +243,24 @@
       },
       async refundApply() {
         //确定申请退款--退款中
-        let res = await this.$api("Order/edit", this.refund);
-        if (res.code === 200) {
-          this.$notify.info({
-            title: '提交成功',
-            message: '请等待审核'
-          });
-          this.close_dialog();
-          await this.init();
-        }
+        this.$refs['refund'].validate(async valid => {
+          if (valid) {
+            let res = await this.$api("Order/edit", this.refund);
+            if (res.code === 200) {
+              this.$notify.info({
+                title: '提交成功',
+                message: '请等待审核'
+              });
+              this.close_dialog();
+              await this.init();
+            }
+          }
+        })
       },
       checkRate(rate) {
         return rate > 2 ? '是' : '否';
-      },
+      }
+      ,
       async changeState(row, state) {
         let isTimeOut = this.checkTime(row.createTime);
         if (this.searchForm.role === 300) {
@@ -322,25 +333,30 @@
           });
           this.init();
         }
-      },
+      }
+      ,
       checkTime(createTime) {
         //校验时间---在下完单之后的两个小时之内是可以取消订单的
         return this.timestamp() - createTime > 2 * 60 * 60;
-      },
+      }
+      ,
       checkSureTime(createTime) {
         //校验时间---在下完单之后的3个小时之内是需要确认订单，若没有及时确认，则本单视为失效订单
         //退还费用，并提示雇主重新进行预定，
         return this.timestamp() - createTime > 3 * 60 * 60;
-      },
+      }
+      ,
       async currentChange(current) {
         this.searchForm.page = current;
         await this.init();
-      },
+      }
+      ,
       async handleSizeChange(val) {
         this.searchForm.size = val;
         // await this.init();
         await this.currentChange(1);
-      },
+      }
+      ,
       async deleteOrder(id) {
         let res = await this.$api("Order/delete", {id: id});
         this.$message({
@@ -348,7 +364,8 @@
           message: res.msg
         });
         this.init();
-      },
+      }
+      ,
     }
   }
 </script>

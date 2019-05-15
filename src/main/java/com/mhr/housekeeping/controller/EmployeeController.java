@@ -1,4 +1,4 @@
-package com.mhr.housekeeping.controller.user;
+package com.mhr.housekeeping.controller;
 
 import com.mhr.housekeeping.entity.UserDO;
 import com.mhr.housekeeping.entity.vo.UserVO;

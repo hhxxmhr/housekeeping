@@ -49,11 +49,18 @@ public class RankServiceImpl implements RankService {
 
     @Override
     public Result updateRank(RankVO rankVO) throws Exception {
-        Integer count = rankMapper.updateRank(rankVO);
-        if (count > 0) {
-            return Result.getSuccess("修改成功");
+        //查找数据库里是否有除了他本身同名的
+        RankDO rankByName = rankMapper.getRankByName(rankVO);
+        if (rankByName != null && !rankByName.getId().equals(rankVO.getId())) {
+            //除了自己本身还有其他记录是这个名字
+            return Result.getFailure("等级名字重复");
+        } else {
+            Integer count = rankMapper.updateRank(rankVO);
+            if (count > 0) {
+                return Result.getSuccess("修改成功");
+            }
+            return Result.getFailure("修改失败");
         }
-        return Result.getFailure("修改失败");
     }
 
     @Override

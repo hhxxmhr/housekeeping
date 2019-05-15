@@ -54,7 +54,7 @@ public class UserController {
                     request.getSession().setAttribute("user", user);
                     return new Result<>(200, "登录成功", user);
                 } else if (user.getState() == EnumType.Disable) {
-                    return Result.getFailure("账号被封停");
+                    return Result.getFailure("账号未被启用或被封停");
                 } else if (user.getState() == EnumType.check) {
                     return Result.getFailure("账号正在审核中");
                 }

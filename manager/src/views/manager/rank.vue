@@ -7,7 +7,7 @@
                    type="primary">添加等级
         </el-button>
         <el-input placeholder="请输入要查询的等级名称" v-model="searchForm.name"
-                  style="width: 250px"></el-input>
+                  style="width: 250px" @keyup.enter.native="search()"></el-input>
         <el-button @click="search"
                    style="margin-left: 10px;"
                    icon="el-icon-search"

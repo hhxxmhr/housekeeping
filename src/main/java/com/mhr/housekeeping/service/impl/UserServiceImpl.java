@@ -46,24 +46,38 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserServiceService userServiceService;
 
+    /**
+     * 超级管理员添加管理员  员工用户注册的时候需要选择服务，所以关联表里需要更新
+     *
+     * @param userVO
+     * @param serviceList
+     * @return
+     * @throws Exception
+     */
     @Override
     public Result addUser(UserVO userVO, List<Integer> serviceList) throws Exception {
-        Integer count = userMapper.addUser(userVO);
-        if (count > 0) {
-            if (serviceList.size() > 0) {
-                //更新UserService关联表
-                Integer userId = userVO.getId();//获取数据库里面自增的id
-                UserServiceVO userServiceVO = new UserServiceVO();
-                userServiceVO.setUserId(userId);
-                userServiceVO.setRankId(1);
-                for (int i = 0; i < serviceList.size(); i++) {
-                    userServiceVO.setServiceId(serviceList.get(i));
-                    userServiceService.addUserService(userServiceVO);
+        //根据账号查询数据库是否已经存在，用户名不可重复
+        UserDO detailUser = userMapper.getUserByUsername(userVO);
+        if (detailUser != null) {
+            return Result.getFailure("该账户已存在");
+        } else {
+            Integer count = userMapper.addUser(userVO);
+            if (count > 0) {
+                if (serviceList != null && serviceList.size() > 0) {
+                    //更新UserService关联表
+                    Integer userId = userVO.getId();//获取数据库里面自增的id
+                    UserServiceVO userServiceVO = new UserServiceVO();
+                    userServiceVO.setUserId(userId);
+                    userServiceVO.setRankId(1);
+                    for (int i = 0; i < serviceList.size(); i++) {
+                        userServiceVO.setServiceId(serviceList.get(i));
+                        userServiceService.addUserService(userServiceVO);
+                    }
                 }
+                return Result.getSuccess("用户添加成功");
             }
-            return Result.getSuccess("用户添加成功");
+            return Result.getFailure("用户添加失败");
         }
-        return Result.getFailure("用户添加失败");
     }
 
     @Override
@@ -197,11 +211,11 @@ public class UserServiceImpl implements UserService {
     /**
      * 充值
      *
-     * @param money   充值金额
+     * @param money 充值金额
      * @return
      */
     @Override
-    public Result updateUserBalance(UserDO userDO ,Integer money) {
+    public Result updateUserBalance(UserDO userDO, Integer money) {
         Integer count = userMapper.updateUser2(userDO);
         if (count > 0) {
             //更新资金记录表

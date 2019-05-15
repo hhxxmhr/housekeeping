@@ -80,7 +80,7 @@
                 } else if (res.data.role === this.$role.Employer) {
                   this.$router.push('/employer/index');
                 } else if (res.data.role === this.$role.Root) {
-                  this.$router.push('/index');
+                  this.$router.push('/manager/managerList');
                 }
               }
             }

@@ -1,4 +1,4 @@
-package com.mhr.housekeeping.controller.user;
+package com.mhr.housekeeping.controller;
 
 import com.mhr.housekeeping.utils.Result;
 import org.springframework.web.bind.annotation.RequestMapping;
