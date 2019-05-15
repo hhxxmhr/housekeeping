@@ -122,17 +122,16 @@ public class ServiceServiceImpl implements ServiceService {
             OrdersVO ordersVO = new OrdersVO();
             ordersVO.setServiceId(ids.get(i));
             List<OrdersVO> voList = ordersMapper.listOrders(ordersVO);
-            if (voList.size() > 0) {
+            if (voList != null && voList.size() > 0) {
                 tmp++;
             }
         }
-        System.out.println("tmp的值是" + tmp);
-        if (tmp == 0) {//这一项服务没有被下过单
+        if (tmp == 0) {//这一大项服务没有被下过单
             for (int i = 0; i < ids.size(); i++) {
                 UserServiceVO userServiceVO = new UserServiceVO();
                 userServiceVO.setServiceId(ids.get(i));
                 List<UserServiceVO> list = userServiceService.listUserService(userServiceVO);
-                if (list.size() > 0) {//人员服务等级表里有这项服务  删除
+                if (list != null && list.size() > 0) {//人员服务等级表里有这项服务  删除
                     userServiceService.deleteUserServiceByServiceId(ids.get(i));
                 }
             }
@@ -143,20 +142,27 @@ public class ServiceServiceImpl implements ServiceService {
         } else return Result.getFailure("此服务的子类别已经被下订单，不可删除");
     }
 
+    /**
+     * 删除子类别，直接根据id
+     *
+     * @param serviceVO
+     * @return
+     * @throws Exception
+     */
     @Override
     public Result deleteService(ServiceVO serviceVO) throws Exception {
-        //根据id查询关联表中是否有数据，有的话就删除
-        UserServiceVO userServiceVO = new UserServiceVO();
-        userServiceVO.setServiceId(serviceVO.getId());
-        List<UserServiceVO> list = userServiceService.listUserService(userServiceVO);
+        //根据id查询是否有相关服务的订单，如果有，则不可删除，如果没有，则可以进行删除操作
         OrdersVO ordersVO = new OrdersVO();
         ordersVO.setServiceId(serviceVO.getId());
         List<OrdersVO> voList = ordersMapper.listOrders(ordersVO);
+        UserServiceVO userServiceVO = new UserServiceVO();
+        userServiceVO.setServiceId(serviceVO.getId());
+        List<UserServiceVO> list = userServiceService.listUserService(userServiceVO);
         //如果订单中出现了此项服务，则提示不可删除
-        if (voList.size() > 0) {
+        if (voList != null && voList.size() > 0) {
             return Result.getFailure("此服务已经被下订单，不可删除");
         } else {
-            if (list.size() > 0) {
+            if (list != null && list.size() > 0) {
                 userServiceService.deleteUserServiceByServiceId(serviceVO.getId());
             }
             Integer count = serviceMapper.deleteService(serviceVO);

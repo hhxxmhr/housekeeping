@@ -32,7 +32,7 @@
                         prop="money"
                         :label-width="formLabelWidth">
             <el-input v-model="rank.money" style="width: 180px" auto-complete="off">
-              <template slot="append">元/次</template>
+              <template slot="append">元/项</template>
             </el-input>
           </el-form-item>
 
@@ -48,7 +48,7 @@
       <el-table :data="rankList" border style="width: 100%">
         <el-table-column prop="id" label="ID" align="center"></el-table-column>
         <el-table-column prop="name" label="等级" align="center"></el-table-column>
-        <el-table-column prop="money" label="额外补贴(元/次)" align="center"></el-table-column>
+        <el-table-column prop="money" label="额外补贴(元/项)" align="center"></el-table-column>
         <el-table-column prop="enable" label="操作" header-align="center" align="center">
           <template slot-scope="scope">
             <el-button size="mini" type="warning" @click="dialog_show(scope.row.id)">编辑</el-button>

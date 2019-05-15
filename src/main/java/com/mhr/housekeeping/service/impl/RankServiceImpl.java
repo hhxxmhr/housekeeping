@@ -90,16 +90,15 @@ public class RankServiceImpl implements RankService {
         UserServiceVO userServiceVO = new UserServiceVO();
         userServiceVO.setRankId(rankVO.getId());
         List<UserServiceVO> list = userServiceService.listUserService(userServiceVO);
-        if (list.size() > 0) {
+        if (list != null && list.size() > 0) {
             //删除关联表user_service里的信息
             Integer integer = userServiceService.deleteUserServiceByRanId(rankVO.getId());
             if (integer > 0) {
                 Integer count = rankMapper.deleteRank(rankVO);
                 if (count > 0) {
                     return Result.getSuccess("删除成功");
-                }
-                return Result.getFailure("删除失败");
-            }
+                } else return Result.getFailure("删除失败");
+            } else return Result.getFailure("关联表删除失败");
         }
         Integer count = rankMapper.deleteRank(rankVO);
         if (count > 0) {
