@@ -58,11 +58,17 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public Result updateService(ServiceVO serviceVO) throws Exception {
-        Integer count = serviceMapper.updateService(serviceVO);
-        if (count > 0) {
-            return Result.getSuccess("操作成功");
+        //编辑服务名称的时候，名称不能重复
+        ServiceVO serviceByName = serviceMapper.findServiceByName(serviceVO);
+        if (serviceByName != null && !serviceByName.getId().equals(serviceVO.getId())) {
+            return Result.getFailure("该服务名称已存在");
+        } else {
+            Integer count = serviceMapper.updateService(serviceVO);
+            if (count > 0) {
+                return Result.getSuccess("操作成功");
+            }
+            return Result.getFailure("操作失败");
         }
-        return Result.getFailure("操作失败");
     }
 
     @Override

@@ -225,6 +225,7 @@
       },
       dialog_showChild(row) {
         this.dialog_title = "新增子服务";
+        this.service.id = null;
         this.service.name = '';
         this.service.price = null;
         this.service.type = row.type;
@@ -263,7 +264,6 @@
           if (valid) {
             let res;
             if (this.service.id == null) {//添加
-              console.log(this.service)
               if (this.service.parent !== null) {//添加子类的时候
                 //子类的工资要大于等于父类的基础工资
                 let tmp = this.serviceList.find(item => item.id === this.service.parent);
