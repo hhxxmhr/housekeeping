@@ -15,7 +15,6 @@ import com.mhr.housekeeping.service.*;
 import com.mhr.housekeeping.utils.EnumType;
 import com.mhr.housekeeping.utils.Result;
 import com.mhr.housekeeping.utils.SmsUtils;
-import org.apache.catalina.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -208,6 +207,13 @@ public class UserController {
         return userService.findDetailUser(userVO);
     }
 
+    /**
+     * 服务预定---根据条件过滤人员  条件有：省、市、服务id、过滤待岗的人员
+     *
+     * @param userVO
+     * @return
+     * @throws Exception
+     */
     @RequestMapping("/User/listUserByServiceId")
     public JSONObject listUserByServiceId(@RequestBody UserVO userVO) throws Exception {
         Result result = userService.listUserByServiceId(userVO);

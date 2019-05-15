@@ -372,6 +372,7 @@
         </set>
         <include refid="_primaryKey_condition"/>
     </update>
+
     <update id="updateUser2" parameterType="UserDO">
         UPDATE
         <include refid="_table"/>
@@ -542,6 +543,7 @@
 
 
     </select>
+
     <select id="findUserByOrder" resultMap="userMapper" parameterType="java.lang.Integer">
         SELECT *
         FROM
@@ -557,7 +559,6 @@
         <include refid="_condition"/>
         <include refid="_order"/>
     </select>
-
 
     <select id="listUserPage" resultMap="userMapper" parameterType="UserVO">
         SELECT

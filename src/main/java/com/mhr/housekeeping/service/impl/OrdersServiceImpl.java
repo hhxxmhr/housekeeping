@@ -113,11 +113,12 @@ public class OrdersServiceImpl implements OrdersService {
                 } else return Result.getFailure("更新金额失败");
             }
 
-            //此操作是雇员完成订单，更新工资、更新资金记录
+            //此操作是雇员完成订单，更新工资、更新待岗状态、更新资金记录
             if (ordersVO.getEndTime() != null) {
                 //更新当前登陆用户工资---加上订单的费用
                 UserDO user = (UserDO) request.getSession().getAttribute("user");
                 user.setBalance(user.getBalance() + detailOrders.getOrderPrice());
+                user.setState(3);//释放状态
                 Integer res1 = userMapper.updateUser2(user);
                 //更新记录
                 Integer res2 = fundMapper.addFund(new FundVO(user.getId(), ordersVO.getId(), user.getBalance(), detailOrders.getOrderPrice(), System.currentTimeMillis() / 1000, 5));
@@ -125,6 +126,18 @@ public class OrdersServiceImpl implements OrdersService {
                     return Result.getSuccess("操作成功");
                 } else return Result.getFailure("更新金额失败");
             }
+
+            //此操作是雇员确认订单的时候，需要更新雇员的状态，设置为在岗   同理，在雇员完成订单的时候更新雇员的待岗状态
+            if (ordersVO.getState() == 2) {
+                //更新当前登陆用户状态
+                UserDO user = (UserDO) request.getSession().getAttribute("user");
+                user.setState(4);
+                Integer integer = userMapper.updateUser2(user);
+                if (integer > 0) {
+                    return Result.getSuccess("更新雇员值岗状态成功");
+                }
+            }
+
             //此操作是管理员同意 退款申请 ，更新员工的工资、雇主的余额 以及 更新资金记录
             if (ordersVO.getState() == 6) {
                 //根据订单更新雇员

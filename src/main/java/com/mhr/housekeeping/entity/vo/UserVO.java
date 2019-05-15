@@ -13,7 +13,7 @@ public class UserVO extends Query implements Serializable {
     private static final long serialVersionUID = -4944675620658964018L;
     //雇员完成订单有评论数
     private Integer totalComment;
-    //雇员完成订单有评论数
+    //雇员完成订单hao评论数
     private Integer goodComment;
 
     public Integer getTotalComment() {

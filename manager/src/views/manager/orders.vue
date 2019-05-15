@@ -71,7 +71,8 @@
           <template slot-scope="scope">
             <at-button confirmText="确认此订单?" size="mini" type="success"
                        v-if="scope.row.state===0&&searchForm.role===200"
-                       @click="changeState(scope.row,2)" :disabled="checkSureTime(scope.row.createTime)">确认
+                       :disabled="checkSureTime(scope.row.createTime)"
+                       @click="changeState(scope.row,2)">确认
             </at-button>
             <at-button confirmText="拒接此订单?" size="mini" type="primary"
                        v-if="scope.row.state===0&&searchForm.role===200"

@@ -66,7 +66,7 @@
           <el-form-item label="工作地区：" :label-width="formLabelWidth">
             {{moreInfo.prov+'--'+moreInfo.city}}
           </el-form-item>
-          <el-form-item label="从事服务：" :label-width="formLabelWidth" >
+          <el-form-item label="从事服务：" :label-width="formLabelWidth">
             {{getServices(moreInfo.services)}}
           </el-form-item>
           <el-form-item label="家政经验：" :label-width="formLabelWidth">
@@ -133,12 +133,13 @@
         formLabelWidth: "90px",
         moreInfo: {},
         searchForm: {
+          role: 200,//显示雇员列表
           serviceId: null,//从服务中心页面跳转过来的参数
-          experience: null,
-          prov: '',
-          city: '',
-          state: 3,
-          role: 200
+          experience: null,//搜索框
+          serviceName: '',//搜索框
+          prov: '',//搜索框
+          city: '',//搜索框
+          // state: 3,
         },
         limitTime: sixHalf,
         info: [],
@@ -147,7 +148,7 @@
         itemTaste: [],
         item: {},
 
-      form: {
+        form: {
           id: null,//所选菜品的id
           name: '',
           shopName: '',
@@ -181,9 +182,9 @@
       },
       async getInfo() {
         let res;
-        if (this.searchForm.serviceId == null){
-           res = await this.$api("getAll", this.searchForm);
-        }else {
+        if (this.searchForm.serviceId == null) {
+          res = await this.$api("getAll", this.searchForm);
+        } else {
           res = await this.$api("User/listUserByServiceId", this.searchForm);
         }
         this.info = res.list;

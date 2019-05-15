@@ -223,7 +223,11 @@
               //跳转到选人的页面
               this.$router.push({
                 path: "/employer/chooseEmployee",
-                query: {serviceId: this.reserveForm.serviceId, prov: this.reserveForm.prov, city: this.reserveForm.city}
+                query: {
+                  serviceId: this.reserveForm.serviceId,
+                  prov: this.reserveForm.prov,
+                  city: this.reserveForm.city,
+                }
               });
             } else this.$message.error("请先选择住址所在区域")
           } else this.$message.error("请先选择服务")
