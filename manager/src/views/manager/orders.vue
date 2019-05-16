@@ -277,6 +277,7 @@
                 message: res.msg
               });
               this.init();
+              this.$emit("updateBalance");//刷新余额
             }).catch(() => {
               this.$message.warning("取消操作")
             });
@@ -292,6 +293,7 @@
                 message: res.msg
               });
               this.init();
+              this.$emit("updateBalance");//刷新余额
             }).catch(() => {
               this.$message.warning("取消操作")
             });
@@ -325,6 +327,7 @@
             });
           }
           this.init();
+          this.$emit("updateBalance");//刷新余额
         } else {//role==100,管理员的同意/拒绝退款操作  更新订单完成时间
           let res = await this.$api("Order/edit", {id: row.id, state: state, endTime: this.timestamp()});
           this.$message({
@@ -332,6 +335,7 @@
             message: res.msg
           });
           this.init();
+          this.$emit("updateBalance");//刷新余额
         }
       }
       ,

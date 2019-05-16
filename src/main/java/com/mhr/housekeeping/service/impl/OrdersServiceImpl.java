@@ -96,12 +96,12 @@ public class OrdersServiceImpl implements OrdersService {
         if (count > 0) {
             //此操作是---超时取消的费用
             if (ordersVO.getPay() != null) {
-                //更新当前登陆用户余额---减去超时费用
+                //更新当前登陆用户余额---减去超时费用--加上订单费用
                 UserDO user = (UserDO) request.getSession().getAttribute("user");
-                user.setBalance(user.getBalance() - ordersVO.getPay());
+                user.setBalance(user.getBalance() - ordersVO.getPay() + detailOrders.getOrderPrice());
                 Integer r1 = userMapper.updateUser2(user);
-                //更新资金记录--减去超时费用
-                Integer r2 = fundMapper.addFund(new FundVO(user.getId(), ordersVO.getId(), user.getBalance(), ordersVO.getPay(), System.currentTimeMillis() / 1000, 2));
+                //更新资金记录--超时费用和订单费用
+                Integer r2 = fundMapper.addFund(new FundVO(user.getId(), ordersVO.getId(), user.getBalance(), (detailOrders.getOrderPrice() - ordersVO.getPay()), System.currentTimeMillis() / 1000, 2));
                 //更新雇员工资
                 UserDO employee = userMapper.findDetailUser(new UserVO(detailOrders.getEmployeeId()));
                 employee.setBalance(employee.getBalance() + ordersVO.getPay());
@@ -111,6 +111,18 @@ public class OrdersServiceImpl implements OrdersService {
                 if (r1 > 0 && r2 > 0 && r3 > 0 && r4 > 0) {
                     return Result.getSuccess("操作成功");
                 } else return Result.getFailure("更新金额失败");
+            }
+
+            //此操作是---普通取消订单的操作----更新当前登陆用户的余额，加上订单费
+            if (ordersVO.getState() == 1) {
+                UserDO user = (UserDO) request.getSession().getAttribute("user");
+                user.setBalance(user.getBalance() + detailOrders.getOrderPrice());
+                Integer integer = userMapper.updateUser2(user);
+                Integer cou = fundMapper.addFund(new FundVO(user.getId(), ordersVO.getId(), user.getBalance(), detailOrders.getOrderPrice(), System.currentTimeMillis() / 1000, 8));
+                if (integer > 0 && cou > 0) {
+                    return Result.getSuccess("操作成功");
+                }
+                return Result.getFailure("失败");
             }
 
             //此操作是雇员完成订单，更新工资、更新待岗状态、更新资金记录
