@@ -44,7 +44,7 @@
             <div v-if="scope.row.state === 2" style="color:#409EFF;">{{'待审核'}}</div>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="260px">
+        <el-table-column label="操作" width="260px" align="center">
           <template slot-scope="scope">
             <at-button confirmText="确定启用此账号?" size="mini" type="success" v-if="scope.row.state===1||scope.row.state===2"
                        @click="changeState(scope.row,0)">启用
@@ -53,7 +53,7 @@
                        @click="changeState(scope.row,1)">禁用
             </at-button>
             <at-button confirmText="确定删除此账号?" size="mini" type="warning"
-                       @click="deleteEmployee(scope.row)">删除
+                       @click="deleteEmployer(scope.row)">删除
             </at-button>
             <el-dropdown size="mini" split-button type="info"
                          @command="handleCommand($event, scope.row.id,scope.row.role)"
@@ -135,24 +135,16 @@
     },
     async created() {
       //接收参数
-      let query = this.$route.query;
-      let id = query.id == null ? null : parseInt(query.id);
-      let username = query.username;
-      let state = query.state == null ? null : parseInt(query.state);
-      this.searchForm.id = id;
-      this.searchForm.username = username;
-      this.searchForm.state = state;
+      Object.assign(this.searchForm, this.$route.query);
+      this.searchForm.id = this.searchForm.id ? parseInt(this.searchForm.id) : null;
+      this.searchForm.state = this.searchForm.state ? parseInt(this.searchForm.state) : null;
       this.init();
     },
     watch: {
       '$route'() {
-        let query = this.$route.query;
-        let id = query.id == null ? null : parseInt(query.id);
-        let username = query.username;
-        let state = query.state == null ? null : parseInt(query.state);
-        this.searchForm.id = id;
-        this.searchForm.username = username;
-        this.searchForm.state = state;
+        Object.assign(this.searchForm, this.$route.query);
+        this.searchForm.id = this.searchForm.id ? parseInt(this.searchForm.id) : null;
+        this.searchForm.state = this.searchForm.state ? parseInt(this.searchForm.state) : null;
         this.init();
       }
     },
@@ -175,7 +167,7 @@
           this.showComment(id, role);
         } else if (command === 'moreInfo') {
           this.showMoreInfo(id);
-        }else if (command === 'showFund') {
+        } else if (command === 'showFund') {
           this.showFund(id);
         }
       },
@@ -211,8 +203,8 @@
         this.moreInfo.photo = tmp.photo;
         this.dialog_visible = true;
       },
-      async deleteEmployee(row) {
-        let res = await this.$api('User/deleteEmployee', {id: row.id});
+      async deleteEmployer(row) {
+        let res = await this.$api('User/deleteEmployee', {id: row.id, role: row.role});
         this.$message({
           type: res.code === 200 ? 'success' : 'error',
           message: res.msg

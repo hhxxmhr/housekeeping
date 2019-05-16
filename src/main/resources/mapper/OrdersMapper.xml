@@ -592,8 +592,16 @@
         select * from orders where state in (0,2,3) and employee_id = #{id}
     </select>
 
-    <delete id="deleteOrdersByUserId" parameterType="java.lang.Integer">
+    <select id="listUnderwayOrdersByEmployerId" resultMap="ordersMapper" parameterType="UserVO">
+        select * from orders where state in (0,2,3) and employer_id = #{id}
+    </select>
+
+    <delete id="deleteOrdersByEmployeeId" parameterType="java.lang.Integer">
         delete from orders where employee_id = #{id}
+    </delete>
+
+    <delete id="deleteOrdersByEmployerId" parameterType="java.lang.Integer">
+        delete from orders where employer_id = #{id}
     </delete>
 
     <select id="countOrdersRefund" resultType="java.lang.Integer">

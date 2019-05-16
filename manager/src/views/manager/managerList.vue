@@ -76,7 +76,7 @@
                      @click="changeState(scope.row,1)">禁用
           </at-button>
           <at-button size="mini" type="primary" confirmText="确定要删除此用户"
-                     @click="delUser(scope.row.id)">删除
+                     @click="delUser(scope.row)">删除
           </at-button>
         </template>
       </el-table-column>
@@ -106,8 +106,8 @@
       };
     },
     methods: {
-      async delUser(id) {
-        let resp = await this.$api('Manager/deleteAdmin', {id: id});
+      async delUser(row) {
+        let resp = await this.$api('Manager/deleteAdmin', {id: row.id, role: row.role});
         if (resp.code === 200) {
           this.$message.success("删除成功");
         }

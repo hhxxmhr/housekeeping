@@ -261,6 +261,12 @@ public class UserController {
 
     }
 
+    /**
+     * 管理员删除雇员、雇主   --通用方法
+     * @param userVO
+     * @return
+     * @throws Exception
+     */
     @RequestMapping("/User/deleteEmployee")
     public Result deleteEmployee(@RequestBody UserVO userVO) throws Exception {
         return userService.deleteUser(userVO);

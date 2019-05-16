@@ -174,24 +174,16 @@
     },
     async created() {
       //接收参数
-      let query = this.$route.query;
-      let id = query.id == null ? null : parseInt(query.id);
-      let username = query.username;
-      let state = query.state == null ? null : parseInt(query.state);
-      this.searchForm.id = id;
-      this.searchForm.username = username;
-      this.searchForm.state = state;
+      Object.assign(this.searchForm, this.$route.query);
+      this.searchForm.id = this.searchForm.id ? parseInt(this.searchForm.id) : null;
+      this.searchForm.state = this.searchForm.state ? parseInt(this.searchForm.state) : null;
       this.init();
     },
     watch: {
       '$route'() {
-        let query = this.$route.query;
-        let id = query.id == null ? null : parseInt(query.id);
-        let username = query.username;
-        let state = query.state == null ? null : parseInt(query.state);
-        this.searchForm.id = id;
-        this.searchForm.username = username;
-        this.searchForm.state = state;
+        Object.assign(this.searchForm, this.$route.query);
+        this.searchForm.id = this.searchForm.id ? parseInt(this.searchForm.id) : null;
+        this.searchForm.state = this.searchForm.state ? parseInt(this.searchForm.state) : null;
         this.init();
       }
     },
@@ -199,6 +191,7 @@
       async init() {
         let res = await this.$api('getAll', this.searchForm);
         this.employeeList = res.list;
+        console.log(this.employeeList)
       },
       async search() {
         //携带查询的参数再次查询一下列表
@@ -255,7 +248,7 @@
         this.dialog_visible = true;
       },
       async deleteEmployee(row) {
-        let res = await this.$api('User/deleteEmployee', {id: row.id});
+        let res = await this.$api('User/deleteEmployee', {id: row.id, role: row.role});
         this.$message({
           type: res.code === 200 ? 'success' : 'error',
           message: res.msg
