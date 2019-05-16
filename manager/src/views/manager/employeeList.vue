@@ -43,7 +43,6 @@
               {{service.name}}
             </el-tag>
           </template>
-
         </el-table-column>
         <el-table-column prop="orderCount" align="center" label="有效订单"></el-table-column>
         <el-table-column prop="praise" align="center" label="好评率">

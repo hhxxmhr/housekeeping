@@ -587,4 +587,12 @@
     <select id="getAllOrderByPage" resultMap="ordersMapper" parameterType="java.lang.Integer">
       select * from orders limit #{page}, #{size}
     </select>
+
+    <select id="listUnderwayOrdersByEmployeeId" resultMap="ordersMapper" parameterType="UserVO">
+        select * from orders where state in (0,2,3) and employee_id = #{id}
+    </select>
+
+    <delete id="deleteOrdersByUserId" parameterType="java.lang.Integer">
+        delete from orders where employee_id = #{id}
+    </delete>
 </mapper>

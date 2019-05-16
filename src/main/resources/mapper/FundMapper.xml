@@ -208,6 +208,10 @@
         delete from fund where order_id = #{id}
     </delete>
 
+    <delete id="deleteFundByUserId" parameterType="java.lang.Integer">
+        delete from fund where user_id = #{id}
+    </delete>
+
     <select id="getExtra" parameterType="FundVO" resultType="java.lang.Integer">
         select sum(fund.change_money) from fund where fund.user_id = #{userId} and fund.type = #{type }
     </select>

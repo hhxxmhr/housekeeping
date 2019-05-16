@@ -2,9 +2,9 @@ package com.mhr.housekeeping.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mhr.housekeeping.dao.*;
+import com.mhr.housekeeping.entity.FundDO;
 import com.mhr.housekeeping.entity.ServiceDO;
 import com.mhr.housekeeping.entity.UserDO;
-import com.mhr.housekeeping.entity.UserServiceDO;
 import com.mhr.housekeeping.entity.vo.FundVO;
 import com.mhr.housekeeping.entity.vo.OrdersVO;
 import com.mhr.housekeeping.entity.vo.UserServiceVO;
@@ -128,26 +128,44 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    /**
+     * 删除员工
+     *
+     * @param userVO
+     * @return
+     * @throws Exception
+     */
     @Override
     public Result deleteUser(UserVO userVO) throws Exception {
-        UserServiceVO userServiceVO = new UserServiceVO();
-        userServiceVO.setUserId(userVO.getId());
-        List<UserServiceVO> list = userServiceMapper.listUserService(userServiceVO);
-        if (list.size() > 0) {
-            Integer r = userServiceMapper.deleteUserServiceByUserId(userVO.getId());
-            if (r > 0) {
-                Integer count = userMapper.deleteUser(userVO);
-                if (count > 0) {
-                    return new Result(Result.CODE_SUCCESS, "删除成功");
-                }
-                return new Result(Result.CODE_FAILURE, "删除失败");
+        //先检查此员工是否有订单正在进行中，如果有的话，就不可删除，若没有，则更新user_service、fund、orders表
+        List<OrdersVO> voList = ordersMapper.listUnderwayOrdersByEmployeeId(userVO);
+        if (voList != null && voList.size() > 0) {
+            return Result.getFailure("此雇员尚有订单在进行中，不可删除");
+        } else {
+            OrdersVO ordersVO = new OrdersVO();
+            ordersVO.setEmployeeId(userVO.getId());
+            List<OrdersVO> ordersVOList = ordersMapper.listOrders(ordersVO);
+            UserServiceVO userServiceVO = new UserServiceVO();
+            userServiceVO.setUserId(userVO.getId());
+            List<UserServiceVO> list = userServiceMapper.listUserService(userServiceVO);
+            FundVO vo = new FundVO();
+            vo.setUserId(userVO.getId());
+            List<FundDO> listFund = fundMapper.listFund(vo);
+            if (listFund != null && listFund.size() > 0) {
+                fundMapper.deleteFundByUserId(userVO.getId());
             }
+            if (list != null && list.size() > 0) {
+                userServiceMapper.deleteUserServiceByUserId(userVO.getId());
+            }
+            if (ordersVOList != null && ordersVOList.size() > 0) {
+                ordersMapper.deleteOrdersByUserId(userVO.getId());//根据员工id删除订单记录
+            }
+            Integer count = userMapper.deleteUser(userVO);
+            if (count > 0) {
+                return Result.getSuccess("操作成功");
+            }
+            return Result.getFailure("操作失败");
         }
-        Integer count = userMapper.deleteUser(userVO);
-        if (count > 0) {
-            return new Result(Result.CODE_SUCCESS, "删除成功");
-        }
-        return new Result(Result.CODE_FAILURE, "删除失败");
     }
 
     @Override
@@ -166,8 +184,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result editPassword(String new_pwd, String old_pwd) {
-        //更新密码
-//        userMapper.findDetailUser();
         return null;
     }
 

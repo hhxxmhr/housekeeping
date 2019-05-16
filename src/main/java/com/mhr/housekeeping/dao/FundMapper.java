@@ -33,4 +33,6 @@ public interface FundMapper {
     Integer getExtra(FundVO vo);
 
     Integer deleteFundByOrder(OrdersVO ordersVO);
+
+    Integer deleteFundByUserId(Integer id);
 }

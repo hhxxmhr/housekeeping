@@ -65,4 +65,8 @@ public interface OrdersMapper {
     Integer getServiceMost(Integer id);
 
     Integer deleteOrdersByServiceId(Integer serviceId);
+
+    List<OrdersVO> listUnderwayOrdersByEmployeeId(UserVO userVO);
+
+    Integer deleteOrdersByUserId(Integer id);
 }
