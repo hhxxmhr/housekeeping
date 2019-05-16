@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -295,35 +296,108 @@ public class UserController {
         UserDO user = (UserDO) request.getSession().getAttribute("user");
         OrdersVO ordersVO = new OrdersVO();
         ordersVO.setEmployeeId(user.getId());
-        object.put("balance", user.getBalance());
+        //定义一个对象，专门放顶头的三个数据
+        JSONObject head = new JSONObject();
+        head.put("我的收益", user.getBalance());
         //根据userId查询完成的订单数
         Integer orderCount = ordersService.countOrdersByEmployeeId(new UserVO(user.getId()));
-        object.put("orderCount", orderCount);
+        head.put("成单数", orderCount);
         //好评量
         Integer goodComment = ordersService.countOrdersWithGoodComment(ordersVO);
-        object.put("goodComment", goodComment);
-        //好评率
+        head.put("好评量", goodComment);
+
+        //好评率  好评占评价总数
         Integer comment = ordersService.countOrdersWithComment(ordersVO);
-        float goodPercent = (float) goodComment / comment;
-        object.put("goodPercent", goodPercent);
+        if (comment == 0) {
+            object.put("goodPercent", 0);
+        } else {
+            float goodPercent = (float) goodComment / comment;
+            object.put("goodPercent", goodPercent);
+        }
         //退款率
         Integer countOrders = ordersService.countOrders(ordersVO);
         Integer refundCount = ordersService.countOrdersWithReason(ordersVO);
-        float refundPercent = (float) refundCount / countOrders;
-        object.put("refundPercent", refundPercent);
+        if (countOrders == 0) {
+            object.put("refundPercent", 0);
+        } else {
+            float refundPercent = (float) refundCount / countOrders;
+            object.put("refundPercent", refundPercent);
+        }
         //额外收益
         FundVO vo = new FundVO();
         vo.setUserId(user.getId());
         vo.setType(4);
         Integer extra = fundService.getExtra(vo);
-        object.put("extra", extra);
+        if (extra == null) {
+            object.put("extra", 0);
+        } else {
+            object.put("extra", extra);
+        }
         //最优服务--雇员被点最多的服务
         Integer serviceId = ordersService.getServiceMost(user.getId());
         ServiceDO detailService = serviceService.findDetailService(new ServiceVO(serviceId));
-        object.put("goodService", detailService.getName());
+        if (detailService != null) {
+            object.put("goodService", detailService.getName());
+        } else {
+            object.put("goodService", "暂无");
+        }
         //最高等级
         RankDO rankDO = rankService.getMostRank(user.getId());
-        object.put("rank", rankDO.getName());
+        if (rankDO != null) {
+            object.put("rank", rankDO.getName());
+        } else {
+            object.put("rank", "暂无");
+        }
+        object.put("head", head);
+        return object;
+    }
+
+    /**
+     * 员工首页--统计近30天的、上个月的  订单数量、成交金额
+     *
+     * @return
+     */
+    @RequestMapping("User/ordersChart")
+    public JSONObject ordersChart(@RequestBody HashMap hashMap, HttpServletRequest request) {
+        UserDO user = (UserDO) request.getSession().getAttribute("user");
+        Long startTime = (Long) hashMap.get("startTime");
+        Long endTime = (Long) hashMap.get("endTime");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        List<String> timeList = new ArrayList<>();
+        //每天的订单数
+        List<Integer> ordersList = new ArrayList<>();
+        //每天的收入---包括额外收入（订单取消的补贴）
+        List<Integer> balanceList = new ArrayList<>();
+        //每天的退款单数
+        List<Integer> refundList = new ArrayList<>();
+        Long timeItem = startTime;
+        while (timeItem <= endTime) {
+            timeList.add(sdf.format(new Date(timeItem)));
+            //统计 所有成功的订单的数量
+            Integer count = ordersService.countOrdersByTime2(timeItem / 1000, (timeItem / 1000 + 3600 * 24 - 1), null, user.getId());
+            ordersList.add(count);
+            Integer countRefund = ordersService.countOrdersRefund(timeItem / 1000, (timeItem / 1000 + 3600 * 24 - 1), user.getId());
+            refundList.add(countRefund);
+            Integer income = fundService.getTotalIncome(timeItem / 1000, (timeItem / 1000 + 3600 * 24 - 1), user.getId());
+            Integer refund = fundService.getTotalRefund(timeItem / 1000, (timeItem / 1000 + 3600 * 24 - 1), user.getId());
+            if (income != null && refund != null) {
+                balanceList.add(income - refund);
+            }
+            if (income == null && refund != null) {
+                balanceList.add(0 - refund);
+            }
+            if (income != null && refund == null) {
+                balanceList.add(income);
+            } else {
+                balanceList.add(0);
+            }
+            timeItem += 60 * 60 * 24 * 1000;
+        }
+        JSONObject object = new JSONObject();
+        object.put("timeList", timeList);
+        object.put("ordersList", ordersList);
+        object.put("balanceList", balanceList);
+        object.put("refundList", refundList);
         return object;
     }
 

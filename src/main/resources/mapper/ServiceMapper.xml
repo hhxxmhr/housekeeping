@@ -232,7 +232,7 @@
         INNER JOIN service ON orders.service_id = service.id
         WHERE
         orders.end_time BETWEEN #{startTime} AND #{endTime} AND
-        orders.state IN (3,4)
+        orders.state IN (3,4,8)
         <if test="serviceId!=null">
             AND orders.service_id = #{serviceId}
         </if>
@@ -255,7 +255,7 @@
         INNER JOIN service ON orders.service_id = service.id
         WHERE
         orders.end_time BETWEEN #{startTime} AND #{endTime} AND
-        orders.state IN (3,4)
+        orders.state IN (3,4,8)
         <if test="serviceId!=null">
             AND orders.service_id = #{serviceId}
         </if>
@@ -281,7 +281,7 @@
         INNER JOIN service ON orders.service_id = service.id
         WHERE
         orders.end_time BETWEEN #{startTime} AND #{endTime} AND
-        orders.state IN (3,4)
+        orders.state IN (3,4,8)
         <if test="serviceId!=null">
             AND orders.service_id = #{serviceId}
         </if>

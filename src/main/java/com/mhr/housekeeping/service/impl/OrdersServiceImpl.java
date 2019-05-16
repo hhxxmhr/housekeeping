@@ -363,5 +363,10 @@ public class OrdersServiceImpl implements OrdersService {
         return ordersMapper.getServiceMost(id);
     }
 
+    @Override
+    public Integer countOrdersRefund(long startTime, long endTime, Integer userId) {
+        return ordersMapper.countOrdersRefund(startTime, endTime, userId);
+    }
+
 
 }

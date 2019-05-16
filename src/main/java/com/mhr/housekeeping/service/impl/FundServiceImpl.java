@@ -103,4 +103,14 @@ public class FundServiceImpl implements FundService {
         return fundMapper.getExtra(vo);
     }
 
+    @Override
+    public Integer getTotalIncome(long startTime, long endTime, Integer userId) {
+        return fundMapper.getTotalIncome(startTime, endTime, userId);
+    }
+
+    @Override
+    public Integer getTotalRefund(long startTime, long endTime, Integer userId) {
+        return fundMapper.getTotalRefund(startTime, endTime, userId);
+    }
+
 }

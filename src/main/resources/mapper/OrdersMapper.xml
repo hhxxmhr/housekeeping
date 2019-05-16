@@ -469,21 +469,21 @@
     </select>
 
     <select id="countOrdersByTime" resultType="java.lang.Integer" parameterType="java.lang.Long">
-        SELECT count(*) from orders WHERE orders.state in (3,4) and orders.end_time BETWEEN #{timeItem} and #{time2}
+        SELECT count(*) from orders WHERE orders.state in (3,4,8) and orders.end_time BETWEEN #{timeItem} and #{time2}
         <if test="serviceId!=null">
             AND orders.service_id = #{serviceId}
         </if>
     </select>
 
     <select id="countMoneyByTime" resultType="java.lang.Integer" parameterType="java.lang.Long">
-        SELECT sum(order_price) from orders WHERE orders.state in (3,4) and orders.end_time BETWEEN #{l} and #{time}
+        SELECT sum(order_price) from orders WHERE orders.state in (3,4,8) and orders.end_time BETWEEN #{l} and #{time}
         <if test="serviceId!=null">
             AND orders.service_id = #{serviceId}
         </if>
     </select>
 
     <select id="countOrdersByTime2" resultType="java.lang.Integer" parameterType="java.lang.Long">
-        SELECT count(*) from orders WHERE orders.state in (3,4) and orders.end_time BETWEEN #{timeItem} and #{time2}
+        SELECT count(*) from orders WHERE orders.state in (3,4,8) and orders.end_time BETWEEN #{timeItem} and #{time2}
         <if test="serviceId!=null">
             AND orders.service_id = #{serviceId}
         </if>
@@ -493,7 +493,7 @@
     </select>
 
     <select id="countMoneyByTime2" resultType="java.lang.Integer" parameterType="java.lang.Long">
-        SELECT sum(order_price) from orders WHERE orders.state in (3,4) and orders.end_time BETWEEN #{l} and #{time}
+        SELECT sum(order_price) from orders WHERE orders.state in (3,4,8) and orders.end_time BETWEEN #{l} and #{time}
         <if test="serviceId!=null">
             AND orders.service_id = #{serviceId}
         </if>
@@ -503,7 +503,7 @@
     </select>
 
     <select id="countOrdersByTime3" resultType="java.lang.Integer" parameterType="java.lang.Long">
-        SELECT count(*) from orders WHERE orders.state in (3,4) and orders.end_time BETWEEN #{timeItem} and #{time2}
+        SELECT count(*) from orders WHERE orders.state in (3,4,8) and orders.end_time BETWEEN #{timeItem} and #{time2}
         <if test="serviceId!=null">
             AND orders.service_id = #{serviceId}
         </if>
@@ -513,7 +513,7 @@
     </select>
 
     <select id="countMoneyByTime3" resultType="java.lang.Integer" parameterType="java.lang.Long">
-        SELECT sum(order_price) from orders WHERE orders.state in (3,4) and orders.end_time BETWEEN #{l} and #{time}
+        SELECT sum(order_price) from orders WHERE orders.state in (3,4,8) and orders.end_time BETWEEN #{l} and #{time}
         <if test="serviceId!=null">
             AND orders.service_id = #{serviceId}
         </if>
@@ -552,7 +552,7 @@
     </select>
 
     <select id="countOrdersWithComment" resultType="java.lang.Integer" parameterType="OrdersVO">
-        SELECT count(*) from orders WHERE orders.state in (3,4)
+        SELECT count(*) from orders WHERE orders.state = 4
         <if test="serviceId!=null">
             AND orders.service_id = #{serviceId}
         </if>
@@ -563,11 +563,11 @@
 
 
     <select id="countOrdersByEmployeeId" resultType="java.lang.Integer" parameterType="UserVO">
-        SELECT COUNT(*) FROM orders WHERE employee_id = #{id} and state in (3,4)
+        SELECT COUNT(*) FROM orders WHERE employee_id = #{id} and state in (3,4,8)
     </select>
 
     <select id="countOrdersByEmployerId" resultType="java.lang.Integer" parameterType="UserVO">
-        SELECT COUNT(*) FROM orders WHERE employer_id = #{id} and state in (3,4)
+        SELECT COUNT(*) FROM orders WHERE employer_id = #{id} and state in (3,4,8)
     </select>
 
     <select id="getServiceMost" resultType="java.lang.Integer" parameterType="java.lang.Integer">
@@ -595,4 +595,8 @@
     <delete id="deleteOrdersByUserId" parameterType="java.lang.Integer">
         delete from orders where employee_id = #{id}
     </delete>
+
+    <select id="countOrdersRefund" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM orders WHERE employee_id = #{userId} and state = 6 and end_time between #{startTime} and #{endTime}
+    </select>
 </mapper>

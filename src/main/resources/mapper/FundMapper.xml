@@ -215,4 +215,12 @@
     <select id="getExtra" parameterType="FundVO" resultType="java.lang.Integer">
         select sum(fund.change_money) from fund where fund.user_id = #{userId} and fund.type = #{type }
     </select>
+
+    <select id="getTotalIncome" resultType="java.lang.Integer">
+        SELECT SUM(change_money) FROM fund WHERE user_id = #{userId} AND type in (4,5) and create_time between #{startTime} and #{endTime}
+    </select>
+
+    <select id="getTotalRefund" resultType="java.lang.Integer">
+        SELECT SUM(change_money) FROM fund WHERE user_id = #{userId} AND type = 6 and create_time between #{startTime} and #{endTime}
+    </select>
 </mapper>

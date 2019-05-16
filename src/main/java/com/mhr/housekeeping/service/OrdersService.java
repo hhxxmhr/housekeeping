@@ -49,4 +49,6 @@ public interface OrdersService {
     Integer countOrdersWithReason(OrdersVO ordersVO);
 
     Integer getServiceMost(Integer id);
+
+    Integer countOrdersRefund(long l, long l1, Integer id);
 }

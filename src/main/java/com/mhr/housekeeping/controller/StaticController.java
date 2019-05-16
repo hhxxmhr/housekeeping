@@ -47,14 +47,17 @@ public class StaticController {
      * @throws Exception
      */
     @RequestMapping("/Static/getServiceDetailByEid")
-    public List<ServiceVO> getServiceDetailByEid(@RequestBody HashMap hashMap) throws Exception {
+    public JSONObject getServiceDetailByEid(@RequestBody HashMap hashMap) throws Exception {
         Integer serviceId = (Integer) hashMap.get("serviceId");
         Integer eid = (Integer) hashMap.get("eid");
         Integer role = (Integer) hashMap.get("role");
         Integer startTime = (Integer) hashMap.get("startTime");
         Integer endTime = (Integer) hashMap.get("endTime");
         //根据服务的id、订单的完结时间区间 查询订单表，进行统计
-        return serviceService.serviceStaticByEid(serviceId, startTime, endTime, eid, role);
+        List<ServiceVO> vos = serviceService.serviceStaticByEid(serviceId, startTime, endTime, eid, role);
+        JSONObject object = new JSONObject();
+        object.put("data",vos);
+        return object;
     }
 
     /**

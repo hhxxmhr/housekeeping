@@ -35,4 +35,8 @@ public interface FundMapper {
     Integer deleteFundByOrder(OrdersVO ordersVO);
 
     Integer deleteFundByUserId(Integer id);
+
+    Integer getTotalIncome(long startTime, long endTime, Integer userId);
+
+    Integer getTotalRefund(long startTime, long endTime, Integer userId);
 }

@@ -325,7 +325,7 @@
             });
           }
           this.init();
-        } else {//role==100,管理员的同意退款操作  更新订单完成时间
+        } else {//role==100,管理员的同意/拒绝退款操作  更新订单完成时间
           let res = await this.$api("Order/edit", {id: row.id, state: state, endTime: this.timestamp()});
           this.$message({
             type: res.code === 200 ? 'success' : 'error',

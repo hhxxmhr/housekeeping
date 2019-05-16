@@ -199,13 +199,14 @@
         });
       },
       async getServiceDetailByEid() {
-        this.services = await this.$api('Static/getServiceDetailByEid', {
+        let res = await this.$api('Static/getServiceDetailByEid', {
           serviceId: this.searchParam.serviceId,
           startTime: this.searchParam.startTime / 1000,
           endTime: this.searchParam.endTime / 1000,
           eid: window.$mine.id,
           role: window.$mine.role,
         });
+        this.services = res.data;
         console.log(this.services)
       },
       async getMyService() {

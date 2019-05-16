@@ -69,4 +69,6 @@ public interface OrdersMapper {
     List<OrdersVO> listUnderwayOrdersByEmployeeId(UserVO userVO);
 
     Integer deleteOrdersByUserId(Integer id);
+
+    Integer countOrdersRefund(long startTime, long endTime, Integer userId);
 }
