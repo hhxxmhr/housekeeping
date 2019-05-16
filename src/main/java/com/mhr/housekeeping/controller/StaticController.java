@@ -31,12 +31,15 @@ public class StaticController {
      * @param hashMap
      */
     @RequestMapping("/Static/serviceDetail")
-    public List<ServiceVO> serviceDetail(@RequestBody HashMap hashMap) throws Exception {
+    public JSONObject serviceDetail(@RequestBody HashMap hashMap) throws Exception {
         Integer serviceId = (Integer) hashMap.get("serviceId");
         Integer startTime = (Integer) hashMap.get("startTime");
         Integer endTime = (Integer) hashMap.get("endTime");
         //根据服务的id、订单的完结时间区间 查询订单表，进行统计
-        return serviceService.serviceStatic(serviceId, startTime, endTime);
+        List<ServiceVO> vos = serviceService.serviceStatic(serviceId, startTime, endTime);
+        JSONObject object = new JSONObject();
+        object.put("data", vos);
+        return object;
     }
 
     /**
@@ -56,7 +59,7 @@ public class StaticController {
         //根据服务的id、订单的完结时间区间 查询订单表，进行统计
         List<ServiceVO> vos = serviceService.serviceStaticByEid(serviceId, startTime, endTime, eid, role);
         JSONObject object = new JSONObject();
-        object.put("data",vos);
+        object.put("data", vos);
         return object;
     }
 

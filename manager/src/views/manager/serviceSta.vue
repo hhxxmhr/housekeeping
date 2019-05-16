@@ -182,11 +182,12 @@
         this.searchParam.endTime = this.searchParam.endTime ? parseInt(this.searchParam.endTime) : null;
       },
       async getServiceDetail() {
-        this.services = await this.$api('Static/serviceDetail', {
+        let res = await this.$api('Static/serviceDetail', {
           serviceId: this.searchParam.serviceId,
           startTime: this.searchParam.startTime / 1000,
           endTime: this.searchParam.endTime / 1000
         });
+        this.services = res.data;
         console.log(this.services)
       },
     },
