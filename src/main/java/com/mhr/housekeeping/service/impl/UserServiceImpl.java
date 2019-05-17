@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -114,8 +115,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result listUserByServiceId(UserVO userVO) {
         List<UserVO> userVOS = userMapper.listUserByServiceId(userVO);
-        moreInfo(userVOS);
-        return new Result<>(userVOS);
+        List<UserVO> newUsers = new ArrayList<>();
+        //根据预留时间查询有无档期
+        if (userVO.getReverseTime() != null) {
+            //查询订单表里这个人  这个时间及3个小时内段是否有任务  任务是已经确认或者待完成的状态，像取消这样的就不算的
+            if (userVOS != null && userVOS.size() > 0) {
+                userVOS.forEach(user -> {
+                    List<OrdersVO> voList = ordersMapper.findOrdersByReserveTime(userVO.getReverseTime(), userVO.getReverseTime() + 3600 * 3, user.getId());
+                    if (voList.size() == 0) {
+                        newUsers.add(user);
+                    }
+                });
+            }
+        }
+        moreInfo(newUsers);
+        return new Result<>(newUsers);
     }
 
     @Override
@@ -278,6 +292,32 @@ public class UserServiceImpl implements UserService {
         } else return Result.getFailure("充值失败");
     }
 
+    /**
+     * 根据搜索框查询数据，多了一个预留时间的过滤，过滤掉在此时间值岗的人员
+     *
+     * @param userVO
+     * @return
+     */
+    @Override
+    public List<UserVO> listUserWithReserveTime(UserVO userVO) {
+        userVO.setReverseTime(userVO.getReverseTime() / 1000);
+        List<UserVO> users = userMapper.listUser(userVO);
+        List<UserVO> newUsers = new ArrayList<>();
+        if (userVO.getReverseTime() != null) {
+            //查询订单表里这个人  这个时间及3个小时内段是否有任务  任务是已经确认或者待完成的状态，像取消这样的就不算的
+            if (users != null && users.size() > 0) {
+                users.forEach(user -> {
+                    List<OrdersVO> voList = ordersMapper.findOrdersByReserveTime(userVO.getReverseTime(), userVO.getReverseTime() + 3600 * 3, user.getId());
+                    if (voList.size() == 0) {
+                        newUsers.add(user);
+                    }
+                });
+            }
+        }
+        moreInfo(newUsers);
+        return newUsers;
+    }
+
     public void moreInfo(List<UserVO> userVOS) {
         if (userVOS != null && userVOS.size() > 0) {
             userVOS.forEach(it -> {
@@ -299,9 +339,9 @@ public class UserServiceImpl implements UserService {
                     it.setGoodComment(goodComment);
                 } else if (it.getRole() == 300) {
                     Integer orderCount = ordersMapper.countOrdersByEmployerId(it);
-                    it.setOrderCount(orderCount);//有效的订单数  状态3/4
-                    //计算此员工的好评率
-                    // 1、这个员工一共有几条带评论的订单数 2、 这总数里面有几条是好评的  3、计算
+                    it.setOrderCount(orderCount);//有效的订单数  状态3/4/8
+                    //计算此用户的好评率
+                    // 1、这个用户一共做出了几条带评论的订单数 2、 这总数里面有几条是好评的  3、计算
                     OrdersVO orderVO = new OrdersVO();
                     orderVO.setState(4);
                     orderVO.setEmployerId(it.getId());

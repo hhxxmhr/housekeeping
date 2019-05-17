@@ -17,7 +17,16 @@
                          :value="parseInt(item[0])"></el-option>
             </el-select>
           </el-form-item>
-          <el-button @click="search" style="margin-left: 10px;" icon="el-icon-star-off">好评优先</el-button>
+          <el-form-item label="预定时间">
+            <el-date-picker
+              v-model="searchForm.reverseTime"
+              format="yyyy-MM-dd HH:mm "
+              value-format="timestamp"
+              type="datetime"
+              placeholder="选择日期时间"
+              :picker-options="pickerOptions0">
+            </el-date-picker>
+          </el-form-item>
           <el-button @click="search" style="margin-left: 10px;" icon="el-icon-search" type="primary">搜索</el-button>
         </el-form>
       </el-row>
@@ -36,7 +45,6 @@
             <p style="margin-top: 5px;">家政经验: {{item.experience?UserExperience[item.experience]:'无'}}</p>
             <p style="margin-top: 5px">从事服务: {{getServices(item.services)|ellipsis}}</p>
             <p style="margin-top: 5px">完成订单: {{item.orderCount}}单</p>
-            <!--<p>口味选项: {{(item.taste.length>0?item.taste.toString():"无")|ellipsis}}</p>-->
             <p style="margin-top: 5px">自我介绍: {{item.introduction}}</p>
           </div>
           <el-button type="primary" plain class="reserve" style="margin-left: 10px" @click="reserve(item)"
@@ -128,15 +136,20 @@
       isPhone = !(system.win || system.mac || system.xll || system.ipad);
       let sixHalf = new Date(new Date().setHours(0, 0, 0, 0)) / 1000 + 18 * 3600 + 5 * 360;
       return {
+        pickerOptions0: {
+          disabledDate(time) {
+            return time.getTime() < Date.now();
+          }
+        },
         dialog_title: '',
         dialog_visible: false,
         formLabelWidth: "90px",
         moreInfo: {},
         searchForm: {
+          reverseTime: this.timestamp() * 1000 + (1000 * 60 * 60 * 24),//过滤预定时间时待岗人员
           role: 200,//显示雇员列表
           serviceId: null,//从服务中心页面跳转过来的参数
           experience: null,//搜索框
-          serviceName: '',//搜索框
           prov: '',//搜索框
           city: '',//搜索框
           // state: 3,
@@ -179,15 +192,17 @@
         Object.assign(this.searchForm, this.$route.query);
         this.searchForm.serviceId = this.searchForm.serviceId ? parseInt(this.searchForm.serviceId) : null;//接受跳转页面的参数
         this.searchForm.experience = this.searchForm.experience != null ? parseInt(this.searchForm.experience) : null;//页面搜索
+        this.searchForm.reverseTime = parseInt(this.searchForm.reverseTime);//页面搜索或者传递
       },
       async getInfo() {
         let res;
         if (this.searchForm.serviceId == null) {
-          res = await this.$api("getAll", this.searchForm);
+          res = await this.$api("User/chooseEmployee", this.searchForm);
         } else {
           res = await this.$api("User/listUserByServiceId", this.searchForm);
         }
         this.info = res.list;
+        console.log(this.info)
       },
       //详细资料按钮点击
       showDialogInfo(item) {
@@ -206,10 +221,15 @@
         });
       },
       reserve(employee) {
+        console.log(employee.id);
         //跳转到预定页面
         this.$router.push({
           path: "/employer/reserve",
-          query: {employeeId: employee.id, serviceId: this.searchForm.serviceId}
+          query: {
+            employeeId: employee.id,
+            serviceId: this.searchForm.serviceId,
+            reverseTime: this.searchForm.reverseTime
+          }
         });
       },
       selectProv(data) {

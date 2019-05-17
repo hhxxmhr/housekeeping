@@ -532,7 +532,7 @@
     </select>
 
     <select id="countOrdersWithGoodComment" resultType="java.lang.Integer" parameterType="OrdersVO">
-        SELECT count(*) from orders WHERE orders.rate &gt; 2
+        SELECT count(*) from orders WHERE orders.state = 4 and orders.rate &gt; 2
         <if test="serviceId!=null">
             AND orders.service_id = #{serviceId}
         </if>
@@ -606,5 +606,9 @@
 
     <select id="countOrdersRefund" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM orders WHERE employee_id = #{userId} and state = 6 and end_time between #{startTime} and #{endTime}
+    </select>
+
+    <select id="findOrdersByReserveTime" resultMap="ordersMapper">
+        select * from orders where employee_id = #{id} and reverse_time between #{startTime} and #{endTime} and state in (2,3)
     </select>
 </mapper>

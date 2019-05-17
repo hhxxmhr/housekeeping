@@ -11,6 +11,18 @@ import java.util.List;
  */
 public class UserVO extends Query implements Serializable {
     private static final long serialVersionUID = -4944675620658964018L;
+
+    //预留时间--过滤在此时间段人员的状态
+    private Long reverseTime;
+
+    public Long getReverseTime() {
+        return reverseTime;
+    }
+
+    public void setReverseTime(Long reverseTime) {
+        this.reverseTime = reverseTime;
+    }
+
     //雇员完成订单有评论数
     private Integer totalComment;
     //雇员完成订单hao评论数
@@ -70,8 +82,17 @@ public class UserVO extends Query implements Serializable {
     private Integer money;
     private Integer price;
     private Integer parent;
+    private String type;//按次结还是月结
     private String rankName;
     private String serviceName;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public List<UserVO> getVoList() {
         return voList;

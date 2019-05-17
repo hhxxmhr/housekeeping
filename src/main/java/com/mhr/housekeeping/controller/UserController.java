@@ -209,7 +209,7 @@ public class UserController {
     }
 
     /**
-     * 服务预定---根据条件过滤人员  条件有：省、市、服务id、过滤待岗的人员
+     * 服务预定---根据条件过滤人员  条件有：省、市、服务id、过滤预留时间不冲突的人员
      *
      * @param userVO
      * @return
@@ -218,6 +218,7 @@ public class UserController {
     @RequestMapping("/User/listUserByServiceId")
     public JSONObject listUserByServiceId(@RequestBody UserVO userVO) throws Exception {
         Result result = userService.listUserByServiceId(userVO);
+        System.out.println(result.getData());
         JSONObject object = new JSONObject();
         object.put("list", result.getData());
         return object;
@@ -252,6 +253,20 @@ public class UserController {
     public Result changeState(@RequestBody UserVO userVO) throws Exception {
         return userService.updateUser(userVO, null);
 
+    }
+
+    /**
+     * 首先根据搜索框 预留时间搜索在这个时间待岗人员
+     * 根据地区、经验搜索
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("User/chooseEmployee")
+    public JSONObject chooseEmployee(@RequestBody UserVO userVO ) throws Exception {
+        JSONObject object = new JSONObject();
+        List<UserVO> list = userService.listUserWithReserveTime(userVO);
+        object.put("list", list);
+        return object;
     }
 
     @RequestMapping("/User/findUserByOrder")
@@ -318,7 +333,7 @@ public class UserController {
             object.put("goodPercent", 0);
         } else {
             float goodPercent = (float) goodComment / comment;
-            object.put("goodPercent", goodPercent);
+            object.put("goodPercent", ((goodPercent*100)+'%'));
         }
         //退款率
         Integer countOrders = ordersService.countOrders(ordersVO);

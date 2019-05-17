@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 public class OrderController {
@@ -54,6 +55,14 @@ public class OrderController {
         JSONObject object = JSONObject.fromObject(hashMap);
         OrdersVO ordersVO = (OrdersVO) JSONObject.toBean(object, OrdersVO.class);
         return ordersService.listOrders(ordersVO);
+    }
+
+    @RequestMapping("/Orders/findOrdersByReverseTime")
+    public List<OrdersVO> findOrdersByReverseTime(@RequestBody HashMap hashMap) throws Exception {
+        Long startTime = (Long) hashMap.get("startTime");
+        Long endTime = (Long) hashMap.get("endTime");
+        Integer employeeId = (Integer) hashMap.get("employeeId");
+        return ordersService.findOrdersByReverseTime(employeeId,startTime,endTime);
     }
 
 

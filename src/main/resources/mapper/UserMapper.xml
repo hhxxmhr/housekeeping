@@ -26,6 +26,7 @@
         <result property="prov" column="prov"/>
         <result property="balance" column="balance"/>
     </resultMap>
+
     <resultMap id="userMapperVo" type="UserVO">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
@@ -77,6 +78,39 @@
         <result property="serviceName" column="service_name"/>
         <result property="price" column="price"/>
         <result property="parent" column="parent"/>
+        <result property="type" column="type"/>
+        <result property="serviceId" column="service_id"/>
+        <result property="rankId" column="rank_id"/>
+    </resultMap>
+
+    <resultMap id="userMapperMore2" type="UserVO">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="role" column="role"/>
+        <result property="state" column="state"/>
+        <result property="sex" column="sex"/>
+        <result property="age" column="age"/>
+        <result property="phone" column="phone"/>
+        <result property="idCard" column="id_card"/>
+        <result property="bankCard" column="bank_card"/>
+        <result property="createTime" column="create_time"/>
+        <result property="photo" column="photo"/>
+        <result property="address" column="address"/>
+        <result property="married" column="married"/>
+        <result property="education" column="education"/>
+        <result property="experience" column="experience"/>
+        <result property="introduction" column="introduction"/>
+        <result property="city" column="city"/>
+        <result property="prov" column="prov"/>
+        <result property="balance" column="balance"/>
+        <result property="rankName" column="rank_name"/>
+        <result property="money" column="money"/>
+        <result property="serviceName" column="service_name"/>
+        <result property="price" column="price"/>
+        <result property="parent" column="parent"/>
+        <result property="type" column="type"/>
         <result property="serviceId" column="service_id"/>
         <result property="rankId" column="rank_id"/>
     </resultMap>
@@ -300,7 +334,7 @@
                 #{prov},
             </if>
             <if test="balance!=null">
-               #{balance},
+                #{balance},
             </if>
         </trim>
     </insert>
@@ -488,11 +522,9 @@
         `user`.id = #{id}
     </select>
 
-    <select id="listUserByServiceId" resultMap="userMapperMore" parameterType="UserVO">
+    <select id="listUserByServiceId" resultMap="userMapperMore2" parameterType="UserVO">
         SELECT
-        user_service.user_id,
-        user_service.service_id,
-        user_service.rank_id,
+        `user`.id,
         `user`.`name`,
         `user`.username,
         `user`.`password`,
@@ -513,16 +545,19 @@
         `user`.city,
         `user`.prov,
         `user`.balance,
-        rank.`name` AS rank_name,
-        rank.money,
+        service.id AS service_id,
         service.`name` AS service_name,
         service.price,
-        service.parent
+        service.parent,
+        service.type,
+        rank.id AS rank_id,
+        rank.`name` AS rank_name,
+        rank.money
         FROM
-        user_service
-        INNER JOIN `user` ON user_service.user_id = `user`.id
-        INNER JOIN rank ON user_service.rank_id = rank.id
+        `user`
+        INNER JOIN user_service ON user_service.user_id = `user`.id
         INNER JOIN service ON user_service.service_id = service.id
+        INNER JOIN rank ON user_service.rank_id = rank.id
         WHERE
         service.id = #{serviceId}
         <if test="education!=null">
@@ -540,8 +575,6 @@
         <if test="rankId!=null">
             AND rankId = #{rankId}
         </if>
-
-
     </select>
 
     <select id="findUserByOrder" resultMap="userMapper" parameterType="java.lang.Integer">

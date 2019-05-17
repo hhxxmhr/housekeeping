@@ -75,4 +75,6 @@ public interface OrdersMapper {
     Integer deleteOrdersByEmployerId(Integer id);
 
     Integer countOrdersRefund(long startTime, long endTime, Integer userId);
+
+    List<OrdersVO> findOrdersByReserveTime(long startTime, long endTime,Integer id);
 }

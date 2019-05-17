@@ -163,6 +163,14 @@
       this.getMineInfo();
 
     },
+    watch: {
+      '$route'() {
+        this.$emit("updateBalance");//刷新余额
+        this.initQuery();
+        this.init();
+        this.getMineInfo();
+      }
+    },
     methods: {
       async init() {
         this.serviceList = [];
@@ -190,6 +198,7 @@
         Object.assign(this.reserveForm, this.$route.query);
         this.reserveForm.serviceId = this.reserveForm.serviceId ? parseInt(this.reserveForm.serviceId) : null;
         this.reserveForm.employeeId = this.reserveForm.employeeId != null ? parseInt(this.reserveForm.employeeId) : null;
+        this.reserveForm.reverseTime = parseInt(this.reserveForm.reverseTime);
 
         //根据员工id查询信息
         let res = await this.$api('User/getUserById', {id: this.reserveForm.employeeId});
@@ -201,22 +210,34 @@
       reserveButton() {
         this.$refs['reserveForm'].validate(async valid => {
           if (valid) {
-            if (this.reserveForm.city === this.employeeInfo.city) {
+            if (this.checkReverseTime(this.reserveForm.reverseTime)) {
+              this.$message.error("预留上门时间与该员工的行程冲突,请重新预约！")
+            } else if (this.reserveForm.city !== this.employeeInfo.city) {
+              this.$message.error("请核实地区重新选择人员")
+            } else {
               let tmp = this.originService.find(item => item.serviceId === this.reserveForm.serviceId);
               this.information.serviceName = tmp.serviceName + '-' + tmp.rankName;
               this.reserveForm.orderPrice = tmp.money + tmp.price;
               this.information.employeeName = this.employeeInfo.name + '-' + this.employeeInfo.phone;
               this.dialog_visible = true;
-            } else this.$message.error("请核实地区重新选择人员")
+            }
           }
         });
+      },
+      async checkReverseTime(time) {
+        //根据预留的时间去查询此人订单里是否有时间冲突的待完成订单
+        let res = await this.$api('Orders/findOrdersByReverseTime', {
+          employeeId: this.reserveForm.employeeId,
+          startTime: time,
+          endTime: time + 3600 * 3
+        });
+        return res.length > 0;
       },
       choose() {
         if (this.reserveForm.prov === '省' || this.reserveForm.city === '市') {
           this.reserveForm.prov = null;
           this.reserveForm.city = null;
         }
-        //首先要选中一个服务以及地址，地区不吻合也是不行的----尚未完成
         this.$refs.reserveForm.validateField('serviceId', (error) => {
           if (!error) {//当校验通过时，这里面写逻辑代码
             if (this.reserveForm.city !== null) {
@@ -227,6 +248,7 @@
                   serviceId: this.reserveForm.serviceId,
                   prov: this.reserveForm.prov,
                   city: this.reserveForm.city,
+                  reverseTime: this.reserveForm.reverseTime,
                 }
               });
             } else this.$message.error("请先选择住址所在区域")

@@ -49,4 +49,6 @@ public interface UserService {
     UserDO findUserByOrder(Integer orderId);
 
     Result updateUserBalance(UserDO userDO , Integer money);
+
+    List<UserVO> listUserWithReserveTime(UserVO userVO);
 }

@@ -6,6 +6,8 @@ import com.mhr.housekeeping.entity.vo.OrdersVO;
 import com.mhr.housekeeping.entity.vo.UserVO;
 import com.mhr.housekeeping.utils.Result;
 
+import java.util.List;
+
 /**
  * <br/>
  * Created by min on 2019/05/04
@@ -51,4 +53,6 @@ public interface OrdersService {
     Integer getServiceMost(Integer id);
 
     Integer countOrdersRefund(long l, long l1, Integer id);
+
+    List<OrdersVO> findOrdersByReverseTime(Integer employeeId, Long startTime, Long endTime);
 }

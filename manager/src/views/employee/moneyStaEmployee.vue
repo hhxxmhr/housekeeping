@@ -51,7 +51,7 @@
             {{$formatTime(scope.row.createTime)}}
           </template>
         </el-table-column>
-        <el-table-column prop="ordersVO" align="center" label="订单详情" width="350px">
+        <el-table-column prop="ordersVO" align="center" label="订单详情" width="380px">
           <template slot-scope="scope">
             {{scope.row.employeeName?scope.row.employeeName+'为'+scope.row.employerName+'提供'+scope.row.rankName+'-'+scope.row.serviceName+'服务':'用户充值'}}
           </template>

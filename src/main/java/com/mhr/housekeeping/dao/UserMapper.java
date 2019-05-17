@@ -48,4 +48,5 @@ public interface UserMapper {
     Integer updateUserBalance(Integer id, Integer balance);
 
     Integer updateUser2(UserDO userDO);
+
 }

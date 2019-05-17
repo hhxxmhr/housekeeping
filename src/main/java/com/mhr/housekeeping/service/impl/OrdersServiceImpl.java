@@ -380,5 +380,10 @@ public class OrdersServiceImpl implements OrdersService {
         return ordersMapper.countOrdersRefund(startTime, endTime, userId);
     }
 
+    @Override
+    public List<OrdersVO> findOrdersByReverseTime(Integer employeeId, Long startTime, Long endTime) {
+        return ordersMapper.findOrdersByReserveTime(startTime,endTime,employeeId);
+    }
+
 
 }
