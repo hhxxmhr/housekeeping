@@ -51,4 +51,6 @@ public interface UserService {
     Result updateUserBalance(UserDO userDO , Integer money);
 
     List<UserVO> listUserWithReserveTime(UserVO userVO);
+
+    List<UserVO> findUserAndService();
 }

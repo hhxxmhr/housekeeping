@@ -8,63 +8,6 @@
       </el-carousel>
     </template>
 
-    <!--<el-row :gutter="16">-->
-    <!--<el-col style="width: 33.3%">-->
-    <!--<el-card shadow="hover" :body-style="{ background: '#fbad4c'}">-->
-    <!--<i class="el-icon-star-off el-icon-star-off1" style="color: white;margin-left: -55%;"></i>-->
-    <!--<p class="balance">我的收益</p>-->
-    <!--<p style="margin-top: 1%;color: white;font-size: 24px;margin-left: 1%">{{allData.balance}}</p>-->
-    <!--</el-card>-->
-    <!--</el-col>-->
-    <!--<el-col style="width: 33.3%">-->
-    <!--<el-card shadow="hover" :body-style="{ background: '#59d05d',height: '15%',fontSize:'18px' }">-->
-    <!--<i class="el-icon-document el-icon-star-off1" style="color: white;margin-left: -55%;"></i>-->
-    <!--<p class="balance">完成订单</p>-->
-    <!--<p style="margin-top: 1%;color: white;font-size: 24px;margin-left:2%">-->
-    <!--{{allData.orderCount}}</p>-->
-    <!--</el-card>-->
-    <!--</el-col>-->
-    <!--<el-col style="width: 33.3%">-->
-    <!--<el-card shadow="hover" :body-style="{ background: '#ff646d',fontSize:'18px' }">-->
-    <!--<i class="el-icon-circle-check-outline el-icon-star-off1"-->
-    <!--style="color: white;margin-left: -55%;"></i>-->
-    <!--<p class="balance">我的好评</p>-->
-    <!--<p style="margin-top: 1%;color: white;font-size: 24px;margin-left: 2%">{{allData.goodComment}}</p>-->
-    <!--</el-card>-->
-    <!--</el-col>-->
-    <!--</el-row>-->
-    <div>
-      <!--<el-row style="width: 100%;margin-top: 2%;" v-if="role==200">
-        <el-col>
-          <el-card shadow="hover" style="height: 100px">
-            <div style="width: 100%">
-              <div style="margin-top: 15px;width: 16.66%;float: left">
-
-                <label style="font-size: 20px;font-weight:normal">
-                  <i class="el-icon-mhr-feiyong" style="color: #b3e19d"></i>
-                  VPN总数:&emsp;{{allData.atotal}}</label>
-              </div>
-              <div style="margin-top: 15px;width: 16.66%;float: left">
-                <label style="font-size: 20px;font-weight:normal">1日到期:&emsp;{{allData.aOneDay}}</label>
-              </div>
-              <div style="margin-top: 15px;width: 16.66%;float: left">
-                <label style="font-size: 20px;font-weight:normal">7日到期:&emsp;{{allData.aSevenDay}}</label>
-              </div>
-              <div style="margin-top: 15px;width: 16.66%;float: left">
-                <label style="font-size: 20px;font-weight:normal">客户VPN总数:&emsp;{{allData.ctotal}}</label>
-              </div>
-              <div style="margin-top: 15px;width: 16.66%;float: left">
-                <label style="font-size: 20px;font-weight:normal">1日到期:&emsp;{{allData.cOneDay}}</label>
-              </div>
-              <div style="margin-top: 15px;width: 16.66%;float: left">
-                <label style="font-size: 20px;font-weight:normal">7日到期:&emsp;{{allData.cSevenDay}}</label>
-              </div>
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>-->
-    </div>
-
     <el-tabs v-model="activeName" @tab-click="handleClick"
              style="height: 0%;margin-left: 90%;margin-top:1% ;width: 50%">
       <el-tab-pane label="近30天" name="first"></el-tab-pane>
@@ -207,7 +150,6 @@
           startTime: this.startTime,
           endTime: this.endTime,
         });
-        console.log(resp);
         this.timeList = resp.timeList;
         this.balanceList = resp.balanceList;
         this.ordersList = resp.ordersList;
@@ -242,7 +184,7 @@
               }
             },
             allowDecimals: false
-          },  {
+          }, {
             title: {
               text: "净收入",
               style: {
@@ -268,14 +210,14 @@
           },
           series: [{
             name: '服务成单量',
-            type: 'line',
+            type: 'spline',
             data: this.ordersList,
             tooltip: {
               valueSuffix: '单'
             },
           }, {
             name: '服务退款数',
-            type: 'line',
+            type: 'spline',
             data: this.refundList,
             tooltip: {
               valueSuffix: '单'
@@ -288,51 +230,10 @@
             tooltip: {
               valueSuffix: '元'
             },
-          }],
+          },],
         });
       }
-      /*else {
-        Highcharts.chart('container_customMeal', {
-          credits: {//去除生成图上面的网址logo
-            enabled: false
-          },
-          chart: {
-            type: 'spline'
-          },
-          title: {
-            text: '套餐购买统计'
-          },
-          xAxis: {
-            title: {
-              text: '月份',
-
-            },
-            categories: timeList//读时间数据
-          },
-          yAxis: {
-            title: {
-              text: null
-            },
-
-          },
-          tooltip: {
-            crosshairs: true,
-            shared: true
-          },
-          plotOptions: {
-            spline: {
-              marker: {
-                radius: 4,
-                lineColor: '#666666',
-                lineWidth: 1
-              }
-            }
-          },
-          series: this.newArr
-        });
-      }*/
     },
-    // },
     created() {
       this.init();
       this.fetchData();

@@ -9,7 +9,7 @@ Vue.prototype.$role = {
   Employer: 300//雇主
 };
 
-Vue.prototype.EmployeeState = {
+/*Vue.prototype.EmployeeState = {
   //员工的状态操作，可以是1-4，禁用变成启用2->3，如果员工正在值岗，那么状态是不可改变的
   //用户的状态操作，可以是0-2
   1: "禁用",
@@ -23,7 +23,7 @@ Vue.prototype.EmployerState = {
   0: "正常",
   1: "禁用",
   2: "待审核",
-};
+};*/
 
 Vue.prototype.UserState = {
   //员工的状态操作，可以是1-4，禁用变成启用2->3，如果员工正在值岗，那么状态是不可改变的
@@ -31,8 +31,6 @@ Vue.prototype.UserState = {
   0: "正常",
   1: "禁用",
   2: "待审核",
-  3: "待岗",
-  4: "值岗"
 };
 Vue.prototype.ManagerState = {
   //员工的状态操作，可以是1-4，禁用变成启用2->3，如果员工正在值岗，那么状态是不可改变的

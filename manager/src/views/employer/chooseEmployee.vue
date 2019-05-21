@@ -202,7 +202,6 @@
           res = await this.$api("User/listUserByServiceId", this.searchForm);
         }
         this.info = res.list;
-        console.log(this.info)
       },
       //详细资料按钮点击
       showDialogInfo(item) {
@@ -221,7 +220,6 @@
         });
       },
       reserve(employee) {
-        console.log(employee.id);
         //跳转到预定页面
         this.$router.push({
           path: "/employer/reserve",

@@ -3,82 +3,84 @@
 
 <mapper namespace="com.mhr.housekeeping.dao.RankMapper">
 
-	<resultMap id="rankMapper" type="RankDO">
+    <resultMap id="rankMapper" type="RankDO">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="money" column="money"/>
-	</resultMap>
+    </resultMap>
 
     <sql id="_table">
         rank
 	</sql>
 
-	<sql id="_fields">
+    <sql id="_fields">
 		id,`name`,money
 	</sql>
 
-	<sql id="_condition">
-		<trim prefix="WHERE" prefixOverrides="AND|OR">
+    <sql id="_condition">
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="id!=null">
-				AND id = #{id}
-			</if>
+                AND id = #{id}
+            </if>
             <if test="name!=null and ''!=name">
-				AND `name` = #{name}
-			</if>
+                AND `name` = #{name}
+            </if>
             <if test="money!=null">
-				AND money = #{money}
-			</if>
-		</trim>
-	</sql>
+                AND money = #{money}
+            </if>
+        </trim>
+    </sql>
 
-	<sql id="_primaryKey_condition">
+    <sql id="_primaryKey_condition">
 		WHERE id = #{id}
 	</sql>
 
-	<sql id="_order">
-        <if test="sortByParams!= null and sortByParams.size()>0" >
+    <sql id="_order">
+        <if test="sortByParams!= null and sortByParams.size()>0">
             ORDER BY
             <foreach collection="sortByParams.keys" index="index" item="sortByParamKey" separator=",">
                 <![CDATA[${sortByParamKey} ${sortByParams[sortByParamKey]}]]>
             </foreach>
         </if>
-	</sql>
+    </sql>
 
     <insert id="addRank" parameterType="RankVO" keyProperty="id">
-        INSERT INTO <include refid="_table"/>
+        INSERT INTO
+        <include refid="_table"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id!=null">
-				id,
-			</if>
+                id,
+            </if>
             <if test="name!=null and ''!=name">
-				`name`,
-			</if>
+                `name`,
+            </if>
             <if test="money!=null">
-				money,
-			</if>
+                money,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null">
-				#{id},
-			</if>
+                #{id},
+            </if>
             <if test="name!=null and ''!=name">
-				#{name},
-			</if>
+                #{name},
+            </if>
             <if test="money!=null">
-				#{money},
-			</if>
+                #{money},
+            </if>
         </trim>
     </insert>
 
     <update id="updateRank" parameterType="RankVO">
-        UPDATE <include refid="_table"/>
+        UPDATE
+        <include refid="_table"/>
         <set>
             <if test="name!=null and ''!=name">
-				`name` = #{name},
-			</if>
+                `name` = #{name},
+            </if>
             <if test="money!=null">
-				money = #{money},
-			</if>
+                money = #{money},
+            </if>
         </set>
         <include refid="_primaryKey_condition"/>
     </update>
@@ -86,7 +88,8 @@
     <select id="findDetailRank" resultMap="rankMapper" parameterType="RankVO">
         SELECT
         <include refid="_fields"/>
-        FROM <include refid="_table"/>
+        FROM
+        <include refid="_table"/>
         <include refid="_primaryKey_condition"/>
     </select>
 
@@ -135,34 +138,42 @@
     <select id="listRank" resultMap="rankMapper" parameterType="RankVO">
         SELECT
         <include refid="_fields"/>
-        FROM <include refid="_table"/>
+        FROM
+        <include refid="_table"/>
         <include refid="_condition"/>
-	    <include refid="_order"/>
+        <include refid="_order"/>
+    </select>
+
+    <select id="listRankOrderByMoney" resultMap="rankMapper" parameterType="RankVO">
+        SELECT * from rank order by rank.money
     </select>
 
     <select id="listRankPage" resultMap="rankMapper" parameterType="RankVO">
         SELECT
         <include refid="_fields"/>
-        FROM <include refid="_table"/>
+        FROM
+        <include refid="_table"/>
         <include refid="_condition"/>
         <include refid="_order"/>
         <if test="startRecord != null and pageSize != null and pageSize >0">
             limit #{startRecord},#{pageSize}
         </if>
-	    <if test="!(startRecord != null and pageSize != null and pageSize >0)">
-		    limit 0,15
-	    </if>
+        <if test="!(startRecord != null and pageSize != null and pageSize >0)">
+            limit 0,15
+        </if>
     </select>
 
     <select id="countRank" resultType="java.lang.Integer" parameterType="RankVO">
         SELECT
         COUNT(*)
-        FROM <include refid="_table"/>
+        FROM
+        <include refid="_table"/>
         <include refid="_condition"/>
     </select>
 
     <delete id="deleteRank" parameterType="RankVO">
-        DELETE FROM <include refid="_table"/>
+        DELETE FROM
+        <include refid="_table"/>
         <include refid="_primaryKey_condition"/>
     </delete>
 

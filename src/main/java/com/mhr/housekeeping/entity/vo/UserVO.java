@@ -11,6 +11,24 @@ import java.util.List;
  */
 public class UserVO extends Query implements Serializable {
     private static final long serialVersionUID = -4944675620658964018L;
+    private float goodPer;//好评率
+    private Integer serviceOrderCount;//每项服务的订单数
+
+    public Integer getServiceOrderCount() {
+        return serviceOrderCount;
+    }
+
+    public void setServiceOrderCount(Integer serviceOrderCount) {
+        this.serviceOrderCount = serviceOrderCount;
+    }
+
+    public float getGoodPer() {
+        return goodPer;
+    }
+
+    public void setGoodPer(float goodPer) {
+        this.goodPer = goodPer;
+    }
 
     //预留时间--过滤在此时间段人员的状态
     private Long reverseTime;

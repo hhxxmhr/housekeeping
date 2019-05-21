@@ -65,7 +65,7 @@
         </el-table-column>
         <el-table-column prop="rate" label="评价/星" align="center">
           <template slot-scope="scope">
-            {{scope.row.rate!=null?scope.row.rate:'待评'}}
+            {{scope.row.rate!=null?scope.row.rate:'无'}}
           </template>
         </el-table-column>
       </el-table>
@@ -121,7 +121,6 @@
           role: window.$mine.role,
         });
         this.loading = false;
-        console.log(res);
         this.timeList = res.timeList;
         this.serviceList = res.serviceList;
         this.moneyList = res.moneyList;
@@ -181,15 +180,15 @@
             backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || 'rgba(255,255,255,0.25)'
           },
           series: [{
-            name: '服务成单量',
+            name: '服务成单',
             type: 'column',
             data: this.serviceList,
             tooltip: {
               valueSuffix: '单'
             },
           }, {
-            name: '每日营业额',
-            type: 'line',
+            name: this.$role === 200 ? '服务支出' : '服务收入',
+            type: 'spline',
             yAxis: 1,
             data: this.moneyList,
             tooltip: {
@@ -207,7 +206,6 @@
           role: window.$mine.role,
         });
         this.services = res.data;
-        console.log(this.services)
       },
       async getMyService() {
         this.role = window.$mine.role;

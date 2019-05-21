@@ -4,6 +4,8 @@ import com.mhr.housekeeping.entity.RankDO;
 import com.mhr.housekeeping.entity.vo.RankVO;
 import com.mhr.housekeeping.utils.Result;
 
+import java.util.List;
+
 /**
  * <br/>
  * Created by min on 2019/04/26
@@ -15,7 +17,7 @@ public interface RankService {
 	Result updateRank(RankVO rankVO) throws Exception;
 	
 	Result findDetailRank(RankVO rankVO) throws Exception;
-	
+
 	Result listRank(RankVO rankVO) throws Exception;
 
     Result listRankPage(RankVO rankVO) throws Exception;
@@ -29,4 +31,6 @@ public interface RankService {
 	Result findRankByUidAndSid(Integer userId, Integer serviceId);
 
     RankDO getMostRank(Integer id);
+
+	List<RankDO> listRankOrderByMoney(RankVO rankVO);
 }

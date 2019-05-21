@@ -12,7 +12,7 @@
           <el-form-item label="状态">
             <el-select v-model="searchForm.state" style="width: 90px">
               <el-option label="全部" :value=null></el-option>
-              <el-option v-for="item in Object.entries(EmployeeState)"
+              <el-option v-for="item in Object.entries(UserState)"
                          :key="item[0]"
                          :label="item[1]"
                          :value="parseInt(item[0])"></el-option>
@@ -57,18 +57,17 @@
         </el-table-column>
         <el-table-column prop="state" align="center" label="状态">
           <template slot-scope="scope">
+            <div v-if="scope.row.state === 0" style="color:#5daf34;">{{'正常'}}</div>
             <div v-if="scope.row.state === 1" style="color:#F56C6C;">{{'禁用'}}</div>
             <div v-if="scope.row.state === 2" style="color:#409EFF;">{{'待审核'}}</div>
-            <div v-if="scope.row.state === 3" style="color:#E6A23C;">{{'待岗'}}</div>
-            <div v-if="scope.row.state === 4" style="color:#67C23A;">{{'值岗'}}</div>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="260px" align="center">
           <template slot-scope="scope">
             <at-button confirmText="确定启用此账号?" size="mini" type="success" v-if="scope.row.state===1||scope.row.state===2"
-                       @click="changeState(scope.row,3)">启用
+                       @click="changeState(scope.row,0)">启用
             </at-button>
-            <at-button confirmText="确定停用此账号?" size="mini" type="danger" v-if="scope.row.state===3"
+            <at-button confirmText="确定停用此账号?" size="mini" type="danger" v-if="scope.row.state===0"
                        @click="changeState(scope.row,1)">禁用
             </at-button>
             <at-button confirmText="确定删除此账号?" size="mini" type="warning"
@@ -191,7 +190,6 @@
       async init() {
         let res = await this.$api('getAll', this.searchForm);
         this.employeeList = res.list;
-        console.log(this.employeeList)
       },
       async search() {
         //携带查询的参数再次查询一下列表

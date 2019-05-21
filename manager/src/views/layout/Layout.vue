@@ -150,7 +150,7 @@
         }, 200);
       },
       //充值
-      recharge() {
+      async recharge() {
         this.$refs["rechargeForm"].validate(async (valid) => {
           if (valid) {
             let res = await this.$api('User/recharge', {
@@ -160,8 +160,7 @@
             if (res.code === 200) {
               this.rechargeVisible = false;
               this.$message.success('充值成功');
-              this.updateBalance();
-
+              await this.updateBalance();
             }
           }
         });
@@ -169,6 +168,7 @@
       async updateBalance() {
         let res = await this.$api('User/getBalance', {id: window.$mine.id});
         this.balance = res.balance;
+        console.log("layout"+'/'+this.balance);
       },
     },
     async created() {

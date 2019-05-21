@@ -318,6 +318,11 @@ public class UserServiceImpl implements UserService {
         return newUsers;
     }
 
+    @Override
+    public List<UserVO> findUserAndService() {
+        return userMapper.findUserAndService();
+    }
+
     public void moreInfo(List<UserVO> userVOS) {
         if (userVOS != null && userVOS.size() > 0) {
             userVOS.forEach(it -> {

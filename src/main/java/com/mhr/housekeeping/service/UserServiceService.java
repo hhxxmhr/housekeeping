@@ -31,4 +31,7 @@ public interface UserServiceService {
 
 	Integer deleteUserServiceByServiceId(Integer id);
 
+	Integer updateUserServiceRank(UserServiceVO userServiceVO);
+
+	UserServiceVO findUserServiceByOther(UserServiceVO userServiceVO);
 }

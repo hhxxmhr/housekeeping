@@ -512,7 +512,8 @@
         rank.money,
         service.`name` AS service_name,
         service.price,
-        service.parent
+        service.parent,
+        service.type
         FROM
         user_service
         INNER JOIN `user` ON user_service.user_id = `user`.id
@@ -657,5 +658,16 @@
     <update id="updateUserBalance" parameterType="java.lang.Integer">
         update user set balance = #{balance} where id = #{id}
     </update>
+
+    <select id="findUserAndService" resultMap="userMapperMore">
+            SELECT
+`user`.id AS user_id,
+user_service.service_id,
+user_service.rank_id
+FROM
+    `user`
+    INNER JOIN user_service ON user_service.user_id = `user`.id and user.state = 0
+
+    </select>
 </mapper>
 

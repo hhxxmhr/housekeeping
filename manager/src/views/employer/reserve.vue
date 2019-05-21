@@ -19,7 +19,7 @@
         </el-radio-group>
         <el-radio-group v-model="reserveForm.serviceId">
           <el-radio v-for="(item,index) in originService" :key="index" :label=item.serviceId>
-            {{item.serviceName+"-"+item.rankName+"-"+(item.money+item.price)+"元/次"}}
+            {{item.serviceName+"-"+item.rankName+"-"+(item.money+item.price)+'/'+item.type}}
           </el-radio>
         </el-radio-group>
       </el-form-item>
@@ -199,6 +199,7 @@
         this.reserveForm.serviceId = this.reserveForm.serviceId ? parseInt(this.reserveForm.serviceId) : null;
         this.reserveForm.employeeId = this.reserveForm.employeeId != null ? parseInt(this.reserveForm.employeeId) : null;
         this.reserveForm.reverseTime = parseInt(this.reserveForm.reverseTime);
+        console.log(this.reserveForm.employeeId);
 
         //根据员工id查询信息
         let res = await this.$api('User/getUserById', {id: this.reserveForm.employeeId});
@@ -206,14 +207,17 @@
         //根据传来的员工id查询其拥有的service数据
         let resp = await this.$api('User/findUserInfos2', {employeeId: this.reserveForm.employeeId});
         this.originService = resp.data;
+        console.log(this.originService)
       },
       reserveButton() {
         this.$refs['reserveForm'].validate(async valid => {
           if (valid) {
-            if (this.checkReverseTime(this.reserveForm.reverseTime)) {
+            if (await this.checkReverseTime(this.reserveForm.reverseTime)) {
               this.$message.error("预留上门时间与该员工的行程冲突,请重新预约！")
+              return false;
             } else if (this.reserveForm.city !== this.employeeInfo.city) {
-              this.$message.error("请核实地区重新选择人员")
+              this.$message.error("请核实地区重新选择人员");
+              return false;
             } else {
               let tmp = this.originService.find(item => item.serviceId === this.reserveForm.serviceId);
               this.information.serviceName = tmp.serviceName + '-' + tmp.rankName;
@@ -229,8 +233,9 @@
         let res = await this.$api('Orders/findOrdersByReverseTime', {
           employeeId: this.reserveForm.employeeId,
           startTime: time,
-          endTime: time + 3600 * 3
+          endTime: time + (3600 * 3 * 1000)
         });
+        console.log(res);
         return res.length > 0;
       },
       choose() {
@@ -257,7 +262,7 @@
       },
       async submit() {
         //检查余额是否充足
-        if (this.reserveForm.orderPrice > window.$mine.balance) {
+        if (window.$mine.balance <= 0 || this.reserveForm.orderPrice > window.$mine.balance) {
           this.$message.error("余额不足，请先充值");
           this.dialog_visible = false;
         } else {
@@ -268,13 +273,14 @@
             type: res.code === 200 ? 'success' : 'error',
             message: res.msg
           });
-          this.$emit("updateBalance");//刷新余额
+          this.init();
           if (res.code === 200) {
             //跳转到订单列表页面
             this.$router.push({
               path: "/manager/orders",
             });
           }
+          this.$emit("updateBalance");//刷新余额
         }
       },
       selectProv(data) {

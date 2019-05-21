@@ -66,14 +66,16 @@ public class OrdersServiceImpl implements OrdersService {
             vo.setOrderId(ordersVO.getId());//自增id
             Integer r2 = fundMapper.addFund(vo);
             if (r1 > 0 && r2 > 0) {
-                //发送短信给雇员，提示在三个小时之内进行信息的确认
+                return Result.getSuccess("预定成功");
+            }
+                /*//发送短信给雇员，提示在三个小时之内进行信息的确认
                 //首先需要获得雇员的手机号码，根据订单
                 UserDO employee = userMapper.findDetailUser(new UserVO(ordersVO.getEmployeeId()));
                 SendSmsResponse sendMessage = SmsUtils.sendmessage(employee.getPhone(), 3);
                 if (sendMessage.getBizId() != null) {
                     return Result.getSuccess("预定成功");
                 }
-            } else return Result.getFailure("预定失败");
+            } else return Result.getFailure("预定失败");*/
         }
         return Result.getFailure("预定失败");
     }
@@ -126,11 +128,11 @@ public class OrdersServiceImpl implements OrdersService {
             }
 
             //此操作是雇员完成订单，更新工资、更新待岗状态、更新资金记录
-            if (ordersVO.getEndTime() != null) {
+            if (ordersVO.getState() == 3) {
                 //更新当前登陆用户工资---加上订单的费用
                 UserDO user = (UserDO) request.getSession().getAttribute("user");
                 user.setBalance(user.getBalance() + detailOrders.getOrderPrice());
-                user.setState(3);//释放状态
+//                user.setState(3);//释放状态
                 Integer res1 = userMapper.updateUser2(user);
                 //更新记录
                 Integer res2 = fundMapper.addFund(new FundVO(user.getId(), ordersVO.getId(), user.getBalance(), detailOrders.getOrderPrice(), System.currentTimeMillis() / 1000, 5));
@@ -140,15 +142,15 @@ public class OrdersServiceImpl implements OrdersService {
             }
 
             //此操作是雇员确认订单的时候，需要更新雇员的状态，设置为在岗   同理，在雇员完成订单的时候更新雇员的待岗状态
-            if (ordersVO.getState() == 2) {
+            /*if (ordersVO.getState() == 2) {
                 //更新当前登陆用户状态
                 UserDO user = (UserDO) request.getSession().getAttribute("user");
-                user.setState(4);
+//                user.setState(4);
                 Integer integer = userMapper.updateUser2(user);
                 if (integer > 0) {
                     return Result.getSuccess("更新雇员值岗状态成功");
                 }
-            }
+            }*/
 
             //此操作是管理员同意 退款申请 ，更新员工的工资、雇主的余额 以及 更新资金记录
             if (ordersVO.getState() == 6) {
@@ -382,7 +384,12 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     public List<OrdersVO> findOrdersByReverseTime(Integer employeeId, Long startTime, Long endTime) {
-        return ordersMapper.findOrdersByReserveTime(startTime,endTime,employeeId);
+        return ordersMapper.findOrdersByReserveTime(startTime, endTime, employeeId);
+    }
+
+    @Override
+    public Integer getEmployerServiceMost(Integer id) {
+        return ordersMapper.getEmployerServiceMost(id);
     }
 
 

@@ -57,12 +57,21 @@ public class OrderController {
         return ordersService.listOrders(ordersVO);
     }
 
+    /**
+     * 查询检验的这个时间  是不是在员工上门时间到预计任务完成时间的  区间内，
+     * 如果在的话，就把此人给过滤掉，不在的话就显示符合条件的雇员
+     * @param hashMap
+     * @return
+     * @throws Exception
+     */
     @RequestMapping("/Orders/findOrdersByReverseTime")
     public List<OrdersVO> findOrdersByReverseTime(@RequestBody HashMap hashMap) throws Exception {
         Long startTime = (Long) hashMap.get("startTime");
         Long endTime = (Long) hashMap.get("endTime");
         Integer employeeId = (Integer) hashMap.get("employeeId");
-        return ordersService.findOrdersByReverseTime(employeeId,startTime,endTime);
+        List<OrdersVO> ordersByReverseTime = ordersService.findOrdersByReverseTime(employeeId, startTime / 1000, endTime / 1000);
+        System.out.println(ordersByReverseTime);
+        return ordersByReverseTime;
     }
 
 

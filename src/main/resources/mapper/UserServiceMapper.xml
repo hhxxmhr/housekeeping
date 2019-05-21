@@ -156,4 +156,18 @@
         DELETE FROM user_service where user_id = #{id}
     </delete>
 
+    <update id="updateUserServiceRank" parameterType="UserServiceVO">
+        update user_service set rank_id = #{rankId} where user_id = #{userId} and service_id = #{serviceId}
+    </update>
+
+    <select id="findUserServiceByOther" parameterType="UserServiceVO">
+      SELECT * FROM rank
+        INNER JOIN user_service ON user_service.rank_id = rank.id
+        WHERE
+        user_service.user_id = #{userId} AND
+        user_service.service_id = #{serviceId}
+        ORDER BY
+        rank.money ASC
+    </select>
+
 </mapper>

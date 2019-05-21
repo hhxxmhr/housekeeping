@@ -188,7 +188,6 @@
           endTime: this.searchParam.endTime / 1000
         });
         this.services = res.data;
-        console.log(this.services)
       },
     },
     async created() {

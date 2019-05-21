@@ -12,7 +12,7 @@
           <el-form-item label="状态">
             <el-select v-model="searchForm.state" style="width: 90px">
               <el-option label="全部" :value=null></el-option>
-              <el-option v-for="item in Object.entries(EmployerState)"
+              <el-option v-for="item in Object.entries(UserState)"
                          :key="item[0]"
                          :label="item[1]"
                          :value="parseInt(item[0])"></el-option>

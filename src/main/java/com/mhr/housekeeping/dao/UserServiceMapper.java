@@ -32,4 +32,8 @@ public interface UserServiceMapper {
     Integer deleteUserServiceByServiceId(Integer id);
 
     Integer deleteUserServiceByUserId(Integer id);
+
+    Integer updateUserServiceRank(UserServiceVO userServiceVO);
+
+    UserServiceVO findUserServiceByOther(UserServiceVO userServiceVO);
 }

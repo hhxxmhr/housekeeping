@@ -23,6 +23,7 @@ const routes = [
       path: '/manager/index',
       name: '首页',
       roles: [100],
+      hidden: true,
       component: () => import('./views/manager/index'),
       meta: {login: true}
     }, {

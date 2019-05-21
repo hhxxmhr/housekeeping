@@ -52,7 +52,7 @@
         </el-table-column>
         <el-table-column prop="praise" align="center" label="好评" width="60px">
           <template slot-scope="scope">
-            {{scope.row.rate?checkRate(scope.row.rate):'待评'}}
+            {{scope.row.rate!=null?checkRate(scope.row.rate):'无'}}
           </template>
         </el-table-column>
         <el-table-column prop="state" align="center" label="状态">
@@ -77,7 +77,6 @@
           <template slot-scope="scope">
             <at-button confirmText="确认此订单?" size="mini" type="success"
                        v-if="scope.row.state===0&&searchForm.role===200"
-                       :disabled="checkSureTime(scope.row.createTime)"
                        @click="changeState(scope.row,2)">确认
             </at-button>
             <at-button confirmText="拒接此订单?" size="mini" type="primary"
@@ -107,7 +106,7 @@
             </at-button>
             <at-button size="mini" type="primary" style="background-color: #f78989;border-color: #f78989"
                        v-if="scope.row.state===3&&searchForm.role===300"
-                       @click="refundDialog(scope.row)">投诉退款
+                       @click="refundDialog(scope.row)">退款
             </at-button>
             <at-button confirmText="确定删除此订单?" size="mini" type="warning"
                        v-if="scope.row.state===1&&searchForm.role===300"
@@ -266,7 +265,7 @@
         if (this.searchForm.role === 300) {
           if (isTimeOut) {
             //提示要收取违约费
-            this.$confirm('已超出2小时，若继续取消将收取此单的50%即' + row.orderPrice * 0.05 + '元，确定继续取消订单吗', '提示', {
+            this.$confirm('已超出2小时，若继续取消将收取此单的50%即' + row.orderPrice * 0.5 + '元，确定继续取消订单吗', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'
@@ -299,20 +298,21 @@
             });
           }
         } else if (this.searchForm.role === 200) {
-          if (row.state === 2) {
+          if (state === 3) {
             //员工完成的时间是订单完成的时间
             let res = await this.$api("Order/edit", {id: row.id, state: state, endTime: this.timestamp()});
             this.$message({
               type: res.code === 200 ? 'success' : 'error',
               message: res.msg
             });
-          } else if (row.state === 7) {//拒接预定
+          } else if (state === 7) {//拒接预定
             let res = await this.$api("Order/edit", {id: row.id, state: state});
             this.$message({
               type: res.code === 200 ? 'success' : 'error',
               message: res.msg
             });
-          } else {
+          } else if (state === 2) {
+            console.log(123)
             //确认订单的时候，校验是否超时成为无效订单
             let res;
             let sureTime = this.checkSureTime(row.createTime);

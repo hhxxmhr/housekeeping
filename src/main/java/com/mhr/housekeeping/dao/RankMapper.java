@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/** 
+/**
  * <br/>
  * Created by min on 2019/04/26
  */
@@ -21,6 +21,8 @@ public interface RankMapper {
     RankDO findDetailRank(RankVO rankVO);
 
     List<RankDO> listRank(RankVO rankVO);
+
+    List<RankDO> listRankOrderByMoney(RankVO rankVO);
 
     List<RankDO> listRankPage(RankVO rankVO);
 

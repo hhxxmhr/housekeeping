@@ -522,7 +522,7 @@
         </if>
     </select>
     <select id="countOrdersOver" resultType="java.lang.Integer" parameterType="OrdersVO">
-        SELECT count(*) from orders WHERE orders.rate is not null
+        SELECT count(*) from orders WHERE orders.state in (3,4,8)
         <if test="serviceId!=null">
             AND orders.service_id = #{serviceId}
         </if>
@@ -539,6 +539,9 @@
         <if test="employeeId!=null">
             AND orders.employee_id = #{employeeId}
         </if>
+        <if test="employerId!=null">
+            AND orders.employer_id = #{employerId}
+        </if>
     </select>
 
     <select id="countOrdersWithReason" resultType="java.lang.Integer" parameterType="OrdersVO">
@@ -549,6 +552,9 @@
         <if test="employeeId!=null">
             AND orders.employee_id = #{employeeId}
         </if>
+        <if test="employerId!=null">
+            AND orders.employer_id = #{employerId}
+        </if>
     </select>
 
     <select id="countOrdersWithComment" resultType="java.lang.Integer" parameterType="OrdersVO">
@@ -558,6 +564,9 @@
         </if>
         <if test="employeeId!=null">
             AND orders.employee_id = #{employeeId}
+        </if>
+        <if test="employerId!=null">
+            AND orders.employer_id = #{employerId}
         </if>
     </select>
 
@@ -574,6 +583,12 @@
         SELECT service_id FROM (select service_id ,COUNT(*) count FROM orders WHERE employee_id = #{id} GROUP BY service_id) a
         ORDER BY a.count desc LIMIT 1
     </select>
+
+    <select id="getEmployerServiceMost" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT service_id FROM (select service_id ,COUNT(*) count FROM orders WHERE employer_id = #{id} GROUP BY service_id) a
+        ORDER BY a.count desc LIMIT 1
+    </select>
+
 
     <delete id="deleteOrders" parameterType="OrdersVO">
         DELETE FROM

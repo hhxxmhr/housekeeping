@@ -74,7 +74,7 @@
                 this.$router.push(query.target);
               } else {
                 if (res.data.role === this.$role.Manager) {
-                  this.$router.push('/manager/index');
+                  this.$router.push('/manager/serviceSta');
                 } else if (res.data.role === this.$role.Employee) {
                   this.$router.push('/employee/index');
                 } else if (res.data.role === this.$role.Employer) {

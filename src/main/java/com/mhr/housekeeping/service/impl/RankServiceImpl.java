@@ -123,4 +123,9 @@ public class RankServiceImpl implements RankService {
         return rankMapper.getMostRank(id);
     }
 
+    @Override
+    public List<RankDO> listRankOrderByMoney(RankVO rankVO) {
+        return rankMapper.listRankOrderByMoney(rankVO);
+    }
+
 }

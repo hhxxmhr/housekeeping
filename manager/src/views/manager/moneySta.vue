@@ -141,7 +141,6 @@
         });
         this.loading = false;
         this.fundList = res.list;
-        console.log(this.fundList)
         this.total = res.total;
       },
       search() {

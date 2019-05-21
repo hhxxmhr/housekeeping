@@ -108,7 +108,7 @@
       },
       // 上传图片成功
       uploadSuccess(res, file, fileList) {
-        console.log(fileList)
+        // console.log(fileList)
         this.uploadComplete = true;
         this.fileChange(fileList);
       },

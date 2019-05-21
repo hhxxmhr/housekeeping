@@ -218,7 +218,6 @@ public class UserController {
     @RequestMapping("/User/listUserByServiceId")
     public JSONObject listUserByServiceId(@RequestBody UserVO userVO) throws Exception {
         Result result = userService.listUserByServiceId(userVO);
-        System.out.println(result.getData());
         JSONObject object = new JSONObject();
         object.put("list", result.getData());
         return object;
@@ -258,11 +257,12 @@ public class UserController {
     /**
      * 首先根据搜索框 预留时间搜索在这个时间待岗人员
      * 根据地区、经验搜索
+     *
      * @return
      * @throws Exception
      */
     @RequestMapping("User/chooseEmployee")
-    public JSONObject chooseEmployee(@RequestBody UserVO userVO ) throws Exception {
+    public JSONObject chooseEmployee(@RequestBody UserVO userVO) throws Exception {
         JSONObject object = new JSONObject();
         List<UserVO> list = userService.listUserWithReserveTime(userVO);
         object.put("list", list);
@@ -278,6 +278,7 @@ public class UserController {
 
     /**
      * 管理员删除雇员、雇主   --通用方法
+     *
      * @param userVO
      * @return
      * @throws Exception
@@ -302,6 +303,57 @@ public class UserController {
         Result detailUser = userService.findDetailUser(userVO);
         UserDO data = (UserDO) detailUser.getData();
         return data;
+    }
+
+    /**
+     * 雇主用户的首页
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("User/employerIndex")
+    public JSONObject employerIndex(HttpServletRequest request) throws Exception {
+        JSONObject object = new JSONObject();
+        UserDO user = (UserDO) request.getSession().getAttribute("user");
+        OrdersVO ordersVO = new OrdersVO();
+        ordersVO.setEmployerId(user.getId());
+        //统计此用户给出的好评率=好评的/给出的评论
+        Integer comment = ordersService.countOrdersWithComment(ordersVO);
+        Integer goodComment = ordersService.countOrdersWithGoodComment(ordersVO);
+        if (comment == 0) {
+            object.put("goodPercent", 0);
+        } else {
+            float goodPercent = (float) goodComment / comment;
+            object.put("goodPercent", goodPercent);
+        }
+        //统计此用户给出的退款率
+        Integer countOrders = ordersService.countOrders(ordersVO);
+        Integer refundCount = ordersService.countOrdersWithReason(ordersVO);
+        if (countOrders == 0) {
+            object.put("refundPercent", 0);
+        } else {
+            float refundPercent = (float) refundCount / countOrders;
+            object.put("refundPercent", refundPercent);
+        }
+        //统计此用户的超时费用
+        FundVO vo = new FundVO();
+        vo.setUserId(user.getId());
+        vo.setType(2);
+        Integer extra = fundService.getExtra(vo);
+        if (extra == null) {
+            object.put("extra", 0);
+        } else {
+            object.put("extra", extra);
+        }
+        //统计此用户的常用服务
+        Integer serviceId = ordersService.getEmployerServiceMost(user.getId());
+        ServiceDO detailService = serviceService.findDetailService(new ServiceVO(serviceId));
+        if (detailService != null) {
+            object.put("mostService", detailService.getName());
+        } else {
+            object.put("mostService", "暂无");
+        }
+        return object;
     }
 
     /**
@@ -333,7 +385,7 @@ public class UserController {
             object.put("goodPercent", 0);
         } else {
             float goodPercent = (float) goodComment / comment;
-            object.put("goodPercent", ((goodPercent*100)+'%'));
+            object.put("goodPercent", goodPercent);
         }
         //退款率
         Integer countOrders = ordersService.countOrders(ordersVO);

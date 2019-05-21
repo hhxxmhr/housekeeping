@@ -80,5 +80,15 @@ public class UserServiceServiceImpl implements UserServiceService {
         return userServiceMapper.deleteUserServiceByServiceId(id);
     }
 
+    @Override
+    public Integer updateUserServiceRank(UserServiceVO userServiceVO) {
+        return userServiceMapper.updateUserServiceRank(userServiceVO);
+    }
+
+    @Override
+    public UserServiceVO findUserServiceByOther(UserServiceVO userServiceVO) {
+        return userServiceMapper.findUserServiceByOther(userServiceVO);
+    }
+
 
 }

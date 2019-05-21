@@ -49,4 +49,5 @@ public interface UserMapper {
 
     Integer updateUser2(UserDO userDO);
 
+    List<UserVO> findUserAndService();
 }

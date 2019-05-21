@@ -55,4 +55,6 @@ public interface OrdersService {
     Integer countOrdersRefund(long l, long l1, Integer id);
 
     List<OrdersVO> findOrdersByReverseTime(Integer employeeId, Long startTime, Long endTime);
+
+    Integer getEmployerServiceMost(Integer id);
 }
