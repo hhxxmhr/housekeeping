@@ -115,7 +115,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Result deleteComment(CommentVO commentVO) throws Exception {
-        return null;
+        Integer count = commentMapper.deleteComment(commentVO);
+        if (count > 0) return Result.getSuccess("删除成功");
+        else return Result.getFailure("删除失败 ");
     }
 
     @Override

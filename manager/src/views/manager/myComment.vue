@@ -21,6 +21,8 @@
           <el-timeline>
             <el-timeline-item v-for="(comment,index) in comments" :key="index" placement="top"
                               :timestamp="$formatTimeDay(comment.createTime)+' '+'服务类型：'+comment.serviceName+' '+'服务等级：'+comment.rankName+' '+'服务人员：'+comment.employeeName">
+              <at-button type="text" confirmText="确定要删除此评论？" @click="deleteComment(comment)" icon="el-icon-delete"
+                         circle style="float: right" v-if="loginRole===100"></at-button>
               <el-card>
                 <el-rate v-model="comment.rate" disabled show-score text-color="#ff9900" score-template="{value}"
                          style="float: right"></el-rate>
@@ -91,6 +93,15 @@
           this.comments = this.commentsWithPhoto;
         }
       },
+      //删除评论
+      async deleteComment(comment) {
+        let res = await this.$api("Comment/deleteComment", {id: comment.id});
+        this.$message({
+          type: res.code === 200 ? 'success' : 'error',
+          message: res.msg
+        });
+        this.init();
+      },
       writeComment() {
         //评论成功跳转到我的订单列表
         this.$router.push({
@@ -117,6 +128,11 @@
 </script>
 
 <style scoped>
+  .button {
+    padding: 90;
+    float: right;
+  }
+
   .avatar {
     width: 85px;
     height: 80px;

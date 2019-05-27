@@ -62,6 +62,7 @@
         <result property="serviceName" column="service_name"/>
         <result property="servicePrice" column="service_price"/>
         <result property="serviceParent" column="service_parent"/>
+        <result property="serviceType" column="service_type"/>
         <result property="realName" column="real_name"/>
         <result property="username" column="username"/>
         <result property="password" column="password"/>
@@ -411,6 +412,7 @@
         service.`name` AS service_name,
         service.price AS service_price,
         service.parent AS service_parent,
+        service.type AS service_Type,
         `user`.`name` AS real_name,
         `user`.username,
         `user`.`password`,
@@ -587,6 +589,50 @@
     <select id="getEmployerServiceMost" resultType="java.lang.Integer" parameterType="java.lang.Integer">
         SELECT service_id FROM (select service_id ,COUNT(*) count FROM orders WHERE employer_id = #{id} GROUP BY service_id) a
         ORDER BY a.count desc LIMIT 1
+    </select>
+
+    <select id="findOrdersByEmployeeIdWithState" resultMap="ordersMoreMapper" parameterType="java.lang.Integer">
+        SELECT
+        orders.id,
+        orders.service_id,
+        orders.employee_id,
+        orders.reverse_time,
+        orders.address,
+        orders.phone,
+        orders.tip,
+        orders.state,
+        orders.order_price,
+        orders.employer_id,
+        orders.create_time,
+        orders.end_time,
+        orders.rate,
+        orders.prov,
+        orders.city,
+        orders.pay,
+        orders.reason,
+        service.`name` AS service_name,
+        service.price AS service_price,
+        service.parent AS service_parent,
+        service.type AS service_type,
+        `user`.`name` AS real_name,
+        `user`.username,
+        `user`.`password`,
+        `user`.role,
+        `user`.sex,
+        `user`.age,
+        `user`.education,
+        `user`.experience,
+        rank.id AS rank_id,
+        rank.`name` AS rank_name,
+        rank.money AS rank_money
+        FROM
+        orders
+        INNER JOIN service ON orders.service_id = service.id
+        INNER JOIN `user` ON orders.employee_id = `user`.id
+        INNER JOIN user_service ON user_service.user_id = `user`.id AND user_service.service_id = service.id
+        INNER JOIN rank ON user_service.rank_id = rank.id
+        WHERE
+        orders.employee_id = #{employeeId} and orders.state in (2,3)
     </select>
 
 

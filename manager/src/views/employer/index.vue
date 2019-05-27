@@ -42,7 +42,7 @@
                      style="margin-left: 15%;background-color: #eeaaee;border-color: #eeaaee"></el-button>
           <label class="lastRow">超时费用
             <br/>
-            <b style="margin-left: 47%;">{{detailData.extra?allData.extra:0}}</b>
+            <b style="margin-left: 47%;">{{detailData.extra?detailData.extra:0}}</b>
           </label>
         </el-card>
       </el-col>
@@ -75,7 +75,6 @@
     },
     async created() {
       this.detailData = await this.$api("User/employerIndex");
-      console.log(this.detailData)
     },
     methods: {},
     mounted() {

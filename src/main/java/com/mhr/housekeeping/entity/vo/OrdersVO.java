@@ -49,6 +49,7 @@ public class OrdersVO extends Query implements Serializable {
     private String serviceName;
     private Integer servicePrice;
     private Integer serviceParent;
+    private String serviceType;
     private String realName;
     private String username;
     private String password;
@@ -59,6 +60,14 @@ public class OrdersVO extends Query implements Serializable {
     private Integer rankId;
     private String rankName;
     private Integer rankMoney;
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
+    }
 
     public String getEmployerPhone() {
         return employerPhone;

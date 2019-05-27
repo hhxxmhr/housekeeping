@@ -312,7 +312,6 @@
               message: res.msg
             });
           } else if (state === 2) {
-            console.log(123)
             //确认订单的时候，校验是否超时成为无效订单
             let res;
             let sureTime = this.checkSureTime(row.createTime);

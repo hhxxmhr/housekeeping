@@ -79,4 +79,6 @@ public interface OrdersMapper {
     List<OrdersVO> findOrdersByReserveTime(long startTime, long endTime,Integer id);
 
     Integer getEmployerServiceMost(Integer id);
+
+    List<OrdersVO> findOrdersByEmployeeIdWithState(Integer employeeId);
 }

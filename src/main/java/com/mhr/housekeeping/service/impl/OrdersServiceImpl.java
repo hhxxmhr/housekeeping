@@ -392,5 +392,10 @@ public class OrdersServiceImpl implements OrdersService {
         return ordersMapper.getEmployerServiceMost(id);
     }
 
+    @Override
+    public List<OrdersVO> findOrdersByEmployeeIdWithState(Integer employeeId) {
+        return ordersMapper.findOrdersByEmployeeIdWithState(employeeId);
+    }
+
 
 }

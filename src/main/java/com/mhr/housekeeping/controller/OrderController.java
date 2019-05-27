@@ -60,18 +60,35 @@ public class OrderController {
     /**
      * 查询检验的这个时间  是不是在员工上门时间到预计任务完成时间的  区间内，
      * 如果在的话，就把此人给过滤掉，不在的话就显示符合条件的雇员
+     *
      * @param hashMap
      * @return
      * @throws Exception
      */
     @RequestMapping("/Orders/findOrdersByReverseTime")
-    public List<OrdersVO> findOrdersByReverseTime(@RequestBody HashMap hashMap) throws Exception {
-        Long startTime = (Long) hashMap.get("startTime");
+    public Boolean findOrdersByReverseTime(@RequestBody HashMap hashMap) throws Exception {
+        Integer startTime = (Integer) hashMap.get("startTime");
         Long endTime = (Long) hashMap.get("endTime");
         Integer employeeId = (Integer) hashMap.get("employeeId");
-        List<OrdersVO> ordersByReverseTime = ordersService.findOrdersByReverseTime(employeeId, startTime / 1000, endTime / 1000);
+        //遍历这个员工的所有的已经确认或者待完成的订单，查看是否有区间满足
+        List<OrdersVO> voList = ordersService.findOrdersByEmployeeIdWithState(employeeId);
+        if (voList != null && voList.size() > 0) {
+            for (OrdersVO order : voList) {
+                if (order.getServiceType().equals("月")) {
+                    if (startTime >= order.getReverseTime() && startTime <= order.getReverseTime() + 31 * 24 * 3600) {
+                        return false;
+                    }
+                } else if (order.getServiceType().equals("次")) {
+                    if (startTime >= order.getReverseTime() && startTime <= order.getReverseTime() + 6 * 3600) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+        /*List<OrdersVO> ordersByReverseTime = ordersService.findOrdersByReverseTime(employeeId, startTime / 1000, endTime / 1000);
         System.out.println(ordersByReverseTime);
-        return ordersByReverseTime;
+        return ordersByReverseTime;*/
     }
 
 

@@ -36,6 +36,16 @@ public class CommentController {
     }
 
     /**
+     * 删除单个的评论记录
+     * @param commentVO
+     * @return
+     */
+    @RequestMapping("/Comment/deleteComment")
+    public Result deleteComment(@RequestBody CommentVO commentVO ) throws Exception {
+        return commentService.deleteComment(commentVO);
+    }
+
+    /**
      * 根据登陆者的id,查询其做出的所有评论的详细信息
      *
      * @param commentVO

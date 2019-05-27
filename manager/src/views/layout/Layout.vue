@@ -168,7 +168,6 @@
       async updateBalance() {
         let res = await this.$api('User/getBalance', {id: window.$mine.id});
         this.balance = res.balance;
-        console.log("layout"+'/'+this.balance);
       },
     },
     async created() {

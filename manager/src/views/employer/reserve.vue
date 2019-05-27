@@ -199,7 +199,6 @@
         this.reserveForm.serviceId = this.reserveForm.serviceId ? parseInt(this.reserveForm.serviceId) : null;
         this.reserveForm.employeeId = this.reserveForm.employeeId != null ? parseInt(this.reserveForm.employeeId) : null;
         this.reserveForm.reverseTime = parseInt(this.reserveForm.reverseTime);
-        console.log(this.reserveForm.employeeId);
 
         //根据员工id查询信息
         let res = await this.$api('User/getUserById', {id: this.reserveForm.employeeId});
@@ -207,12 +206,12 @@
         //根据传来的员工id查询其拥有的service数据
         let resp = await this.$api('User/findUserInfos2', {employeeId: this.reserveForm.employeeId});
         this.originService = resp.data;
-        console.log(this.originService)
+        // console.log(this.originService)
       },
       reserveButton() {
         this.$refs['reserveForm'].validate(async valid => {
           if (valid) {
-            if (await this.checkReverseTime(this.reserveForm.reverseTime)) {
+            if (!await this.checkReverseTime(this.reserveForm.reverseTime)) {
               this.$message.error("预留上门时间与该员工的行程冲突,请重新预约！")
               return false;
             } else if (this.reserveForm.city !== this.employeeInfo.city) {
@@ -232,11 +231,10 @@
         //根据预留的时间去查询此人订单里是否有时间冲突的待完成订单
         let res = await this.$api('Orders/findOrdersByReverseTime', {
           employeeId: this.reserveForm.employeeId,
-          startTime: time,
-          endTime: time + (3600 * 3 * 1000)
+          startTime: time / 1000,
         });
-        console.log(res);
-        return res.length > 0;
+        console.log('时间是否满足条件'+res);
+        return res;
       },
       choose() {
         if (this.reserveForm.prov === '省' || this.reserveForm.city === '市') {
