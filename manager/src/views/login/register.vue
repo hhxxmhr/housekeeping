@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="page-content">
       <div class="register__progress-wrap">
         <ul class="register__progress step1" :class="{step2:step_2}">
@@ -132,9 +131,7 @@
               </el-form-item>
             </el-form>
           </div>
-          <div class="register__ft">
-            <at-button type="primary" @click="submit">创建账号</at-button>
-          </div>
+            <at-button type="primary" @click="submit" style="margin-left: 40%;margin-top: -20px">创建账号</at-button>
         </div>
       </form>
     </div>

@@ -1,13 +1,14 @@
-<template>
+<template >
   <!-- 内容区 -->
-  <div>
+  <div style="background-color: #F2F6FC;width: 100%;height: 100%">
 
     <div class="page-content">
       <form>
         <div class="form-wrap">
           <div class="forget__bd">
             <h2 class="forget__form-title">忘记密码</h2>
-            <el-form size="medium" ref="form" label-width="85px" :model="form"
+            <hr style=" height:2px;border:none;border-top: 2px ridge cornflowerblue;">
+            <el-form size="large" ref="form" label-width="85px" :model="form"
                      :rules="rules" class="forget__forget-form">
               <el-form-item label="帐号" prop="username">
                 <el-input v-model="form.username" placeholder="帐号"></el-input>
@@ -137,6 +138,7 @@
 <style>
   .forget__forget-form {
     width: 400px;
+    margin-top: 20px;
   }
 
   .code {
@@ -151,7 +153,7 @@
   .form-wrap .forget__bd {
     border: 1px solid #ebebeb;
     margin-bottom: 30px;
-    padding: 20px
+    padding: 20px;
   }
 
   .form-wrap .forget__form-title {

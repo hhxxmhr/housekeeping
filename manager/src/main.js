@@ -32,15 +32,11 @@ Vue.use(ElementUI);
 Vue.use(Vuex);
 
 Vue.prototype.$api = async (method, data) => {
-  // let keys2 = Object.keys(data);
-  /* 这里就是把json变成url形式，并进行encode */
-  // data = encodeURI(keys2.map(name => `${name}=${data[name]}`).join('&'));
-  // axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-  if (data){//默认是这个格式？默认json
+  if (data) {
     let res = await axios({
       method: 'post',
       url: '/api/' + method,
-      data: data,//chao shi gei chang yi dian  jiuhaole??   en
+      data: data,
       timeout: 10000
     });
     return res.data;
@@ -54,7 +50,6 @@ Vue.prototype.$api = async (method, data) => {
   }
 };
 
-/* eslint-disable no-new */
 let v = new Vue({
   router,
   store,
