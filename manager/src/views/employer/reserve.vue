@@ -23,6 +23,13 @@
           </el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label="预约人员" prop="user">
+        <el-tag v-if="reserveForm.employeeId!==null">{{"name："+employeeInfo.name+"、tel："+employeeInfo.phone}}</el-tag>
+        <el-button v-if="reserveForm.employeeId!==null" type="primary" icon="el-icon-edit" size="mini" @click="choose"
+                   style="margin-left: 20px">重新选择
+        </el-button>
+        <el-button v-else type="primary" icon="el-icon-edit" size="mini" @click="choose">选择服务人员</el-button>
+      </el-form-item>
       <el-form-item label="上门时间" prop="reverseTime" required>
         <el-date-picker
           v-model="reserveForm.reverseTime"
@@ -43,13 +50,7 @@
       <el-form-item label="详细地址" prop="address">
         <el-input v-model="reserveForm.address" style="width: 41%"></el-input>
       </el-form-item>
-      <el-form-item label="预约人员" prop="user">
-        <el-tag v-if="reserveForm.employeeId!==null">{{"name："+employeeInfo.name+"、tel："+employeeInfo.phone}}</el-tag>
-        <el-button v-if="reserveForm.employeeId!==null" type="primary" icon="el-icon-edit" size="mini" @click="choose"
-                   style="margin-left: 20px">重新选择
-        </el-button>
-        <el-button v-else type="primary" icon="el-icon-edit" size="mini" @click="choose">选择服务人员</el-button>
-      </el-form-item>
+
       <el-form-item label="相关备注" prop="tip">
         <el-input type="textarea" v-model="reserveForm.tip" style="width: 41%"></el-input>
       </el-form-item>

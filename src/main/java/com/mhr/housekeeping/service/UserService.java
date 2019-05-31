@@ -53,4 +53,6 @@ public interface UserService {
     List<UserVO> listUserWithReserveTime(UserVO userVO);
 
     List<UserVO> findUserAndService();
+
+    List<UserVO> listUserByService(UserVO userVO);
 }

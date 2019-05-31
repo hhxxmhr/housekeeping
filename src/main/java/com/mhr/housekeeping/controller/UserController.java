@@ -230,15 +230,14 @@ public class UserController {
         if (serviceIds != null && serviceIds.size() > 0) {
             serviceIds.forEach(serviceId -> {
                 userVO.setServiceId(serviceId);
-                Result result = userService.listUserByServiceId(userVO);
-                List<UserVO> data = (List<UserVO>) result.getData();
-                userVOS.addAll(data);
+                List<UserVO> list = userService.listUserByService(userVO);
+                userVOS.addAll(list);
             });
         }
         //去除id相同的对象
         for (int i = 0; i < userVOS.size() - 1; i++) {
             for (int j = userVOS.size() - 1; j > i; j--) {
-                if (userVOS.get(j).getId() == userVOS.get(i).getId()) {
+                if (userVOS.get(j).getId().equals(userVOS.get(i).getId())) {
                     userVOS.remove(j);
                 }
             }

@@ -132,7 +132,7 @@
           experience: null,
           prov: '',
           city: '',
-          state: 3,
+          state: 0,
           role: 200
         },
         limitTime: sixHalf,
@@ -141,20 +141,6 @@
         dialogVisible: false,
         itemTaste: [],
         item: {},
-
-        form: {
-          id: null,//所选菜品的id
-          name: '',
-          shopName: '',
-          desc: '',
-          amount: null,
-          taste: '',
-        },
-        rules: {
-          amount: [
-            {required: true, message: '此项不可为空', trigger: 'change'}
-          ],
-        },
         dialogWidth: isPhone ? ((window.screen.width * 0.9) + 'px') : '420px',
         isPhone: isPhone,
       }
@@ -162,7 +148,6 @@
     methods: {
       initQuery() {
         Object.assign(this.searchForm, this.$route.query);
-        // this.serviceIds = this.$route.query.serviceIds;
         this.searchForm.experience = this.searchForm.experience != null ? parseInt(this.searchForm.experience) : null;//页面搜索
       },
       async getInfo() {
@@ -170,9 +155,11 @@
         if (this.searchForm.serviceIds.length === 0) {
           res = await this.$api("getAll", this.searchForm);
         } else {
+          console.log(this.searchForm)
           res = await this.$api("User/listUserByServiceIds", this.searchForm);
         }
         this.info = res.list;
+        console.log(this.info)
       },
       getServices(services) {
         let newArr = [];

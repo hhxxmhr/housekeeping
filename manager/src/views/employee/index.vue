@@ -9,14 +9,14 @@
     </template>
 
     <el-tabs v-model="activeName" @tab-click="handleClick"
-             style="height: 0%;margin-left: 90%;margin-top:1% ;width: 50%">
+             style="height: 0%;margin-left: 90%;margin-top:-10px;width: 50%">
       <el-tab-pane label="近30天" name="first"></el-tab-pane>
       <el-tab-pane label="上个月" name="second"></el-tab-pane>
     </el-tabs>
     <el-row style="margin-top: 50px">
       <!--<div id="container_agentMeal" class="divcss5" style="width:83%;height:400px;margin-top: -310px;float: right"></div>-->
       <div id="container_chart" class="divcss5"
-           style="width:100%;height:400px;float: right;margin-top: -10px"></div>
+           style="width:100%;height:400px;margin-top: -10px"></div>
     </el-row>
     <el-row style="margin-top: 2%;">
       <el-col style="width: 18%;">

@@ -54,7 +54,7 @@
         </el-table-column>
         <el-table-column prop="rate" label="评价/星" align="center">
           <template slot-scope="scope">
-            {{scope.row.rate!=null?scope.row.rate:'待评'}}
+            {{scope.row.rate==null?'待评':scope.row.rate}}
           </template>
         </el-table-column>
       </el-table>
