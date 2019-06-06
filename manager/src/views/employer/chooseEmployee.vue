@@ -48,7 +48,7 @@
             <p style="margin-top: 5px">自我介绍: {{item.introduction}}</p>
           </div>
           <el-button type="primary" plain class="reserve" style="margin-left: 10px" @click="reserve(item)"
-                     icon="el-icon-d-arrow-right">去预定
+                     icon="el-icon-d-arrow-right">选我预定
           </el-button>
 
         </el-card>

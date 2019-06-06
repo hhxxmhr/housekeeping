@@ -281,6 +281,8 @@
       },
       step1Fn() {
         this.$refs['registerForm_1'].validate((valid) => {
+          //可以在这里进行验证用户名是否重复
+
           if (valid) {
             this.step_1 = false;
             this.step_2 = true;

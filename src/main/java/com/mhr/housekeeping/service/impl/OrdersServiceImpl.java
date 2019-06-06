@@ -66,18 +66,16 @@ public class OrdersServiceImpl implements OrdersService {
             vo.setOrderId(ordersVO.getId());//自增id
             Integer r2 = fundMapper.addFund(vo);
             if (r1 > 0 && r2 > 0) {
-                return Result.getSuccess("预定成功");
-            }
-                /*//发送短信给雇员，提示在三个小时之内进行信息的确认
+//                return Result.getSuccess("预定成功");
+                //发送短信给雇员，提示在三个小时之内进行信息的确认
                 //首先需要获得雇员的手机号码，根据订单
                 UserDO employee = userMapper.findDetailUser(new UserVO(ordersVO.getEmployeeId()));
                 SendSmsResponse sendMessage = SmsUtils.sendmessage(employee.getPhone(), 3);
                 if (sendMessage.getBizId() != null) {
-                    return Result.getSuccess("预定成功");
-                }
-            } else return Result.getFailure("预定失败");*/
-        }
-        return Result.getFailure("预定失败");
+                    return Result.getSuccess("发送成功");
+                } else return Result.getFailure("发送失败");
+            } else return Result.getFailure("更新失败");
+        } else return Result.getFailure("预定失败");
     }
 
     /**

@@ -9,9 +9,9 @@
         <div style="float: left">{{$route.name}}</div>
         <div style="float: right;padding-right: 10px">
 
-            <el-button type="text" style="margin-right: 20px" v-if="role===300" @click="rechargeVisible = true">
-              余额：{{parseInt(balance)}}元-->充值
-            </el-button>
+          <el-button type="text" style="margin-right: 20px" v-if="role===300" @click="rechargeVisible = true">
+            余额：{{parseInt(balance)}}元-->充值
+          </el-button>
           <el-dropdown>
             <span class="el-dropdown-link">
               {{username+' '+(rankName!=null?rankName:'')}}
@@ -27,7 +27,6 @@
             </el-dropdown-menu>
           </el-dropdown>
         </div>
-
       </el-menu>
 
       <section class="app-main">

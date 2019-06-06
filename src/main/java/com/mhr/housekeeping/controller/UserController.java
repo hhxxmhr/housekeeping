@@ -138,8 +138,8 @@ public class UserController {
         UserVO userVO = JSONObject.parseObject(jsonString, UserVO.class);
 //        UserVO userVO = (UserVO) JSONObject.toBean(object, UserVO.class);
         //更新user表
-//        UserDO user = userService.getUserByUsername(userVO);
-        /*if (user != null) {
+        UserDO user = userService.getUserByUsername(userVO);
+        if (user != null) {
             return Result.getFailure("此账号已存在");
         }
         UserDO user2 = userService.getUserByPhone(userVO);
@@ -153,7 +153,7 @@ public class UserController {
         UserDO user4 = userService.getUserByBankCard(userVO);
         if (user4 != null) {
             return Result.getFailure("请检查银行卡号");
-        }*/
+        }
         userVO.setCreateTime(System.currentTimeMillis() / 1000);
         userVO.setState(EnumType.check);
         userVO.setBalance(0);
